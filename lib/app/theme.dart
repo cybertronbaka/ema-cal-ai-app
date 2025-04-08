@@ -3,34 +3,44 @@ import 'package:flutter/material.dart';
 
 abstract class AppTheme {
   static ThemeData get data {
-    const baseTextStyle = TextStyle(color: Color(0xFF1F1F1F));
+    const baseTextStyle = TextStyle(
+      color: Color(0xFF1F1F1F),
+      fontFamily: 'Roboto',
+    );
+
     return ThemeData(
       fontFamily: 'Roboto',
       colorScheme: const ColorScheme.light(primary: AppColors.primary),
       textTheme: TextTheme(
         displayLarge: baseTextStyle.copyWith(
           fontSize: 32,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
+          fontVariations: const [FontVariation.weight(600)],
         ),
         displayMedium: baseTextStyle.copyWith(
           fontSize: 28,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
+          fontVariations: const [FontVariation.weight(600)],
         ),
         displaySmall: baseTextStyle.copyWith(
           fontSize: 24,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
+          fontVariations: const [FontVariation.weight(600)],
         ),
         titleLarge: baseTextStyle.copyWith(
-          fontSize: 22,
-          fontWeight: FontWeight.w500,
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          fontVariations: const [FontVariation.weight(600)],
         ),
         titleMedium: baseTextStyle.copyWith(
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          fontVariations: const [FontVariation.weight(600)],
         ),
         titleSmall: baseTextStyle.copyWith(
           fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
+          fontVariations: const [FontVariation.weight(600)],
         ),
         bodyLarge: baseTextStyle.copyWith(fontSize: 18),
         bodyMedium: baseTextStyle.copyWith(fontSize: 16),
@@ -43,13 +53,14 @@ abstract class AppTheme {
       filledButtonTheme: const FilledButtonThemeData(
         style: ButtonStyle(
           padding: WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32)),
             ),
           ),
+          textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 18)),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
