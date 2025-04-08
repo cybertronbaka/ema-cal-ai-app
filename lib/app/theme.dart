@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 
 abstract class AppTheme {
   static ThemeData get data {
+    const fontFamily = 'Poppins';
     const baseTextStyle = TextStyle(
       color: Color(0xFF1F1F1F),
-      fontFamily: 'Roboto',
+      fontFamily: 'Poppins',
     );
 
     return ThemeData(
-      fontFamily: 'Roboto',
+      fontFamily: fontFamily,
+      fontFamilyFallback: const [fontFamily, 'Roboto'],
       colorScheme: const ColorScheme.light(primary: AppColors.primary),
       textTheme: TextTheme(
         displayLarge: baseTextStyle.copyWith(
@@ -33,7 +35,7 @@ abstract class AppTheme {
           fontVariations: const [FontVariation.weight(600)],
         ),
         titleMedium: baseTextStyle.copyWith(
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w600,
           fontVariations: const [FontVariation.weight(600)],
         ),
@@ -53,14 +55,16 @@ abstract class AppTheme {
       filledButtonTheme: const FilledButtonThemeData(
         style: ButtonStyle(
           padding: WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32)),
             ),
           ),
-          textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 18)),
+          textStyle: WidgetStatePropertyAll(
+            TextStyle(fontSize: 18, fontFamily: fontFamily),
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -75,7 +79,11 @@ abstract class AppTheme {
           borderSide: const BorderSide(color: AppColors.inputBorder),
         ),
         contentPadding: const EdgeInsets.all(16),
-        hintStyle: const TextStyle(color: AppColors.inputHint, fontSize: 16),
+        hintStyle: const TextStyle(
+          color: AppColors.inputHint,
+          fontSize: 16,
+          fontFamily: fontFamily,
+        ),
       ),
     );
   }
