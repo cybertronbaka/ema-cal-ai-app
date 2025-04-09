@@ -54,4 +54,9 @@ abstract class Routes {
     name: 'authEntry',
     path: ([args]) => '/',
   );
+
+  static final CustomRoute onboarding = CustomRoute(
+    name: 'onboarding',
+    path: ([args]) => '/onboarding',
+  );
 }
