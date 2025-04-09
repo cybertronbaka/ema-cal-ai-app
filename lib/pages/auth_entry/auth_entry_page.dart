@@ -25,6 +25,7 @@ class AuthEntryPage extends HookConsumerWidget {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           const _ImageSection(),

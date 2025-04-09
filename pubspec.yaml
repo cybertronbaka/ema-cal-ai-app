@@ -48,6 +48,7 @@ dependencies:
   reactive_forms: ^17.0.1
   collection: ^1.19.1
   flutter_keyboard_visibility: ^6.0.0
+  wheel_picker: ^0.2.1
 
 dev_dependencies:
   flutter_test:

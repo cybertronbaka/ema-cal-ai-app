@@ -2,9 +2,10 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SetGenderView extends HookWidget {
-  const SetGenderView({
+class SetWorkoutFrequencyView extends HookConsumerWidget {
+  const SetWorkoutFrequencyView({
     super.key,
     this.title,
     this.description,
@@ -16,13 +17,13 @@ class SetGenderView extends HookWidget {
   final String? title;
   final String? description;
   final String btnLabel;
-  final void Function(Gender value)? onBtnPressed;
-  final Gender? initialValue;
+  final void Function(WorkoutFrequency value)? onBtnPressed;
+  final WorkoutFrequency? initialValue;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
     final selected = useValueNotifier(initialValue);
 
@@ -54,11 +55,33 @@ class SetGenderView extends HookWidget {
                       minHeight: constraints.maxHeight,
                     ),
                     child: Center(
-                      child: OptionsList<Gender>(
-                        options: Gender.values,
+                      child: OptionsList<WorkoutFrequency>(
+                        options: WorkoutFrequency.values,
                         initialValue: selected.value,
                         onSelected: (value) => selected.value = value,
-                        builder: (value) => Text(value.name),
+                        builder: (value) {
+                          // Todo: Add Icons here
+                          return Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              spacing: 4,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  value.label,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  value.description,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

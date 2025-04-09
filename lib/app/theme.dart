@@ -17,32 +17,26 @@ abstract class AppTheme {
         displayLarge: baseTextStyle.copyWith(
           fontSize: 32,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         displayMedium: baseTextStyle.copyWith(
           fontSize: 28,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         displaySmall: baseTextStyle.copyWith(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         titleLarge: baseTextStyle.copyWith(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         titleMedium: baseTextStyle.copyWith(
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         titleSmall: baseTextStyle.copyWith(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         bodyLarge: baseTextStyle.copyWith(fontSize: 18),
         bodyMedium: baseTextStyle.copyWith(fontSize: 16),
@@ -63,7 +57,11 @@ abstract class AppTheme {
             ),
           ),
           textStyle: WidgetStatePropertyAll(
-            TextStyle(fontSize: 18, fontFamily: fontFamily),
+            TextStyle(
+              fontSize: 18,
+              fontFamily: fontFamily,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
