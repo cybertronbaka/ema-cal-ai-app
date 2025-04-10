@@ -103,3 +103,22 @@ class _SetWeightGoalStep extends ConsumerWidget {
     );
   }
 }
+
+class _ChooseDietStep extends ConsumerWidget {
+  const _ChooseDietStep({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(onboardingControllerProvider);
+
+    return SetDietView(
+      title: "What's your diet preference?",
+      description: 'Your personalized plan will be tailored based on this.',
+      btnLabel: 'Next',
+      initialValue: controller.diet,
+      onBtnPressed: (value) {
+        controller.diet = value;
+        controller.moveToNextStep(context, DefaultTabController.of(context));
+      },
+    );
+  }
+}

@@ -6,4 +6,5 @@ enum OnboardingStep {
   heightAndWeight,
   setDOB,
   setWeightGoal,
+  chooseDiet,
 }

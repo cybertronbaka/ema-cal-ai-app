@@ -3,6 +3,7 @@ library;
 import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/controllers/onboarding_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/widgets/views/set_diet_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_dob_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_height_and_weight_view/set_height_and_weight_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_weight_goal_view.dart';

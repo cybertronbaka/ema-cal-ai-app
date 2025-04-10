@@ -27,6 +27,9 @@ class _StepperBody extends ConsumerWidget {
       OnboardingStep.setWeightGoal => const _SetWeightGoalStep(
         key: ValueKey(OnboardingStep.setWeightGoal),
       ),
+      OnboardingStep.chooseDiet => const _ChooseDietStep(
+        key: ValueKey(OnboardingStep.chooseDiet),
+      ),
     };
   }
 }

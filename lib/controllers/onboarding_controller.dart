@@ -30,6 +30,8 @@ class OnboardingController {
   UnitWeight get weightGoal => _weightGoal ?? weight;
   set weightGoal(UnitWeight value) => _weightGoal = value;
 
+  Diet? diet;
+
   void moveToPrevStep(BuildContext context, TabController tabController) {
     if (currentStep == OnboardingStep.gender) return context.pop();
 
