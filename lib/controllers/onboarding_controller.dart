@@ -18,6 +18,7 @@ class OnboardingController {
 
   Gender? gender;
   WorkoutFrequency? workoutFrequency;
+  MeasurementSystem measurementSystem = MeasurementSystem.metric;
   UnitLength height = MetricLength(163);
   UnitWeight weight = MetricWeight(50);
   DateTime? dob;

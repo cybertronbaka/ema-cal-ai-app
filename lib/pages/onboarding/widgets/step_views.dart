@@ -54,7 +54,9 @@ class _SetHeightAndWeightStep extends ConsumerWidget {
       btnLabel: 'Next',
       initialHeight: controller.height,
       initialWeight: controller.weight,
-      onBtnPressed: (height, weight) {
+      initialMeasurementSystem: controller.measurementSystem,
+      onBtnPressed: (measurementSystem, height, weight) {
+        controller.measurementSystem = measurementSystem;
         controller.height = height;
         controller.weight = weight;
         controller.moveToNextStep(context, DefaultTabController.of(context));

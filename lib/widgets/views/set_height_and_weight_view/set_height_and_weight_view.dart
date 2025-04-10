@@ -1,5 +1,6 @@
 library;
 
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
@@ -23,6 +24,7 @@ class SetHeightAndWeightView extends HookWidget {
     this.onBtnPressed,
     required this.initialHeight,
     required this.initialWeight,
+    required this.initialMeasurementSystem,
   });
 
   final String? title;
@@ -30,8 +32,9 @@ class SetHeightAndWeightView extends HookWidget {
   final String btnLabel;
   final UnitLength initialHeight;
   final UnitWeight initialWeight;
+  final MeasurementSystem initialMeasurementSystem;
 
-  final void Function(UnitLength height, UnitWeight weight)? onBtnPressed;
+  final void Function(MeasurementSystem, UnitLength, UnitWeight)? onBtnPressed;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
 
@@ -40,7 +43,9 @@ class SetHeightAndWeightView extends HookWidget {
     final textTheme = TextTheme.of(context);
     final height = useValueNotifier<UnitLength>(initialHeight);
     final weight = useValueNotifier<UnitWeight>(initialWeight);
-    final isMetric = useValueNotifier<bool>(true);
+    final isMetric = useValueNotifier<bool>(
+      initialMeasurementSystem == MeasurementSystem.metric,
+    );
 
     return SafeArea(
       child: Column(
@@ -126,7 +131,13 @@ class SetHeightAndWeightView extends HookWidget {
             width: double.infinity,
             child: CustomFilledButton(
               onPressed: () {
-                onBtnPressed?.call(height.value, weight.value);
+                onBtnPressed?.call(
+                  isMetric.value
+                      ? MeasurementSystem.metric
+                      : MeasurementSystem.imperial,
+                  height.value,
+                  weight.value,
+                );
               },
               label: btnLabel,
             ),
