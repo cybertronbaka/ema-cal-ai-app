@@ -20,6 +20,7 @@ class OnboardingController {
   WorkoutFrequency? workoutFrequency;
   UnitLength height = MetricLength(163);
   UnitWeight weight = MetricWeight(50);
+  DateTime? dob;
 
   void moveToPrevStep(BuildContext context, TabController tabController) {
     if (currentStep == OnboardingStep.gender) return context.pop();

@@ -62,3 +62,22 @@ class _SetHeightAndWeightStep extends ConsumerWidget {
     );
   }
 }
+
+class _SetDobStep extends ConsumerWidget {
+  const _SetDobStep({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(onboardingControllerProvider);
+
+    return SetDobView(
+      title: 'When were you born?',
+      description: 'Your personalized plan will be tailored based on this.',
+      btnLabel: 'Next',
+      initialValue: controller.dob,
+      onBtnPressed: (dob) {
+        controller.dob = dob;
+        controller.moveToNextStep(context, DefaultTabController.of(context));
+      },
+    );
+  }
+}

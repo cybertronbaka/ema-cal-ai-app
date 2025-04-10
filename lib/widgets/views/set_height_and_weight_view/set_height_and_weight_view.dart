@@ -97,13 +97,17 @@ class SetHeightAndWeightView extends HookWidget {
                                   return isMetric.value
                                       ? _MetricHeightAndWeightPicker(
                                         key: const Key('metric-pickers'),
-                                        initialHeight: initialHeight,
-                                        initialWeight: initialWeight,
+                                        initialHeight: height.value,
+                                        initialWeight: weight.value,
+                                        heightNotifier: height,
+                                        weightNotifier: weight,
                                       )
                                       : _ImperialHeightAndWeightPicker(
                                         key: const Key('imperial-pickers'),
                                         initialHeight: initialHeight,
                                         initialWeight: initialWeight,
+                                        heightNotifier: height,
+                                        weightNotifier: weight,
                                       );
                                 },
                               ),
@@ -133,91 +137,106 @@ class SetHeightAndWeightView extends HookWidget {
   }
 }
 
-class _MetricHeightAndWeightPicker extends StatelessWidget {
+class _MetricHeightAndWeightPicker extends HookWidget {
   const _MetricHeightAndWeightPicker({
     super.key,
     required this.initialHeight,
     required this.initialWeight,
+    required this.heightNotifier,
+    required this.weightNotifier,
   });
 
   final UnitLength initialHeight;
   final UnitWeight initialWeight;
+  final ValueNotifier<UnitLength> heightNotifier;
+  final ValueNotifier<UnitWeight> weightNotifier;
 
   @override
   Widget build(BuildContext context) {
-    final cmController = CustomIntWheelPickerController(
-      min: _cmRange.$1,
-      max: _cmRange.$2,
-      initialValue: initialHeight.cm.toInt(),
-    );
-
-    final kgController = CustomIntWheelPickerController(
-      min: _kgRange.$1,
-      max: _kgRange.$2,
-      initialValue: initialWeight.kg.toInt(),
-    );
-
     return _PickersLayout(
-      heightSide: CustomIntWheelPicker(
-        controller: cmController,
+      heightSide: WheelPicker(
+        min: _cmRange.$1,
+        max: _cmRange.$2,
+        initialValue: initialHeight.cm.toInt(),
+        onValueChanged: (value) {
+          heightNotifier.value = MetricLength(value.toDouble());
+        },
         builder: (context, value) => Text('$value cm'),
       ),
-      weightSide: CustomIntWheelPicker(
-        controller: kgController,
+      weightSide: WheelPicker(
+        min: _kgRange.$1,
+        max: _kgRange.$2,
+        initialValue: initialWeight.kg.toInt(),
+        onValueChanged: (value) {
+          weightNotifier.value = MetricWeight(value.toDouble());
+        },
         builder: (context, value) => Text('$value kg'),
       ),
     );
   }
 }
 
-class _ImperialHeightAndWeightPicker extends StatelessWidget {
+class _ImperialHeightAndWeightPicker extends HookWidget {
   const _ImperialHeightAndWeightPicker({
     super.key,
     required this.initialHeight,
     required this.initialWeight,
+    required this.heightNotifier,
+    required this.weightNotifier,
   });
 
   final UnitLength initialHeight;
   final UnitWeight initialWeight;
+  final ValueNotifier<UnitLength> heightNotifier;
+  final ValueNotifier<UnitWeight> weightNotifier;
+
   @override
   Widget build(BuildContext context) {
-    final feetController = CustomIntWheelPickerController(
+    final feetController = useWheelPickerController(
       min: _feetRange.$1,
       max: _feetRange.$2,
       initialValue: initialHeight.feet.toInt(),
     );
 
-    final inchesController = CustomIntWheelPickerController(
+    final inchesController = useWheelPickerController(
       min: _inchesRange.$1,
       max: _inchesRange.$2,
       initialValue: initialHeight.inches.toInt(),
-    );
-
-    final lbsController = CustomIntWheelPickerController(
-      min: _lbsRange.$1,
-      max: _lbsRange.$2,
-      initialValue: initialWeight.lbs.toInt(),
     );
 
     return _PickersLayout(
       heightSide: Row(
         children: [
           Expanded(
-            child: CustomIntWheelPicker(
+            child: WheelPicker(
               controller: feetController,
               builder: (context, value) => Text('$value ft'),
+              onValueChanged: (value) {
+                heightNotifier.value = ImperialLength(
+                  value,
+                  inchesController.value.toDouble(),
+                );
+              },
             ),
           ),
           Expanded(
-            child: CustomIntWheelPicker(
+            child: WheelPicker(
               controller: inchesController,
+              onValueChanged: (value) {
+                heightNotifier.value = ImperialLength(
+                  feetController.value,
+                  value.toDouble(),
+                );
+              },
               builder: (context, value) => Text('$value in'),
             ),
           ),
         ],
       ),
-      weightSide: CustomIntWheelPicker(
-        controller: lbsController,
+      weightSide: WheelPicker(
+        min: _lbsRange.$1,
+        max: _lbsRange.$2,
+        initialValue: initialWeight.lbs.toInt(),
         builder: (context, value) => Text('$value lb'),
       ),
     );
