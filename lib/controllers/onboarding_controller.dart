@@ -1,4 +1,5 @@
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,12 @@ class OnboardingController {
   set weightGoal(UnitWeight value) => _weightGoal = value;
 
   Diet? diet;
+
+  List<MealTimeReminder> mealTimeReminders = [
+    MealTimeReminder(label: 'Breakfast', icon: 'assets/images/meal.svg'),
+    MealTimeReminder(label: 'Lunch', icon: 'assets/images/meal.svg'),
+    MealTimeReminder(label: 'Dinner ', icon: 'assets/images/meal.svg'),
+  ];
 
   void moveToPrevStep(BuildContext context, TabController tabController) {
     if (currentStep == OnboardingStep.gender) return context.pop();

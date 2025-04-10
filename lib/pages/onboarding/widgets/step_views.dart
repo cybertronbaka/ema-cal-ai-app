@@ -122,3 +122,24 @@ class _ChooseDietStep extends ConsumerWidget {
     );
   }
 }
+
+class _SetMealTimeRemindersStep extends ConsumerWidget {
+  const _SetMealTimeRemindersStep({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(onboardingControllerProvider);
+
+    return SetMealTimeRemindersView(
+      title: 'Set Reminders to take a photo of your food.',
+      description:
+          'We will remind you to take a photo of your meal at the set times.\n\n'
+          'You can skip this step by tapping "Next"',
+      btnLabel: 'Next',
+      initialValue: controller.mealTimeReminders,
+      onBtnPressed: (reminders) {
+        controller.mealTimeReminders = reminders;
+        controller.moveToNextStep(context, DefaultTabController.of(context));
+      },
+    );
+  }
+}

@@ -1,7 +1,7 @@
 part of 'widgets.dart';
 
-class CustomFilledButton extends StatelessWidget {
-  const CustomFilledButton({
+class CustomSmallOutlinedButton extends StatelessWidget {
+  const CustomSmallOutlinedButton({
     super.key,
     required this.onPressed,
     this.enabled = true,
@@ -14,36 +14,7 @@ class CustomFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(
-          enabled ? null : AppColors.secondary,
-        ),
-        foregroundColor: WidgetStatePropertyAll(
-          enabled ? null : AppColors.primary,
-        ),
-      ),
-      onPressed: onPressed,
-      child: Text(label),
-    );
-  }
-}
-
-class CustomSmallFilledButton extends StatelessWidget {
-  const CustomSmallFilledButton({
-    super.key,
-    required this.onPressed,
-    this.enabled = true,
-    required this.label,
-  });
-
-  final VoidCallback onPressed;
-  final bool enabled;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton(
+    return OutlinedButton(
       style: ButtonStyle(
         backgroundColor: WidgetStatePropertyAll(
           enabled ? null : AppColors.secondary,

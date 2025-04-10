@@ -8,7 +8,6 @@ class WheelPicker extends HookWidget {
       fontWeight: FontWeight.w500,
       height: 1.5,
     ),
-    this.looping = false,
     this.onValueChanged,
     this.builder,
     this.controller,
@@ -19,7 +18,6 @@ class WheelPicker extends HookWidget {
   });
 
   final TextStyle textStyle;
-  final bool looping;
   final void Function(int value)? onValueChanged;
   final Widget Function(BuildContext context, int value)? builder;
   final WheelPickerController? controller;

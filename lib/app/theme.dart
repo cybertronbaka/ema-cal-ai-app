@@ -13,6 +13,7 @@ abstract class AppTheme {
       fontFamily: fontFamily,
       fontFamilyFallback: const [fontFamily, 'Roboto'],
       colorScheme: const ColorScheme.light(primary: AppColors.primary),
+      scaffoldBackgroundColor: AppColors.bgColor,
       textTheme: TextTheme(
         displayLarge: baseTextStyle.copyWith(
           fontSize: 32,
@@ -55,6 +56,20 @@ abstract class AppTheme {
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32)),
             ),
+          ),
+          textStyle: WidgetStatePropertyAll(
+            TextStyle(
+              fontSize: 18,
+              fontFamily: fontFamily,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      outlinedButtonTheme: const OutlinedButtonThemeData(
+        style: ButtonStyle(
+          padding: WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           ),
           textStyle: WidgetStatePropertyAll(
             TextStyle(
