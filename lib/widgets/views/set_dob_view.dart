@@ -139,6 +139,7 @@ class SetDobView extends HookWidget {
     return SizedBox(
       height: 250,
       child: Row(
+        spacing: 16,
         children: [
           Expanded(
             child: WheelPicker(

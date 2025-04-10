@@ -27,6 +27,8 @@ class WheelPicker extends HookWidget {
   final int? max;
   final int? initialValue;
 
+  static const _magnification = 1.5;
+
   @override
   Widget build(BuildContext context) {
     // Use controller values if available, otherwise use widget parameters
@@ -46,34 +48,52 @@ class WheelPicker extends HookWidget {
       return null;
     }, [controller?.min, controller?.max, min, max, initialValue]);
 
-    return ListWheelScrollView.useDelegate(
-      controller: effectiveController._scrollController,
-      itemExtent: textStyle.fontSize! * textStyle.height!,
-      diameterRatio: 1,
-      overAndUnderCenterOpacity: 0.25,
-      magnification: 1.7,
-      squeeze: 0.8,
-      physics: const FixedExtentScrollPhysics(),
-      onSelectedItemChanged: (index) {
-        final value = effectiveController.min + index;
-        effectiveController.value = value;
-        onValueChanged?.call(value);
-      },
-      childDelegate: ListWheelChildBuilderDelegate(
-        childCount: effectiveController.itemCount,
-        builder: (context, index) {
-          final value = effectiveController.min + index;
+    final itemExtent = textStyle.fontSize! * textStyle.height!;
+    final magnifierHeight = itemExtent * _magnification;
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Center(
+            child: Container(
+              height: magnifierHeight * 1.2,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withAlpha(20),
+                borderRadius: BorderRadius.circular(magnifierHeight * 0.2),
+              ),
+            ),
+          ),
+        ),
+        ListWheelScrollView.useDelegate(
+          controller: effectiveController._scrollController,
+          itemExtent: itemExtent,
+          diameterRatio: 1,
+          overAndUnderCenterOpacity: 0.25,
+          magnification: _magnification,
+          squeeze: 0.8,
+          physics: const FixedExtentScrollPhysics(),
+          onSelectedItemChanged: (index) {
+            final value = effectiveController.min + index;
+            effectiveController.value = value;
+            onValueChanged?.call(value);
+          },
+          childDelegate: ListWheelChildBuilderDelegate(
+            childCount: effectiveController.itemCount,
+            builder: (context, index) {
+              final value = effectiveController.min + index;
 
-          if (builder != null) {
-            return DefaultTextStyle(
-              style: DefaultTextStyle.of(context).style.merge(textStyle),
-              child: builder!.call(context, value),
-            );
-          }
+              if (builder != null) {
+                return DefaultTextStyle(
+                  style: DefaultTextStyle.of(context).style.merge(textStyle),
+                  child: builder!.call(context, value),
+                );
+              }
 
-          return Text(value.toString(), style: textStyle);
-        },
-      ),
+              return Text(value.toString(), style: textStyle);
+            },
+          ),
+        ),
+      ],
     );
   }
 }
