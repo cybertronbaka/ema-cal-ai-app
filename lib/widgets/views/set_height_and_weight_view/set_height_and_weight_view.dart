@@ -43,9 +43,7 @@ class SetHeightAndWeightView extends HookWidget {
     final textTheme = TextTheme.of(context);
     final height = useValueNotifier<UnitLength>(initialHeight);
     final weight = useValueNotifier<UnitWeight>(initialWeight);
-    final isMetric = useValueNotifier<bool>(
-      initialMeasurementSystem == MeasurementSystem.metric,
-    );
+    final isMetric = useValueNotifier<bool>(initialMeasurementSystem.isMetric);
 
     return SafeArea(
       child: Column(

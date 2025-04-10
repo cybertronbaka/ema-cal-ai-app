@@ -24,6 +24,9 @@ class _StepperBody extends ConsumerWidget {
       OnboardingStep.setDOB => const _SetDobStep(
         key: ValueKey(OnboardingStep.setDOB),
       ),
+      OnboardingStep.setWeightGoal => const _SetWeightGoalStep(
+        key: ValueKey(OnboardingStep.setWeightGoal),
+      ),
     };
   }
 }

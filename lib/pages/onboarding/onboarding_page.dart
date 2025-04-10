@@ -5,6 +5,7 @@ import 'package:ema_cal_ai/controllers/onboarding_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/widgets/views/set_dob_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_height_and_weight_view/set_height_and_weight_view.dart';
+import 'package:ema_cal_ai/widgets/views/set_weight_goal_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_workout_frequency_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_gender_view.dart';
 import 'package:flutter/material.dart';

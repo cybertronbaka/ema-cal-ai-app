@@ -83,3 +83,23 @@ class _SetDobStep extends ConsumerWidget {
     );
   }
 }
+
+class _SetWeightGoalStep extends ConsumerWidget {
+  const _SetWeightGoalStep({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(onboardingControllerProvider);
+
+    return SetWeightGoalView(
+      title: 'Set your weight goal',
+      description: 'Your personalized plan will be tailored based on this.',
+      btnLabel: 'Next',
+      initialValue: controller.weight,
+      measurementSystem: controller.measurementSystem,
+      onBtnPressed: (weight) {
+        controller.weightGoal = weight;
+        controller.moveToNextStep(context, DefaultTabController.of(context));
+      },
+    );
+  }
+}

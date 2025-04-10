@@ -17,11 +17,18 @@ class OnboardingController {
   OnboardingStep currentStep = OnboardingStep.gender;
 
   Gender? gender;
+
   WorkoutFrequency? workoutFrequency;
+
   MeasurementSystem measurementSystem = MeasurementSystem.metric;
   UnitLength height = MetricLength(163);
   UnitWeight weight = MetricWeight(50);
+
   DateTime? dob;
+
+  UnitWeight? _weightGoal;
+  UnitWeight get weightGoal => _weightGoal ?? weight;
+  set weightGoal(UnitWeight value) => _weightGoal = value;
 
   void moveToPrevStep(BuildContext context, TabController tabController) {
     if (currentStep == OnboardingStep.gender) return context.pop();

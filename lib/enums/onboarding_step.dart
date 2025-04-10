@@ -1,3 +1,9 @@
 part of 'enums.dart';
 
-enum OnboardingStep { gender, workoutFrequency, heightAndWeight, setDOB }
+enum OnboardingStep {
+  gender,
+  workoutFrequency,
+  heightAndWeight,
+  setDOB,
+  setWeightGoal,
+}
