@@ -138,7 +138,7 @@ class _SetMealTimeRemindersStep extends ConsumerWidget {
       initialValue: controller.mealTimeReminders,
       onBtnPressed: (reminders) {
         controller.mealTimeReminders = reminders;
-        controller.moveToNextStep(context, DefaultTabController.of(context));
+        controller.submit(context);
       },
     );
   }

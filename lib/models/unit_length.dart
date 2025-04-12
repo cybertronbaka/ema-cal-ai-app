@@ -1,9 +1,34 @@
 /// Represents a measurable length with imperial/metric conversion capabilities
 abstract final class UnitLength {
+  static UnitLength fromJson(Map<String, dynamic> json) {
+    if (json[_isMetricKey] == null) {
+      throw 'Cannot determine measurement system for unit length';
+    }
+
+    if (json[_isMetricKey]) {
+      return MetricLength(json[_cmKey]);
+    }
+
+    return ImperialLength(json[_feetKey], json[_inchesKey]);
+  }
+
   double get cm;
+  static const _cmKey = 'cm';
   int get feet;
+  static const _feetKey = 'feet';
   double get inches;
+  static const _inchesKey = 'inches';
   bool get isMetric;
+  static const _isMetricKey = 'isMetric';
+
+  Map<String, dynamic> toJson() {
+    return {
+      _isMetricKey: isMetric,
+      _cmKey: cm,
+      _feetKey: feet,
+      _inchesKey: inches,
+    };
+  }
 }
 
 /// Imperial units implementation
@@ -25,6 +50,15 @@ final class ImperialLength extends UnitLength {
 
   @override
   bool get isMetric => false;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      UnitLength._isMetricKey: isMetric,
+      UnitLength._feetKey: feet,
+      UnitLength._inchesKey: inches,
+    };
+  }
 }
 
 /// Metric units implementation
@@ -44,4 +78,9 @@ final class MetricLength extends UnitLength {
 
   @override
   bool get isMetric => true;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {UnitLength._isMetricKey: isMetric, UnitLength._cmKey: cm};
+  }
 }

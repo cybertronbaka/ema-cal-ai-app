@@ -2,6 +2,8 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
+import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -48,6 +50,27 @@ class OnboardingController {
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  Future<void> submit(BuildContext context) async {
+    await ref
+        .read(profileRepoProvider)
+        .save(
+          UserProfile(
+            dob: dob!,
+            gender: gender!,
+            workoutFrequency: workoutFrequency!,
+            height: height,
+            weight: weight,
+            measurementSystem: measurementSystem,
+            weightGoal: weightGoal,
+            diet: diet!,
+          ),
+        );
+
+    await ref.read(profileRepoProvider).get().then((value) {
+      debugPrint(value?.toJson().toString());
+    });
   }
 
   void moveToNextStep(BuildContext context, TabController tabController) {

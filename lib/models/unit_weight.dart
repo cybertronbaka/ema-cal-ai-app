@@ -1,13 +1,29 @@
 /// Represents a measurable weight with metric/imperial conversion capabilities
 abstract final class UnitWeight {
-  /// The weight in kilograms
+  static UnitWeight fromJson(Map<String, dynamic> json) {
+    if (json[_isMetricKey] == null) {
+      throw 'Cannot determine measurement system for unit weight';
+    }
+
+    if (json[_isMetricKey]) {
+      return MetricWeight(json[_kgKey]);
+    }
+
+    return ImperialWeight(json[_lbsKey]);
+  }
+
   double get kg;
-
-  /// The weight in pounds
+  static const _kgKey = 'kg';
   double get lbs;
-
+  static const _lbsKey = 'lbs';
   bool get isMetric;
+  static const _isMetricKey = 'isMetric';
+
   UnitWeight operator -(double other);
+
+  Map<String, dynamic> toJson() {
+    return {_isMetricKey: isMetric, _kgKey: kg, _lbsKey: lbs};
+  }
 }
 
 /// Imperial units implementation (pounds)
@@ -29,6 +45,11 @@ final class ImperialWeight extends UnitWeight {
   ImperialWeight operator -(double other) {
     return ImperialWeight(lbs - other);
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {UnitWeight._isMetricKey: isMetric, UnitWeight._lbsKey: lbs};
+  }
 }
 
 /// Metric units implementation (kilograms)
@@ -49,5 +70,10 @@ final class MetricWeight extends UnitWeight {
   @override
   MetricWeight operator -(double other) {
     return MetricWeight(kg - other);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {UnitWeight._isMetricKey: isMetric, UnitWeight._kgKey: kg};
   }
 }
