@@ -6,28 +6,23 @@ class MealTimeReminder {
 
   factory MealTimeReminder.fromJson(Map<dynamic, dynamic> json) {
     return MealTimeReminder(
-      label: json[_labelKey],
-      icon: json[_iconKey],
-      timeOfDay: TimeOfDayExt.parse(json[_timeOfDayKey]),
+      label: json['label'],
+      icon: json['icon'],
+      timeOfDay: TimeOfDayExt.parse(json['time_of_day']),
     );
   }
 
+  String label;
+  TimeOfDay? timeOfDay;
+  String icon;
+
   Map<String, dynamic> toJson() {
     return {
-      _labelKey: label,
-      _iconKey: icon,
-      _timeOfDayKey: timeOfDay?.toHiveStr(),
+      'label': label,
+      'icon': icon,
+      'time_of_day': timeOfDay?.toHiveStr(),
     };
   }
-
-  String label;
-  static const _labelKey = 'label';
-
-  TimeOfDay? timeOfDay;
-  static const _timeOfDayKey = 'timeOfDay';
-
-  String icon;
-  static const _iconKey = 'icon';
 }
 
 extension ListMealTimeReminderExt on List<MealTimeReminder> {

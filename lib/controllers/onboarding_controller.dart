@@ -78,7 +78,7 @@ class OnboardingController {
     });
 
     await ref.read(nutritionPlannerRepoProvider).plan(profile).then((value) {
-      debugPrint(value);
+      debugPrint(value.toJson().toString());
     });
 
     // await Gemini

@@ -17,52 +17,37 @@ class UserProfile {
 
   factory UserProfile.fromHive(Box box) {
     return UserProfile(
-      dob: DateTime.parse(box.get(_dobKey)),
-      gender: Gender.values[box.get(_genderKey)],
-      workoutFrequency: WorkoutFrequency.values[box.get(_workoutFrequencyKey)],
-      height: UnitLength.fromJson(box.get(_heightKey)),
-      weight: UnitWeight.fromJson(box.get(_weightKey)),
+      dob: DateTime.parse(box.get('dob')),
+      gender: Gender.values[box.get('gender')],
+      workoutFrequency: WorkoutFrequency.values[box.get('workout_frequency')],
+      height: UnitLength.fromJson(box.get('height')),
+      weight: UnitWeight.fromJson(box.get('weight')),
       measurementSystem:
-          MeasurementSystem.values[box.get(_measurementSystemKey)],
-      weightGoal: UnitWeight.fromJson(box.get(_weightGoalKey)),
-      diet: Diet.values[box.get(_dietKey)],
+          MeasurementSystem.values[box.get('measurement_system')],
+      weightGoal: UnitWeight.fromJson(box.get('weight_goal')),
+      diet: Diet.values[box.get('diet')],
     );
   }
 
+  final DateTime dob;
+  final Gender gender;
+  final WorkoutFrequency workoutFrequency;
+  final UnitLength height;
+  final UnitWeight weight;
+  final MeasurementSystem measurementSystem;
+  final UnitWeight weightGoal;
+  final Diet diet;
+
   Map<String, dynamic> toJson() {
     return {
-      _dobKey: dob.toIso8601String(),
-      _genderKey: gender.index,
-      _workoutFrequencyKey: workoutFrequency.index,
-      _heightKey: height.toJson(),
-      _weightKey: weight.toJson(),
-      _measurementSystemKey: measurementSystem.index,
-      _weightGoalKey: weightGoal.toJson(),
-      _dietKey: diet.index,
+      'dob': dob.toIso8601String(),
+      'gender': gender.index,
+      'workout_frequency': workoutFrequency.index,
+      'height': height.toJson(),
+      'weight': weight.toJson(),
+      'measurement_system': measurementSystem.index,
+      'weight_goal': weightGoal.toJson(),
+      'diet': diet.index,
     };
   }
-
-  final DateTime dob;
-  static const _dobKey = 'dob';
-
-  final Gender gender;
-  static const _genderKey = 'gender';
-
-  final WorkoutFrequency workoutFrequency;
-  static const _workoutFrequencyKey = 'workoutFrequency';
-
-  final UnitLength height;
-  static const _heightKey = 'height';
-
-  final UnitWeight weight;
-  static const _weightKey = 'weight';
-
-  final MeasurementSystem measurementSystem;
-  static const _measurementSystemKey = 'measurementSystem';
-
-  final UnitWeight weightGoal;
-  static const _weightGoalKey = 'weightGoal';
-
-  final Diet diet;
-  static const _dietKey = 'diet';
 }
