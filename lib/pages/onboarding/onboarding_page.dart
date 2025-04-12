@@ -22,21 +22,32 @@ class OnboardingPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watching onboardingControllerProvider here to not let it auto dispose
-    ref.watch(onboardingControllerProvider);
+    final controller = ref.watch(onboardingControllerProvider);
 
     return DefaultTabController(
       length: OnboardingStep.values.length,
-      child: Scaffold(
-        appBar: const _StepperAppBar(key: Key('stepper-app-bar')),
-        body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            for (final step in OnboardingStep.values)
-              _StepperBody(key: ValueKey(step), step: step),
-          ],
-        ),
-        resizeToAvoidBottomInset: false,
+      child: Builder(
+        builder:
+            (context) => BackButtonListener(
+              onBackButtonPressed: () async {
+                controller.moveToPrevStep(
+                  context,
+                  DefaultTabController.of(context),
+                );
+                return true;
+              },
+              child: Scaffold(
+                appBar: const _StepperAppBar(key: Key('stepper-app-bar')),
+                body: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    for (final step in OnboardingStep.values)
+                      _StepperBody(key: ValueKey(step), step: step),
+                  ],
+                ),
+                resizeToAvoidBottomInset: false,
+              ),
+            ),
       ),
     );
   }
