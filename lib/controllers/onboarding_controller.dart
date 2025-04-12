@@ -78,6 +78,8 @@ class OnboardingController {
     await ref.read(mealTimeRemindersRepoProvider).get().then((value) {
       debugPrint(value.toJson().toString());
     });
+
+    // await Gemini
   }
 
   void moveToNextStep(BuildContext context, TabController tabController) {

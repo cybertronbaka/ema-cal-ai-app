@@ -8,8 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
+
   final SharedPreferences sharedPref = await SharedPreferences.getInstance();
 
   await SystemChrome.setPreferredOrientations([
