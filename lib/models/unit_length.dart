@@ -3,6 +3,7 @@ abstract final class UnitLength {
   double get cm;
   int get feet;
   double get inches;
+  bool get isMetric;
 }
 
 /// Imperial units implementation
@@ -21,6 +22,9 @@ final class ImperialLength extends UnitLength {
   // 1 inch = 2.54 cm
   @override
   double get cm => (feet * 12 + inches) * 2.54;
+
+  @override
+  bool get isMetric => false;
 }
 
 /// Metric units implementation
@@ -37,4 +41,7 @@ final class MetricLength extends UnitLength {
 
   @override
   double get inches => (cm / 2.54) % 12;
+
+  @override
+  bool get isMetric => true;
 }

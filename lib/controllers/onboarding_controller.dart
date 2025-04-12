@@ -28,7 +28,7 @@ class OnboardingController {
   DateTime? dob;
 
   UnitWeight? _weightGoal;
-  UnitWeight get weightGoal => _weightGoal ?? weight;
+  UnitWeight get weightGoal => _weightGoal ?? weight - 10;
   set weightGoal(UnitWeight value) => _weightGoal = value;
 
   Diet? diet;
@@ -51,10 +51,8 @@ class OnboardingController {
   }
 
   void moveToNextStep(BuildContext context, TabController tabController) {
-    if (currentStep.index == OnboardingStep.values.last.index) {
-      // Todo: Move to home page
-      return;
-    }
+    if (currentStep.index == OnboardingStep.values.last.index) return;
+
     currentStep = OnboardingStep.values[currentStep.index + 1];
     tabController.animateTo(
       currentStep.index,

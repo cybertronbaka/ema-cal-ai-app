@@ -94,7 +94,7 @@ class _SetWeightGoalStep extends ConsumerWidget {
       title: 'Set your weight goal',
       description: 'Your personalized plan will be tailored based on this.',
       btnLabel: 'Next',
-      initialValue: controller.weight,
+      initialValue: controller.weightGoal,
       measurementSystem: controller.measurementSystem,
       onBtnPressed: (weight) {
         controller.weightGoal = weight;
