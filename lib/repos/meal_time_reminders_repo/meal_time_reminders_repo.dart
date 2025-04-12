@@ -38,7 +38,7 @@ class LocalMealTimeRemindersRepo extends MealTimeRemindersRepo {
   @override
   Future<void> save(List<MealTimeReminder> reminders) async {
     final box = await _openBox();
-    await box.put(_valuesKey, reminders.map((e) => e.toJson()).toList());
+    await box.put(_valuesKey, reminders.toJson());
   }
 
   Future<Box> _openBox() => Hive.openBox(boxName);

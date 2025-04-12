@@ -3,6 +3,7 @@ import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -68,8 +69,14 @@ class OnboardingController {
           ),
         );
 
+    await ref.read(mealTimeRemindersRepoProvider).save(mealTimeReminders);
+
     await ref.read(profileRepoProvider).get().then((value) {
       debugPrint(value?.toJson().toString());
+    });
+
+    await ref.read(mealTimeRemindersRepoProvider).get().then((value) {
+      debugPrint(value.toJson().toString());
     });
   }
 

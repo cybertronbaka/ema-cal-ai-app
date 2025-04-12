@@ -29,3 +29,9 @@ class MealTimeReminder {
   String icon;
   static const _iconKey = 'icon';
 }
+
+extension ListMealTimeReminderExt on List<MealTimeReminder> {
+  List<Map<String, dynamic>> toJson() {
+    return map((e) => e.toJson()).toList();
+  }
+}
