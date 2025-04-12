@@ -1,6 +1,7 @@
 import 'package:ema_cal_ai/app/router.dart';
 import 'package:ema_cal_ai/app/theme.dart';
 import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
+import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:ema_cal_ai/utils/shared_pref_proxy.dart';
@@ -27,6 +28,7 @@ class EmaCalAIApp extends StatelessWidget {
       keyboardVisibilityController: keyboardVisibilityController,
       profileRepo: LocalProfileRepo(),
       mealTimeRemindersRepo: LocalMealTimeRemindersRepo(),
+      nutritionPlannerRepo: GeminiNutritionPlannerRepo(),
       child: const EmaCalAIAppMaterialApp(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
+import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/shared_pref_proxy.dart';
@@ -11,6 +12,7 @@ ProviderScope createRootProviderScope({
   KeyboardVisibilityController? keyboardVisibilityController,
   ProfileRepo? profileRepo,
   MealTimeRemindersRepo? mealTimeRemindersRepo,
+  NutritionPlannerRepo? nutritionPlannerRepo,
   required Widget child,
 }) {
   final overrides = [
@@ -25,6 +27,9 @@ ProviderScope createRootProviderScope({
 
     if (mealTimeRemindersRepo != null)
       mealTimeRemindersRepoProvider.overrideWithValue(mealTimeRemindersRepo),
+
+    if (nutritionPlannerRepo != null)
+      nutritionPlannerRepoProvider.overrideWithValue(nutritionPlannerRepo),
   ];
 
   return ProviderScope(overrides: overrides, child: child);
