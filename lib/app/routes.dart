@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,21 +31,23 @@ class CustomRoute {
   GoRoute generateRoute({
     PageBuilder? pageBuilder,
     Widget Function(BuildContext, GoRouterState)? builder,
-    required Widget child,
+    FutureOr<String?> Function(BuildContext, GoRouterState)? redirect,
+    Widget? child,
   }) {
     return GoRoute(
       name: name,
       path: path(), // Todo: Solve a way to resolve path here or do I need to?
+      redirect: redirect,
       pageBuilder:
           pageBuilder ??
           (transition != null
               ? (context, state) =>
-                  transition!(key: state.pageKey, child: child)
+                  transition!(key: state.pageKey, child: child!)
               : null),
       builder:
           builder ??
           (pageBuilder == null && transition == null
-              ? (context, state) => child
+              ? (context, state) => child!
               : null),
     );
   }
@@ -63,5 +67,10 @@ abstract class Routes {
   static final CustomRoute onboardingCompleteOverview = CustomRoute(
     name: 'onboardingCompleteOverview',
     path: ([args]) => '/onboardingCompleteOverview',
+  );
+
+  static final CustomRoute home = CustomRoute(
+    name: 'home',
+    path: ([args]) => '/home',
   );
 }

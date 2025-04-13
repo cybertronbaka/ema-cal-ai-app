@@ -1,6 +1,6 @@
 /// Represents a measurable weight with metric/imperial conversion capabilities
 abstract final class UnitWeight {
-  static UnitWeight fromJson(Map<String, dynamic> json) {
+  static UnitWeight fromJson(Map<dynamic, dynamic> json) {
     if (json[_isMetricKey] == null) {
       throw 'Cannot determine measurement system for unit weight';
     }

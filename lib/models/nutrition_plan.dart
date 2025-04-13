@@ -8,7 +8,7 @@ class NutritionPlan {
     required this.bmiIndex,
   });
 
-  factory NutritionPlan.fromJson(Map<String, dynamic> json) {
+  factory NutritionPlan.fromJson(Map<dynamic, dynamic> json) {
     return NutritionPlan(
       goal: DailyNutrition.fromJson(json['goal']),
       timeframeInWeeks: json['timeframe_in_weeks'] as int,
@@ -49,7 +49,7 @@ class DailyNutrition {
     required this.waterLiters,
   });
 
-  factory DailyNutrition.fromJson(Map<String, dynamic> json) {
+  factory DailyNutrition.fromJson(Map<dynamic, dynamic> json) {
     return DailyNutrition(
       calories: json['calories'] as int,
       proteinG: (json['protein_g'] as num).toDouble(),
@@ -84,7 +84,7 @@ class NutritionNotes {
     required this.warnings,
   });
 
-  factory NutritionNotes.fromJson(Map<String, dynamic> json) {
+  factory NutritionNotes.fromJson(Map<dynamic, dynamic> json) {
     return NutritionNotes(
       gymAdvice: json['gym_advice'] as String,
       medicalAdvice: json['medical_advice'] as String,

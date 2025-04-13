@@ -10,7 +10,6 @@ import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:ema_cal_ai/utils/shared_pref_proxy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,11 +39,11 @@ class EmaCalAIApp extends StatelessWidget {
   }
 }
 
-class EmaCalAIAppMaterialApp extends ConsumerWidget {
+class EmaCalAIAppMaterialApp extends StatelessWidget {
   const EmaCalAIAppMaterialApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ReactiveFormConfig(
       validationMessages: {
         ValidationMessage.required: (error) => 'This field must not be empty',

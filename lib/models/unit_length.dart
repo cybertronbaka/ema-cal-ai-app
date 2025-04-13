@@ -1,6 +1,6 @@
 /// Represents a measurable length with imperial/metric conversion capabilities
 abstract final class UnitLength {
-  static UnitLength fromJson(Map<String, dynamic> json) {
+  static UnitLength fromJson(Map<dynamic, dynamic> json) {
     if (json[_isMetricKey] == null) {
       throw 'Cannot determine measurement system for unit length';
     }
