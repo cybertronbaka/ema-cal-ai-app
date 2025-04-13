@@ -4,15 +4,12 @@ import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks/keyboard_visibility_controller.dart';
-import '../../mocks/shared_pref_proxy.dart';
 import '../../utils/material_app.dart';
 
 void main() {
-  late MockSharedPrefProxy sharedPrefProxy;
   late MockKeyboardVisibilityController keyboardVisibilityController;
 
   setUpAll(() {
-    sharedPrefProxy = MockSharedPrefProxy();
     keyboardVisibilityController = MockKeyboardVisibilityController();
   });
 
@@ -22,7 +19,6 @@ void main() {
         windowConfig: variant,
         tester: tester,
         child: createRootProviderScope(
-          sharedPrefProxy: sharedPrefProxy,
           keyboardVisibilityController: keyboardVisibilityController,
           child: createTestMaterialApp(const AuthEntryPage()),
         ),

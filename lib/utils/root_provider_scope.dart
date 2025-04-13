@@ -5,13 +5,11 @@ import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
-import 'package:ema_cal_ai/utils/shared_pref_proxy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 ProviderScope createRootProviderScope({
-  SharedPrefProxy? sharedPrefProxy,
   KeyboardVisibilityController? keyboardVisibilityController,
   ProfileRepo? profileRepo,
   MealTimeRemindersRepo? mealTimeRemindersRepo,
@@ -22,8 +20,6 @@ ProviderScope createRootProviderScope({
   required Widget child,
 }) {
   final overrides = [
-    if (sharedPrefProxy != null)
-      sharedPrefProvider.overrideWithValue(sharedPrefProxy),
     if (keyboardVisibilityController != null)
       keyboardVisibilityControllerProvider.overrideWithValue(
         keyboardVisibilityController,

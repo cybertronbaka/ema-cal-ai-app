@@ -38,7 +38,6 @@ dependencies:
   go_router: ^14.8.1
   flutter_hooks: ^0.21.2
   json_theme: ^8.0.0+2
-  shared_preferences: ^2.5.3
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
   cached_network_image: ^3.4.1
