@@ -8,5 +8,6 @@ enum OnboardingStep {
   setWeightGoal,
   chooseDiet,
   setMealTimes,
+  setGeminiApiKey,
   generateNutritionPlan,
 }

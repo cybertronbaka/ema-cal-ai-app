@@ -81,20 +81,17 @@ abstract class AppTheme {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: Colors.white,
+        fillColor: Colors.white.withAlpha(100),
         filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32),
-          gapPadding: 16,
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.inputBorder),
         ),
-        contentPadding: const EdgeInsets.all(16),
+        contentPadding: const EdgeInsets.all(12),
         hintStyle: const TextStyle(
           color: AppColors.inputHint,
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: fontFamily,
         ),
       ),

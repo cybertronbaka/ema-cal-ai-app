@@ -144,6 +144,28 @@ class _SetMealTimeRemindersStep extends ConsumerWidget {
   }
 }
 
+class _SetGeminiApiKeyStep extends ConsumerWidget {
+  const _SetGeminiApiKeyStep({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(onboardingControllerProvider);
+
+    return SetGeminiApiKeyView(
+      title: 'Enter Your Gemini API Key',
+      description:
+          'Your API key is stored locally for your convenience.\n\n'
+          "Since our service is currently free, we're unable to support external API keys at this time.\n"
+          'Please continue using the provided key for seamless access.',
+      btnLabel: 'Next',
+      initialValue: controller.geminiApiKey,
+      onBtnPressed: (value) {
+        controller.geminiApiKey = value;
+        controller.moveToNextStep(context, DefaultTabController.of(context));
+      },
+    );
+  }
+}
+
 class _GenerateNutritionPlanStep extends ConsumerWidget {
   const _GenerateNutritionPlanStep({super.key});
   @override

@@ -42,6 +42,8 @@ class OnboardingController {
     MealTimeReminder(label: 'Dinner ', icon: 'assets/images/meal.svg'),
   ];
 
+  String? geminiApiKey;
+
   UserProfile get profile => UserProfile(
     dob: dob!,
     gender: gender!,

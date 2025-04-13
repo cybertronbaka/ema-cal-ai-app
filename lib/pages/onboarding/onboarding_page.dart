@@ -7,6 +7,7 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/widgets/views/generate_nutrition_plan_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_diet_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_dob_view.dart';
+import 'package:ema_cal_ai/widgets/views/set_gemini_api_key_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_height_and_weight_view/set_height_and_weight_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_meal_time_reminders_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_weight_goal_view.dart';
@@ -50,7 +51,6 @@ class OnboardingPage extends HookConsumerWidget {
                       _StepperBody(key: ValueKey(step), step: step),
                   ],
                 ),
-                resizeToAvoidBottomInset: false,
               ),
             ),
       ),

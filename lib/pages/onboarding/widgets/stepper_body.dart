@@ -33,6 +33,9 @@ class _StepperBody extends ConsumerWidget {
       OnboardingStep.setMealTimes => const _SetMealTimeRemindersStep(
         key: ValueKey(OnboardingStep.setMealTimes),
       ),
+      OnboardingStep.setGeminiApiKey => const _SetGeminiApiKeyStep(
+        key: ValueKey(OnboardingStep.setGeminiApiKey),
+      ),
       OnboardingStep.generateNutritionPlan => const _GenerateNutritionPlanStep(
         // Keep the data if already generated (Don't generate again and again is what I am trying to achieve).
         // If values have changed, then regenerate. Or maybe I can just not let them go back.
