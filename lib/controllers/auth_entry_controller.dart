@@ -13,6 +13,6 @@ class AuthEntryController {
   Ref ref;
 
   void toOnboardingPage(BuildContext context) {
-    context.pushNamed(Routes.onboarding.name);
+    context.pushReplacementNamed(Routes.onboarding.name);
   }
 }

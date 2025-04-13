@@ -1,3 +1,5 @@
+import 'package:hive/hive.dart';
+
 class NutritionPlan {
   NutritionPlan({
     required this.goal,
@@ -15,6 +17,14 @@ class NutritionPlan {
     );
   }
 
+  factory NutritionPlan.fromHive(Box box) {
+    return NutritionPlan(
+      goal: DailyNutrition.fromJson(box.get('goal')),
+      timeframeInWeeks: box.get('timeframe_in_weeks') as int,
+      bmiIndex: box.get('bmi_index') as double,
+      notes: NutritionNotes.fromJson(box.get('notes')),
+    );
+  }
   final DailyNutrition goal;
   final int timeframeInWeeks;
   final NutritionNotes notes;

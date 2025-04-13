@@ -59,6 +59,9 @@ final class ImperialWeight extends UnitWeight {
   Map<String, dynamic> toJson() {
     return {UnitWeight._isMetricKey: isMetric, UnitWeight._lbsKey: lbs};
   }
+
+  @override
+  String toString() => '$kg lbs';
 }
 
 /// Metric units implementation (kilograms)
@@ -85,4 +88,7 @@ final class MetricWeight extends UnitWeight {
   Map<String, dynamic> toJson() {
     return {UnitWeight._isMetricKey: isMetric, UnitWeight._kgKey: kg};
   }
+
+  @override
+  String toString() => '$kg kg';
 }

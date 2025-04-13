@@ -13,6 +13,7 @@ class UserProfile {
     required this.measurementSystem,
     required this.weightGoal,
     required this.diet,
+    required this.isOnboardingComplete,
   });
 
   factory UserProfile.fromHive(Box box) {
@@ -26,6 +27,7 @@ class UserProfile {
           MeasurementSystem.values[box.get('measurement_system')],
       weightGoal: UnitWeight.fromJson(box.get('weight_goal')),
       diet: Diet.values[box.get('diet')],
+      isOnboardingComplete: box.get('is_onboarding_complete'),
     );
   }
 
@@ -37,6 +39,7 @@ class UserProfile {
   final MeasurementSystem measurementSystem;
   final UnitWeight weightGoal;
   final Diet diet;
+  final bool isOnboardingComplete;
 
   Map<String, dynamic> toJson() {
     return {
@@ -48,6 +51,7 @@ class UserProfile {
       'measurement_system': measurementSystem.index,
       'weight_goal': weightGoal.toJson(),
       'diet': diet.index,
+      'is_onboarding_complete': isOnboardingComplete,
     };
   }
 
@@ -62,7 +66,32 @@ class UserProfile {
         weight == other.weight &&
         measurementSystem == other.measurementSystem &&
         weightGoal == other.weightGoal &&
-        diet == other.diet;
+        diet == other.diet &&
+        isOnboardingComplete == other.isOnboardingComplete;
+  }
+
+  UserProfile copyWith({
+    DateTime? dob,
+    Gender? gender,
+    WorkoutFrequency? workoutFrequency,
+    UnitLength? height,
+    UnitWeight? weight,
+    MeasurementSystem? measurementSystem,
+    UnitWeight? weightGoal,
+    Diet? diet,
+    bool? isOnboardingComplete,
+  }) {
+    return UserProfile(
+      dob: dob ?? this.dob,
+      gender: gender ?? this.gender,
+      workoutFrequency: workoutFrequency ?? this.workoutFrequency,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      measurementSystem: measurementSystem ?? this.measurementSystem,
+      weightGoal: weightGoal ?? this.weightGoal,
+      diet: diet ?? this.diet,
+      isOnboardingComplete: isOnboardingComplete ?? this.isOnboardingComplete,
+    );
   }
 
   @override

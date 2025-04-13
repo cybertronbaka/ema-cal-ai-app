@@ -59,4 +59,9 @@ abstract class Routes {
     name: 'onboarding',
     path: ([args]) => '/onboarding',
   );
+
+  static final CustomRoute onboardingCompleteOverview = CustomRoute(
+    name: 'onboardingCompleteOverview',
+    path: ([args]) => '/onboardingCompleteOverview',
+  );
 }

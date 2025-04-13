@@ -14,6 +14,7 @@ abstract class AppTheme {
       fontFamilyFallback: const [fontFamily, 'Roboto'],
       colorScheme: const ColorScheme.light(primary: AppColors.primary),
       scaffoldBackgroundColor: AppColors.bgColor,
+      appBarTheme: const AppBarTheme(backgroundColor: AppColors.bgColor),
       textTheme: TextTheme(
         displayLarge: baseTextStyle.copyWith(
           fontSize: 32,

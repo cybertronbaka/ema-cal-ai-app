@@ -160,6 +160,7 @@ class _SetGeminiApiKeyStep extends ConsumerWidget {
       initialValue: controller.gptApiKey,
       onBtnPressed: (value) {
         controller.gptApiKey = value;
+        ref.read(gptApiKeyProvider.notifier).state = value;
         controller.moveToNextStep(context, DefaultTabController.of(context));
       },
     );
@@ -181,7 +182,7 @@ class _GenerateNutritionPlanStep extends ConsumerWidget {
       gptApiKey: controller.gptApiKey!,
       onBtnPressed: (nutritionPlan) {
         controller.nutritionPlan = nutritionPlan;
-        controller.moveToNextStep(context, DefaultTabController.of(context));
+        controller.onboardingDone(context);
       },
     );
   }
