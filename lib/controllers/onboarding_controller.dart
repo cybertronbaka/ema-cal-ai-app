@@ -1,11 +1,10 @@
+import 'package:ema_cal_ai/controllers/nutrition_planner_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
+import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
-import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
-import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
-import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -43,7 +42,22 @@ class OnboardingController {
     MealTimeReminder(label: 'Dinner ', icon: 'assets/images/meal.svg'),
   ];
 
+  UserProfile get profile => UserProfile(
+    dob: dob!,
+    gender: gender!,
+    workoutFrequency: workoutFrequency!,
+    height: height,
+    weight: weight,
+    measurementSystem: measurementSystem,
+    weightGoal: weightGoal,
+    diet: diet!,
+  );
+
+  NutritionPlan? nutritionPlan;
+
   void moveToPrevStep(BuildContext context, TabController tabController) {
+    if (!ref.read(nutritionPlannerCanGoBack)) return;
+
     if (currentStep == OnboardingStep.gender) return context.pop();
 
     currentStep = OnboardingStep.values[currentStep.index - 1];
@@ -52,36 +66,6 @@ class OnboardingController {
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
-  }
-
-  Future<void> submit(BuildContext context) async {
-    final profile = UserProfile(
-      dob: dob!,
-      gender: gender!,
-      workoutFrequency: workoutFrequency!,
-      height: height,
-      weight: weight,
-      measurementSystem: measurementSystem,
-      weightGoal: weightGoal,
-      diet: diet!,
-    );
-    await ref.read(profileRepoProvider).save(profile);
-
-    await ref.read(mealTimeRemindersRepoProvider).save(mealTimeReminders);
-
-    await ref.read(profileRepoProvider).get().then((value) {
-      debugPrint(value?.toJson().toString());
-    });
-
-    await ref.read(mealTimeRemindersRepoProvider).get().then((value) {
-      debugPrint(value.toJson().toString());
-    });
-
-    await ref.read(nutritionPlannerRepoProvider).plan(profile).then((value) {
-      debugPrint(value.toJson().toString());
-    });
-
-    // await Gemini
   }
 
   void moveToNextStep(BuildContext context, TabController tabController) {

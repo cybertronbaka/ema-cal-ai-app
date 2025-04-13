@@ -7,6 +7,7 @@ class _StepperAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(onboardingControllerProvider);
     final tabController = DefaultTabController.of(context);
+    final canMovePrevStep = ref.watch(nutritionPlannerCanGoBack);
 
     return SafeArea(
       child: Padding(
@@ -15,6 +16,8 @@ class _StepperAppBar extends ConsumerWidget implements PreferredSizeWidget {
           children: [
             BackButton(
               onPressed: () {
+                if (!canMovePrevStep) return;
+
                 controller.moveToPrevStep(context, tabController);
               },
             ),

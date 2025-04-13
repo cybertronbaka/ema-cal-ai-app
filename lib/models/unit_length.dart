@@ -29,6 +29,18 @@ abstract final class UnitLength {
       _inchesKey: inches,
     };
   }
+
+  @override
+  bool operator ==(covariant UnitLength other) {
+    return isMetric == other.isMetric &&
+        cm == other.cm &&
+        feet == other.feet &&
+        inches == other.inches;
+  }
+
+  @override
+  // ignore: unnecessary_overrides
+  int get hashCode => super.hashCode;
 }
 
 /// Imperial units implementation

@@ -1,8 +1,10 @@
 library;
 
 import 'package:ema_cal_ai/app/colors.dart';
+import 'package:ema_cal_ai/controllers/nutrition_planner_controller.dart';
 import 'package:ema_cal_ai/controllers/onboarding_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/widgets/views/generate_nutrition_plan_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_diet_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_dob_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_height_and_weight_view/set_height_and_weight_view.dart';
@@ -23,6 +25,7 @@ class OnboardingPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(onboardingControllerProvider);
+    final canMovePrevStep = ref.watch(nutritionPlannerCanGoBack);
 
     return DefaultTabController(
       length: OnboardingStep.values.length,
@@ -30,6 +33,8 @@ class OnboardingPage extends HookConsumerWidget {
         builder:
             (context) => BackButtonListener(
               onBackButtonPressed: () async {
+                if (!canMovePrevStep) return true;
+
                 controller.moveToPrevStep(
                   context,
                   DefaultTabController.of(context),

@@ -50,4 +50,22 @@ class UserProfile {
       'diet': diet.index,
     };
   }
+
+  @override
+  bool operator ==(covariant UserProfile other) {
+    return dob.year == other.dob.year &&
+        dob.month == other.dob.month &&
+        dob.day == other.dob.day &&
+        gender == other.gender &&
+        workoutFrequency == other.workoutFrequency &&
+        height == other.height &&
+        weight == other.weight &&
+        measurementSystem == other.measurementSystem &&
+        weightGoal == other.weightGoal &&
+        diet == other.diet;
+  }
+
+  @override
+  // ignore: unnecessary_overrides
+  int get hashCode => super.hashCode;
 }

@@ -24,6 +24,15 @@ abstract final class UnitWeight {
   Map<String, dynamic> toJson() {
     return {_isMetricKey: isMetric, _kgKey: kg, _lbsKey: lbs};
   }
+
+  @override
+  bool operator ==(covariant UnitWeight other) {
+    return isMetric == other.isMetric && kg == other.kg && lbs == other.lbs;
+  }
+
+  @override
+  // ignore: unnecessary_overrides
+  int get hashCode => super.hashCode;
 }
 
 /// Imperial units implementation (pounds)

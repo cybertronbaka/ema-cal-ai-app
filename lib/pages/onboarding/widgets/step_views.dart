@@ -138,7 +138,27 @@ class _SetMealTimeRemindersStep extends ConsumerWidget {
       initialValue: controller.mealTimeReminders,
       onBtnPressed: (reminders) {
         controller.mealTimeReminders = reminders;
-        controller.submit(context);
+        controller.moveToNextStep(context, DefaultTabController.of(context));
+      },
+    );
+  }
+}
+
+class _GenerateNutritionPlanStep extends ConsumerWidget {
+  const _GenerateNutritionPlanStep({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(onboardingControllerProvider);
+
+    return GenerateNutritionPlanView(
+      title: "We're setting everything up for you",
+      description: 'Customizing your nutrition plan',
+      btnLabel: 'Next',
+      profile: controller.profile,
+      reminders: controller.mealTimeReminders,
+      onBtnPressed: (nutritionPlan) {
+        controller.nutritionPlan = nutritionPlan;
+        controller.moveToNextStep(context, DefaultTabController.of(context));
       },
     );
   }
