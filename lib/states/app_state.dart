@@ -7,3 +7,5 @@ final sharedPrefProvider = Provider<SharedPrefProxy>(
 /// created only for testing
 final keyboardVisibilityControllerProvider =
     Provider<KeyboardVisibilityController>((ref) => throw UnimplementedError());
+
+final gptApiKey = StateProvider<String?>((_) => null);

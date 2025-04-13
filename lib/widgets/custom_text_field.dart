@@ -12,6 +12,7 @@ class CustomTextField<T> extends StatelessWidget {
     this.textInputAction,
     this.onSubmitted,
     this.onEditingComplete,
+    this.readOnly = false,
   });
 
   final String formControlName;
@@ -23,6 +24,7 @@ class CustomTextField<T> extends StatelessWidget {
   final TextInputAction? textInputAction;
   final void Function(FormControl<T>)? onSubmitted;
   final void Function(FormControl<T>)? onEditingComplete;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class CustomTextField<T> extends StatelessWidget {
       obscureText: obscureText,
       onEditingComplete: onEditingComplete,
       onSubmitted: onSubmitted,
+      readOnly: readOnly,
       style: const TextStyle(color: Colors.black),
       keyboardType: keyboardType,
       textInputAction: textInputAction,

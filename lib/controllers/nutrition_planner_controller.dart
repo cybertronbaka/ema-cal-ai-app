@@ -23,6 +23,7 @@ class NutritionPlannerController {
   Future<void> generatePlan(
     UserProfile profile,
     List<MealTimeReminder> reminders,
+    String gptApiKey,
   ) async {
     try {
       ref.read(nutritionPlannerCanGoBack.notifier).state = false;
@@ -40,7 +41,9 @@ class NutritionPlannerController {
         debugPrint(value.toJson().toString());
       });
 
-      final plan = await ref.read(nutritionPlannerRepoProvider).plan(profile);
+      final plan = await ref
+          .read(nutritionPlannerRepoProvider)
+          .plan(profile, gptApiKey);
       debugPrint(plan.toJson().toString());
       nutritionPlan = AsyncData(plan);
     } catch (e, st) {

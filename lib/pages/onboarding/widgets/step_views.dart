@@ -157,9 +157,9 @@ class _SetGeminiApiKeyStep extends ConsumerWidget {
           "Since our service is currently free, we're unable to support external API keys at this time.\n"
           'Please continue using the provided key for seamless access.',
       btnLabel: 'Next',
-      initialValue: controller.geminiApiKey,
+      initialValue: controller.gptApiKey,
       onBtnPressed: (value) {
-        controller.geminiApiKey = value;
+        controller.gptApiKey = value;
         controller.moveToNextStep(context, DefaultTabController.of(context));
       },
     );
@@ -178,6 +178,7 @@ class _GenerateNutritionPlanStep extends ConsumerWidget {
       btnLabel: 'Next',
       profile: controller.profile,
       reminders: controller.mealTimeReminders,
+      gptApiKey: controller.gptApiKey!,
       onBtnPressed: (nutritionPlan) {
         controller.nutritionPlan = nutritionPlan;
         controller.moveToNextStep(context, DefaultTabController.of(context));

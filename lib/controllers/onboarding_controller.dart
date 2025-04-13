@@ -42,7 +42,7 @@ class OnboardingController {
     MealTimeReminder(label: 'Dinner ', icon: 'assets/images/meal.svg'),
   ];
 
-  String? geminiApiKey;
+  String? gptApiKey;
 
   UserProfile get profile => UserProfile(
     dob: dob!,
@@ -62,6 +62,8 @@ class OnboardingController {
 
     if (currentStep == OnboardingStep.gender) return context.pop();
 
+    FocusManager.instance.primaryFocus?.unfocus();
+
     currentStep = OnboardingStep.values[currentStep.index - 1];
     tabController.animateTo(
       currentStep.index,
@@ -72,6 +74,8 @@ class OnboardingController {
 
   void moveToNextStep(BuildContext context, TabController tabController) {
     if (currentStep.index == OnboardingStep.values.last.index) return;
+
+    FocusManager.instance.primaryFocus?.unfocus();
 
     currentStep = OnboardingStep.values[currentStep.index + 1];
     tabController.animateTo(

@@ -2,7 +2,6 @@ library;
 
 import 'dart:convert';
 
-import 'package:ema_cal_ai/app/globals.dart';
 import 'package:ema_cal_ai/extensions/date_time.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
@@ -10,7 +9,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'gemini/config.dart';
-part 'gemini/gemin_nutrition_planner_repo.dart';
+part 'gemini/gemini_nutrition_planner_repo.dart';
 part 'gemini/prompt.dart';
 
 final nutritionPlannerRepoProvider = Provider<NutritionPlannerRepo>(
@@ -18,5 +17,5 @@ final nutritionPlannerRepoProvider = Provider<NutritionPlannerRepo>(
 );
 
 abstract class NutritionPlannerRepo {
-  Future<NutritionPlan> plan(UserProfile profile);
+  Future<NutritionPlan> plan(UserProfile profile, String gptApiKey);
 }

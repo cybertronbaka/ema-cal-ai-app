@@ -3,7 +3,7 @@ part of 'widgets.dart';
 class CustomAssetVideoPlayer extends HookWidget {
   const CustomAssetVideoPlayer({
     super.key,
-    this.height = 400,
+    this.height = 350,
     required this.source,
   });
   final double height;

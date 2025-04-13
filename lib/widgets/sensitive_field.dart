@@ -8,6 +8,7 @@ class SensitiveField extends HookWidget {
     this.textInputAction,
     this.onSubmitted,
     this.onEditingComplete,
+    this.readOnly = false,
   });
 
   final String formControlName;
@@ -15,6 +16,7 @@ class SensitiveField extends HookWidget {
   final TextInputAction? textInputAction;
   final void Function(FormControl<String>)? onEditingComplete;
   final void Function(FormControl<String>)? onSubmitted;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class SensitiveField extends HookWidget {
       textInputAction: textInputAction,
       onEditingComplete: onEditingComplete,
       onSubmitted: onSubmitted,
+      readOnly: readOnly,
       suffixIcon: Focus(
         canRequestFocus: false,
         descendantsAreFocusable: false,
