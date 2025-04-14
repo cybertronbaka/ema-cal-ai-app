@@ -180,6 +180,11 @@ class _GenerateNutritionPlanStep extends ConsumerWidget {
       profile: controller.profile,
       reminders: controller.mealTimeReminders,
       gptApiKey: controller.gptApiKey!,
+      plan: controller.nutritionPlan,
+      onGenerationDone: (plan) {
+        controller.nutritionPlan = plan;
+        controller.saveData();
+      },
       onBtnPressed: (nutritionPlan) {
         controller.nutritionPlan = nutritionPlan;
         controller.onboardingDone(context);

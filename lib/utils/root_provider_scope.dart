@@ -3,6 +3,7 @@ import 'package:ema_cal_ai/repos/gpt_api_key_verify_repo/gpt_api_key_verify_repo
 import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
+import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ ProviderScope createRootProviderScope({
   NutritionPlanRepo? nutritionPlanRepo,
   GptApiKeyVerifyRepo? gptApiKeyVerifyRepo,
   GptApiKeyRepo? gptApiKeyRepo,
+  OnboardingSaveRepo? onboardingSaveRepo,
   required Widget child,
 }) {
   final overrides = [
@@ -41,6 +43,9 @@ ProviderScope createRootProviderScope({
 
     if (nutritionPlanRepo != null)
       nutritionPlanRepoProvider.overrideWithValue(nutritionPlanRepo),
+
+    if (onboardingSaveRepo != null)
+      onboardingSaveRepoProvider.overrideWithValue(onboardingSaveRepo),
   ];
 
   return ProviderScope(overrides: overrides, child: child);

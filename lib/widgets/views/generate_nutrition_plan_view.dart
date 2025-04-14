@@ -20,15 +20,19 @@ class GenerateNutritionPlanView extends HookConsumerWidget {
     this.reminders,
     required this.profile,
     required this.gptApiKey,
+    this.plan,
+    this.onGenerationDone,
   });
 
   final String? title;
   final String? description;
   final String btnLabel;
   final void Function(NutritionPlan value)? onBtnPressed;
+  final void Function(NutritionPlan value)? onGenerationDone;
   final UserProfile profile;
   final List<MealTimeReminder>? reminders;
   final String gptApiKey;
+  final NutritionPlan? plan;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
 
@@ -42,14 +46,23 @@ class GenerateNutritionPlanView extends HookConsumerWidget {
     final isDone = useState(false);
 
     useInitHook(() {
+      if (plan != null) {
+        controller.nutritionPlan = AsyncData(plan!);
+        isDone.value = true;
+        return;
+      }
+
       controller.generatePlan(profile, reminders ?? [], gptApiKey);
-    }, []);
+    }, [plan]);
 
     useEffect(() {
       final plan = controller.nutritionPlan;
       if (plan.hasValue) {
         confettiController.play();
         isDone.value = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          onGenerationDone?.call(plan.value!);
+        });
       }
 
       return null;

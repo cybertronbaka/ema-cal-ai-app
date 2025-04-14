@@ -2,7 +2,6 @@ library;
 
 import 'dart:convert';
 
-import 'package:ema_cal_ai/states/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
