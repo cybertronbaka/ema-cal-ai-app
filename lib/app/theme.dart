@@ -13,36 +13,32 @@ abstract class AppTheme {
       fontFamily: fontFamily,
       fontFamilyFallback: const [fontFamily, 'Roboto'],
       colorScheme: const ColorScheme.light(primary: AppColors.primary),
+      scaffoldBackgroundColor: AppColors.bgColor,
+      appBarTheme: const AppBarTheme(backgroundColor: AppColors.bgColor),
       textTheme: TextTheme(
         displayLarge: baseTextStyle.copyWith(
           fontSize: 32,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         displayMedium: baseTextStyle.copyWith(
           fontSize: 28,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         displaySmall: baseTextStyle.copyWith(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         titleLarge: baseTextStyle.copyWith(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         titleMedium: baseTextStyle.copyWith(
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         titleSmall: baseTextStyle.copyWith(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          fontVariations: const [FontVariation.weight(600)],
         ),
         bodyLarge: baseTextStyle.copyWith(fontSize: 18),
         bodyMedium: baseTextStyle.copyWith(fontSize: 16),
@@ -63,25 +59,40 @@ abstract class AppTheme {
             ),
           ),
           textStyle: WidgetStatePropertyAll(
-            TextStyle(fontSize: 18, fontFamily: fontFamily),
+            TextStyle(
+              fontSize: 18,
+              fontFamily: fontFamily,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      outlinedButtonTheme: const OutlinedButtonThemeData(
+        style: ButtonStyle(
+          padding: WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          ),
+          textStyle: WidgetStatePropertyAll(
+            TextStyle(
+              fontSize: 18,
+              fontFamily: fontFamily,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: Colors.white,
+        fillColor: Colors.white.withAlpha(100),
         filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32),
-          gapPadding: 16,
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.inputBorder),
         ),
-        contentPadding: const EdgeInsets.all(16),
+        contentPadding: const EdgeInsets.all(12),
         hintStyle: const TextStyle(
           color: AppColors.inputHint,
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: fontFamily,
         ),
       ),

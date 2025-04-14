@@ -1,39 +1,22 @@
+library;
+
+import 'package:ema_cal_ai/controllers/auth_entry_controller.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum _OnboardingStep {
-  intro(
-    'Calorie tracking made easy',
-    "Just snap a quick photo of your meal and we'll do the rest",
-  ),
-  disclaimer(
-    'Disclaimer',
-    'Ema AI provides calorie and nutritional information for general guidance only.\n\n'
-        'Consult a healthcare professional before making dietary changes.'
-        'Information may not be accurate and is not medical advice.\n\n'
-        'Results vary. Use responsibly.'
-        'We are not liable for any health outcomes. AI estimates are not guaranteed.',
-    TextAlign.left,
-  );
-
-  const _OnboardingStep(
-    this.title,
-    this.description, [
-    this.descriptionAlign = TextAlign.center,
-  ]);
-
-  final String title;
-  final String description;
-  final TextAlign descriptionAlign;
-}
+part 'enums/onboarding_step.dart';
+part 'widgets/image_section.dart';
+part 'widgets/indicators.dart';
 
 class AuthEntryPage extends HookConsumerWidget {
   const AuthEntryPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(authEntryControllerProvider);
+
     final textTheme = TextTheme.of(context);
     final isAttached = useValueNotifier(false);
     final pageController = usePageController(
@@ -42,6 +25,7 @@ class AuthEntryPage extends HookConsumerWidget {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           const _ImageSection(),
@@ -104,7 +88,9 @@ class AuthEntryPage extends HookConsumerWidget {
                                   isAttached: isAttached,
                                 ),
                                 FilledButton(
-                                  onPressed: () {},
+                                  onPressed:
+                                      () =>
+                                          controller.toOnboardingPage(context),
                                   child: const Text('Next'),
                                 ),
                               ],
@@ -120,72 +106,6 @@ class AuthEntryPage extends HookConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _Indicators extends StatelessWidget {
-  const _Indicators({required this.pageController, required this.isAttached});
-
-  final PageController pageController;
-  final ValueNotifier<bool> isAttached;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      spacing: 12,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(_OnboardingStep.values.length, (i) {
-        return ListenableBuilder(
-          listenable: Listenable.merge([pageController, isAttached]),
-          builder: (context, _) {
-            final page = isAttached.value ? pageController.page ?? 0 : 0.0;
-            final isActive = page > i - 0.5 && page < i + 0.5;
-
-            return Container(
-              height: 8,
-              width: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isActive ? Colors.black : Colors.grey,
-              ),
-            );
-          },
-        );
-      }),
-    );
-  }
-}
-
-class _ImageSection extends StatelessWidget {
-  const _ImageSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Stack(
-            children: [
-              Container(),
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/images/cuisine.jpg', // Todo: Need a better image
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const Column(
-                children: [
-                  Expanded(flex: 1, child: SizedBox.expand()),
-                  Expanded(flex: 5, child: ScannerOverlayBox()),
-                  Expanded(flex: 2, child: SizedBox.expand()),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const Expanded(child: SizedBox.expand()),
-      ],
     );
   }
 }
