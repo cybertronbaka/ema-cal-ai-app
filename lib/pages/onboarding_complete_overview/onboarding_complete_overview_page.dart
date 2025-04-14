@@ -2,7 +2,7 @@ library;
 
 import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/app/routes.dart';
-import 'package:ema_cal_ai/models/macro_nutrient_value.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
@@ -218,29 +218,21 @@ class _NutritionGrid extends StatelessWidget {
         crossAxisSpacing: 8,
       ),
       children: [
-        NutritionProgressCard(
-          value: MacroNutrientValue.calories(
-            value: nutritionPlan.goal.calories / 2.0,
-            maxValue: nutritionPlan.goal.calories.toDouble(),
-          ),
+        MacroNutritionPlanCard(
+          value: nutritionPlan.goal.calories.toDouble(),
+          type: MacroNutrients.calories,
         ),
-        NutritionProgressCard(
-          value: MacroNutrientValue.protein(
-            value: nutritionPlan.goal.proteinG / 2.0,
-            maxValue: nutritionPlan.goal.proteinG.toDouble(),
-          ),
+        MacroNutritionPlanCard(
+          value: nutritionPlan.goal.proteinG,
+          type: MacroNutrients.protein,
         ),
-        NutritionProgressCard(
-          value: MacroNutrientValue.carbs(
-            value: nutritionPlan.goal.carbsG / 2.0,
-            maxValue: nutritionPlan.goal.carbsG.toDouble(),
-          ),
+        MacroNutritionPlanCard(
+          value: nutritionPlan.goal.carbsG,
+          type: MacroNutrients.carbs,
         ),
-        NutritionProgressCard(
-          value: MacroNutrientValue.fats(
-            value: nutritionPlan.goal.fatsG / 2.0,
-            maxValue: nutritionPlan.goal.fatsG.toDouble(),
-          ),
+        MacroNutritionPlanCard(
+          value: nutritionPlan.goal.fatsG,
+          type: MacroNutrients.fats,
         ),
       ],
     );

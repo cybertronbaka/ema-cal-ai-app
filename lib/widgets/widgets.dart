@@ -2,7 +2,7 @@ library;
 
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/colors.dart';
-import 'package:ema_cal_ai/models/macro_nutrient_value.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
 import 'package:ema_cal_ai/utils/hooks/video_player_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ part 'custom_dialog.dart';
 part 'custom_filled_button.dart';
 part 'custom_outlined_button.dart';
 part 'custom_text_field.dart';
-part 'nutrition_progress_card.dart';
+part 'macro_nutrition_plan_card.dart';
 part 'options_list.dart';
 part 'scanner_overlay_box.dart';
 part 'sensitive_field.dart';

@@ -1,9 +1,14 @@
 part of 'widgets.dart';
 
-class NutritionProgressCard extends StatelessWidget {
-  const NutritionProgressCard({super.key, required this.value});
+class MacroNutritionPlanCard extends StatelessWidget {
+  const MacroNutritionPlanCard({
+    super.key,
+    required this.type,
+    required this.value,
+  });
 
-  final MacroNutrientValue value;
+  final MacroNutrients type;
+  final double value;
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +23,16 @@ class NutritionProgressCard extends StatelessWidget {
         spacing: 16,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            value.type.label,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
+          Text(type.label, style: const TextStyle(fontWeight: FontWeight.w500)),
           Stack(
             children: [
               SizedBox(
                 height: 80,
                 width: 80,
                 child: CircularProgressIndicator(
-                  value: value.value / value.maxValue,
+                  value: 0.5,
                   backgroundColor: Colors.grey.withAlpha(100),
-                  color: value.type.color,
+                  color: type.color,
                   strokeWidth: 5,
                 ),
               ),
@@ -40,8 +42,8 @@ class NutritionProgressCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(value.maxValue.toInt().toString()),
-                      if (value.type.unit != null) Text(' ${value.type.unit}'),
+                      Text(value.toInt().toString()),
+                      if (type.unit != null) Text(' ${type.unit}'),
                     ],
                   ),
                 ),
