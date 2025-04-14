@@ -31,7 +31,7 @@ class SetGeminiApiKeyView extends HookConsumerWidget {
     final textTheme = TextTheme.of(context);
     final formGroup = useFormGroup(
       controls: {
-        'api_key': ['', Validators.required],
+        'api_key': [initialValue ?? '', Validators.required],
       },
     );
     final btnIsStale = useState(true);
@@ -104,7 +104,8 @@ class SetGeminiApiKeyView extends HookConsumerWidget {
 
                       btnIsStale.value = false;
 
-                      final value = fg.control('api_key').value;
+                      final value =
+                          (fg.control('api_key').value as String).trim();
 
                       final verified = await controller.verifyApiKey(
                         context,

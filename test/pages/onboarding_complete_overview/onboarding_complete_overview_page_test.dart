@@ -1,7 +1,6 @@
 import 'package:adaptive_test/adaptive_test.dart';
 import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
 import 'package:ema_cal_ai/pages/onboarding_complete_overview/onboarding_complete_overview_page.dart';
-import 'package:ema_cal_ai/states/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:flutter/material.dart';

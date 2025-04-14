@@ -31,6 +31,7 @@ class OnboardingPage extends HookConsumerWidget {
 
     return DefaultTabController(
       length: OnboardingStep.values.length,
+      initialIndex: controller.currentStep.index,
       child: Builder(
         builder:
             (context) => BackButtonListener(

@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/nutrition_planner_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
+import 'package:ema_cal_ai/models/onboarding_data.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
+import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
-import 'package:ema_cal_ai/states/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,8 +21,35 @@ final onboardingControllerProvider = Provider.autoDispose(
   (ref) => OnboardingController(ref),
 );
 
+// gender,
+// workoutFrequency,
+// heightAndWeight,
+// setDOB,
+// setWeightGoal,
+// chooseDiet,
+// setMealTimes,
+// setGeminiApiKey,
+// generateNutritionPlan,
 class OnboardingController {
-  OnboardingController(this.ref);
+  OnboardingController(this.ref) {
+    final data = ref.read(onboardingDataProvider);
+    if (data == null) return;
+
+    currentStep = data.currentStep;
+    gender = data.gender;
+    workoutFrequency = data.workoutFrequency;
+    height = data.height;
+    weight = data.weight;
+    measurementSystem = data.measurementSystem;
+    dob = data.dob;
+    if (data.mealTimeReminders != null) {
+      mealTimeReminders = data.mealTimeReminders!;
+    }
+    diet = data.diet;
+    gptApiKey = data.gptApiKey;
+    nutritionPlan = data.nutritionPlan;
+    // No need to do for > 8 because after the last one, isOnboardingComplete is true;
+  }
 
   Ref ref;
 
@@ -30,8 +60,16 @@ class OnboardingController {
   WorkoutFrequency? workoutFrequency;
 
   MeasurementSystem measurementSystem = MeasurementSystem.metric;
-  UnitLength height = MetricLength(163);
-  UnitWeight weight = MetricWeight(50);
+  static const UnitLength _initialHeight = MetricLength(163);
+  static const UnitWeight _initialWeight = MetricWeight(50);
+
+  UnitWeight? _weight;
+  UnitWeight get weight => _weight ?? _initialWeight;
+  set weight(UnitWeight value) => _weight = value;
+
+  UnitLength? _height;
+  UnitLength get height => _height ?? _initialHeight;
+  set height(UnitLength value) => _height = value;
 
   DateTime? dob;
 
@@ -61,6 +99,21 @@ class OnboardingController {
     isOnboardingComplete: false,
   );
 
+  OnboardingData get _data => OnboardingData(
+    currentStep: currentStep,
+    dob: dob,
+    gender: gender,
+    workoutFrequency: workoutFrequency,
+    height: height,
+    weight: weight,
+    mealTimeReminders: mealTimeReminders,
+    measurementSystem: measurementSystem,
+    weightGoal: weightGoal,
+    diet: diet,
+    gptApiKey: gptApiKey,
+    nutritionPlan: nutritionPlan,
+  );
+
   NutritionPlan? nutritionPlan;
 
   void moveToPrevStep(BuildContext context, TabController tabController) async {
@@ -68,12 +121,19 @@ class OnboardingController {
 
     if (currentStep == OnboardingStep.gender) {
       context.pushReplacementNamed(Routes.authEntry.name);
+      clearData();
       return;
+    }
+
+    if (currentStep == OnboardingStep.generateNutritionPlan) {
+      nutritionPlan = null;
+      saveData();
     }
 
     FocusManager.instance.primaryFocus?.unfocus();
 
     currentStep = OnboardingStep.values[currentStep.index - 1];
+    saveData();
 
     tabController.animateTo(
       currentStep.index,
@@ -93,6 +153,7 @@ class OnboardingController {
     final newProfile = profile.copyWith(isOnboardingComplete: true);
     await ref.read(profileRepoProvider).save(newProfile);
     ref.read(userProfileProvider.notifier).state = newProfile;
+    clearData();
 
     if (context.mounted) {
       context.pushReplacementNamed(Routes.onboardingCompleteOverview.name);
@@ -105,10 +166,21 @@ class OnboardingController {
     FocusManager.instance.primaryFocus?.unfocus();
 
     currentStep = OnboardingStep.values[currentStep.index + 1];
+    saveData();
     tabController.animateTo(
       currentStep.index,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  void saveData() {
+    unawaited(ref.read(onboardingSaveRepoProvider).save(_data));
+    ref.read(onboardingDataProvider.notifier).state = _data;
+  }
+
+  void clearData() {
+    unawaited(ref.read(onboardingSaveRepoProvider).clear());
+    ref.read(onboardingDataProvider.notifier).state = null;
   }
 }

@@ -11,6 +11,7 @@ final profileRepoProvider = Provider<ProfileRepo>(
 abstract class ProfileRepo {
   Future<UserProfile?> get();
   Future<void> save(UserProfile profile);
+  Future<void> clear();
 }
 
 class LocalProfileRepo extends ProfileRepo {
@@ -31,4 +32,10 @@ class LocalProfileRepo extends ProfileRepo {
   }
 
   Future<Box> _openBox() => Hive.openBox(boxName);
+
+  @override
+  Future<void> clear() async {
+    final box = await _openBox();
+    await box.clear();
+  }
 }

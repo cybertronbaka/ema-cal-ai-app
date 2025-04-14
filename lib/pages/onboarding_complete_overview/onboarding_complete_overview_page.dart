@@ -3,7 +3,6 @@ library;
 import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/models/macro_nutrient_value.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
-import 'package:ema_cal_ai/states/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';

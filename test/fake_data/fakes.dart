@@ -1,6 +1,7 @@
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
+import 'package:ema_cal_ai/models/onboarding_data.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
@@ -29,10 +30,10 @@ UserProfile genFakeUserProfile() {
     dob: DateTime(2007, 04, 1),
     gender: Gender.male,
     workoutFrequency: WorkoutFrequency.low,
-    height: MetricLength(169),
-    weight: MetricWeight(69),
+    height: const MetricLength(169),
+    weight: const MetricWeight(69),
     measurementSystem: MeasurementSystem.metric,
-    weightGoal: MetricWeight(59),
+    weightGoal: const MetricWeight(59),
     diet: Diet.standard,
     isOnboardingComplete: false,
   );
@@ -44,4 +45,8 @@ List<MealTimeReminder> genFakeMealTimeReminders() {
     MealTimeReminder(label: 'Lunch', icon: 'assets/images/meal.svg'),
     MealTimeReminder(label: 'Dinner', icon: 'assets/images/meal.svg'),
   ];
+}
+
+OnboardingData genFakeOnboardingData() {
+  return OnboardingData(currentStep: OnboardingStep.values.first);
 }

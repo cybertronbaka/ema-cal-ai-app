@@ -46,11 +46,11 @@ abstract final class UnitLength {
 }
 
 /// Imperial units implementation
-final class ImperialLength extends UnitLength {
-  ImperialLength(this.feet, [double inches = 0])
-    : inches = inches.clamp(0, 11.99) {
-    if (feet < 0) throw ArgumentError('Feet must be non-negative');
-  }
+final class ImperialLength implements UnitLength {
+  const ImperialLength(this.feet, [double inches = 0])
+    : assert(feet >= 0, 'Feet must be non-negative'),
+      // Clamping here
+      inches = inches < 0 ? 0 : (inches > 11.99 ? 11.99 : inches);
 
   @override
   final int feet;
@@ -76,10 +76,8 @@ final class ImperialLength extends UnitLength {
 }
 
 /// Metric units implementation
-final class MetricLength extends UnitLength {
-  MetricLength(this.cm) {
-    if (cm < 0) throw ArgumentError('Length must be non-negative');
-  }
+final class MetricLength implements UnitLength {
+  const MetricLength(this.cm) : assert(cm >= 0, 'CM must be non-negative');
 
   @override
   final double cm;

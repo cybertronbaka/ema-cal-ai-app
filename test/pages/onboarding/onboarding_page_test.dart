@@ -27,6 +27,7 @@ void main() {
   late MockGptApiKeyVerifyRepo gptApiKeyVerifyRepo;
   late MockGptApiKeyRepo gptApiKeyRepo;
   late MockNutritionPlannerRepo nutritionPlannerRepo;
+  late MockOnboardingSaveRepo onboardingSaveRepo;
   bool verifiedApiKey = false;
 
   setUpAll(() {
@@ -37,9 +38,11 @@ void main() {
     nutritionPlannerRepo = MockNutritionPlannerRepo();
     profileRepo = MockProfileRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
+    onboardingSaveRepo = MockOnboardingSaveRepo();
 
     registerFallbackValue(genFakeUserProfile());
     registerFallbackValue(genFakeMealTimeReminders());
+    registerFallbackValue(genFakeOnboardingData());
 
     when(
       () => gptApiKeyVerifyRepo.verify(any()),
@@ -68,6 +71,9 @@ void main() {
 
       return genFakeNutritionPlan();
     });
+
+    when(() => onboardingSaveRepo.save(any())).thenAnswer((_) async {});
+    when(() => onboardingSaveRepo.clear()).thenAnswer((_) async {});
   });
 
   testAdaptiveWidgets('Onboarding Page Goldens', (tester, variant) async {
@@ -83,6 +89,7 @@ void main() {
             profileRepo: profileRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
             nutritionPlannerRepo: nutritionPlannerRepo,
+            onboardingSaveRepo: onboardingSaveRepo,
             child: createTestMaterialApp(const OnboardingPage()),
           ),
         ),

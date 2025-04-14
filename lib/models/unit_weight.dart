@@ -38,10 +38,9 @@ abstract final class UnitWeight {
 }
 
 /// Imperial units implementation (pounds)
-final class ImperialWeight extends UnitWeight {
-  ImperialWeight(this.lbs) {
-    if (lbs < 0) throw ArgumentError('Weight must be non-negative');
-  }
+final class ImperialWeight implements UnitWeight {
+  const ImperialWeight(this.lbs)
+    : assert(lbs >= 0, 'Weight must be non-negative');
 
   @override
   final double lbs;
@@ -67,10 +66,8 @@ final class ImperialWeight extends UnitWeight {
 }
 
 /// Metric units implementation (kilograms)
-final class MetricWeight extends UnitWeight {
-  MetricWeight(this.kg) {
-    if (kg < 0) throw ArgumentError('Weight must be non-negative');
-  }
+final class MetricWeight implements UnitWeight {
+  const MetricWeight(this.kg) : assert(kg >= 0, 'Weight must be non-negative');
 
   @override
   final double kg;
