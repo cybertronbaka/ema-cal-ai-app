@@ -26,7 +26,9 @@ abstract final class UnitWeight {
   }
 
   @override
-  bool operator ==(covariant UnitWeight other) {
+  bool operator ==(Object other) {
+    if (other is! UnitWeight) return false;
+
     return isMetric == other.isMetric && kg == other.kg && lbs == other.lbs;
   }
 

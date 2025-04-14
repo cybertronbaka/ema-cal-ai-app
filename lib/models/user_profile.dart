@@ -56,7 +56,9 @@ class UserProfile {
   }
 
   @override
-  bool operator ==(covariant UserProfile other) {
+  bool operator ==(Object other) {
+    if (other is! UserProfile) return false;
+
     return dob.year == other.dob.year &&
         dob.month == other.dob.month &&
         dob.day == other.dob.day &&

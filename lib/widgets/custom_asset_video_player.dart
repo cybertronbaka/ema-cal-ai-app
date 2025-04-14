@@ -15,10 +15,7 @@ class CustomAssetVideoPlayer extends HookWidget {
     final controller = useAssetVideoPlayerController(source: source);
 
     useInitHook(() {
-      debugPrint('***************initializing');
-
       controller.initialize().then((_) {
-        debugPrint('***************initialized');
         isInitialized.value = true;
       });
     }, []);

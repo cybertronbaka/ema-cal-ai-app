@@ -44,6 +44,7 @@ class NutritionPlannerController {
       final plan = await ref
           .read(nutritionPlannerRepoProvider)
           .plan(profile, gptApiKey);
+
       debugPrint(plan.toJson().toString());
       nutritionPlan = AsyncData(plan);
     } catch (e, st) {

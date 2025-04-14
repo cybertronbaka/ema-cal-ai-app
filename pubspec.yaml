@@ -53,6 +53,7 @@ dependencies:
   google_generative_ai: ^0.4.6
   confetti: ^0.8.0
   video_player: ^2.9.5
+  clock: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,8 @@ dev_dependencies:
   freezed: ^3.0.4
   adaptive_test: ^0.8.0
   mocktail: ^1.0.4
+  recase: ^4.1.0
+  test: ^1.25.15
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,6 +1,8 @@
+import 'package:clock/clock.dart';
+
 extension DateTimeExt on DateTime {
   int calculateAge() {
-    final now = DateTime.now();
+    final now = clock.now();
 
     // Calculate the difference in years
     int age = now.year - year;

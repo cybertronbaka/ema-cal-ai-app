@@ -212,7 +212,7 @@ class _NutritionGrid extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 8,
-        crossAxisSpacing: 20,
+        crossAxisSpacing: 8,
       ),
       children: [
         NutritionProgressCard(

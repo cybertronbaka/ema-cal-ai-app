@@ -31,7 +31,9 @@ abstract final class UnitLength {
   }
 
   @override
-  bool operator ==(covariant UnitLength other) {
+  bool operator ==(Object other) {
+    if (other is! UnitLength) return false;
+
     return isMetric == other.isMetric &&
         cm == other.cm &&
         feet == other.feet &&

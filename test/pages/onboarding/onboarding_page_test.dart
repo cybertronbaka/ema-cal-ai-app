@@ -1,0 +1,230 @@
+import 'package:adaptive_test/adaptive_test.dart';
+import 'package:clock/clock.dart';
+import 'package:ema_cal_ai/controllers/onboarding_controller.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/models/nutrition_plan.dart';
+import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
+import 'package:ema_cal_ai/utils/root_provider_scope.dart';
+import 'package:ema_cal_ai/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:recase/recase.dart';
+
+import '../../fake_data/fakes.dart';
+import '../../mocks/keyboard_visibility_controller.dart';
+import '../../mocks/repositories.dart';
+import '../../mocks/video_player_platform.dart';
+import '../../utils/material_app.dart';
+import '../../utils/tester.dart';
+
+void main() {
+  late MockKeyboardVisibilityController keyboardVisibilityController;
+  late MockMealTimeRemindersRepo mealTimeRemindersRepo;
+  late MockProfileRepo profileRepo;
+  late MockGptApiKeyVerifyRepo gptApiKeyVerifyRepo;
+  late MockGptApiKeyRepo gptApiKeyRepo;
+  late MockNutritionPlannerRepo nutritionPlannerRepo;
+  bool verifiedApiKey = false;
+
+  setUpAll(() {
+    keyboardVisibilityController = MockKeyboardVisibilityController();
+    MockVideoPlayerPlatform().setup();
+    gptApiKeyVerifyRepo = MockGptApiKeyVerifyRepo();
+    gptApiKeyRepo = MockGptApiKeyRepo();
+    nutritionPlannerRepo = MockNutritionPlannerRepo();
+    profileRepo = MockProfileRepo();
+    mealTimeRemindersRepo = MockMealTimeRemindersRepo();
+
+    registerFallbackValue(genFakeUserProfile());
+    registerFallbackValue(genFakeMealTimeReminders());
+
+    when(
+      () => gptApiKeyVerifyRepo.verify(any()),
+    ).thenAnswer((_) => Future.value(verifiedApiKey));
+
+    when(() => gptApiKeyRepo.save(any())).thenAnswer((_) async {});
+
+    when(() => profileRepo.save(any())).thenAnswer((_) async {});
+    when(
+      () => profileRepo.get(),
+    ).thenAnswer((_) => Future.value(genFakeUserProfile()));
+
+    when(() => mealTimeRemindersRepo.save(any())).thenAnswer((_) async {});
+
+    when(
+      () => mealTimeRemindersRepo.get(),
+    ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
+
+    when<Future<NutritionPlan>>(
+      () => nutritionPlannerRepo.plan(
+        any<UserProfile>(that: isA<UserProfile>()),
+        any<String>(that: isA<String>()),
+      ),
+    ).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+
+      return genFakeNutritionPlan();
+    });
+  });
+
+  testAdaptiveWidgets('Onboarding Page Goldens', (tester, variant) async {
+    await withClock(Clock.fixed(DateTime(2025, 4, 1)), () async {
+      await tester.pumpWidget(
+        AdaptiveWrapper(
+          windowConfig: variant,
+          tester: tester,
+          child: createRootProviderScope(
+            keyboardVisibilityController: keyboardVisibilityController,
+            gptApiKeyVerifyRepo: gptApiKeyVerifyRepo,
+            gptApiKeyRepo: gptApiKeyRepo,
+            profileRepo: profileRepo,
+            mealTimeRemindersRepo: mealTimeRemindersRepo,
+            nutritionPlannerRepo: nutritionPlannerRepo,
+            child: createTestMaterialApp(const OnboardingPage()),
+          ),
+        ),
+      );
+
+      final element = tester.element(find.byType(OnboardingPage));
+      final container = ProviderScope.containerOf(element);
+
+      // Step 1
+      await tester.pumpAndSettle();
+      final prefix = 'preview/${variant.name.snakeCase}/onboarding_page';
+
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_1.png',
+      );
+      await tester.tap(find.text('Male'));
+      await tester.tap(find.text('Next'));
+
+      // step 2
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_2.png',
+      );
+      await tester.tap(find.text('None'));
+      await tester.tap(find.text('Next'));
+
+      // step 3
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_3.png',
+      );
+
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_3_imperial.png',
+      );
+
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Next'));
+
+      // step 4
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_4.png',
+      );
+      await tester.tap(find.text('Next'));
+
+      // step 5
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_5.png',
+      );
+
+      container.read(onboardingControllerProvider).measurementSystem =
+          MeasurementSystem.imperial;
+      await tester.tap(find.byType(BackButton));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_5_imperial.png',
+      );
+      container.read(onboardingControllerProvider).measurementSystem =
+          MeasurementSystem.metric;
+      await tester.tap(find.text('Next'));
+
+      // step 6
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_6.png',
+      );
+
+      await tester.tap(find.text('Standard'));
+      await tester.tap(find.text('Next'));
+
+      // Step 7
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_7.png',
+      );
+
+      await tester.tap(find.byIcon(Icons.add_rounded).first);
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_7_time_picker.png',
+      );
+
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_7_picked_time.png',
+      );
+
+      await tester.tap(find.byIcon(Icons.edit_rounded).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.delete_rounded).first);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Next'));
+
+      // step 8
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_8.png',
+      );
+
+      await tester.enterText(find.byType(SensitiveField), 'test_api_key');
+      await tester.pumpAndSettle();
+
+      verifiedApiKey = false;
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_8_api_key_error.png',
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      verifiedApiKey = true;
+      await tester.tap(find.text('Next'));
+      await tester.pumpNTimes(4);
+      await tester.expectGolden<OnboardingPage>(
+        variant,
+        path: '${prefix}_step_9.png',
+      );
+    });
+  });
+}

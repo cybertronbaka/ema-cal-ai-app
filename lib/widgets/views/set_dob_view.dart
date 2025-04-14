@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,7 +24,7 @@ class SetDobView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
-    final now = DateTime.now();
+    final now = clock.now();
     final effectiveInitialValue =
         initialValue ?? DateTime(now.year - 18, now.month, now.day);
     final dateTimeController = useCustomDatePickerController(

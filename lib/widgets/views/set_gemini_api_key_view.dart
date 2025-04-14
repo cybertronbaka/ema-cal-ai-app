@@ -74,6 +74,7 @@ class SetGeminiApiKeyView extends HookConsumerWidget {
                           SensitiveField(
                             formControlName: 'api_key',
                             readOnly: !btnIsStale.value,
+                            hintText: 'Enter your Gemini API Key',
                           ),
                           const Text(
                             '* Follow the following instruction video if you are not sure how to get the API key.',

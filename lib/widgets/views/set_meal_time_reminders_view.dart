@@ -169,7 +169,7 @@ class _MealTimeReminderCard extends HookWidget {
             },
             icon:
                 time.value == null
-                    ? const Icon(Icons.add)
+                    ? const Icon(Icons.add_rounded)
                     : const Icon(Icons.edit_rounded),
           ),
         ],

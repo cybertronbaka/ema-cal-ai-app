@@ -8,7 +8,7 @@ class CustomTimePicker extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
-    final now = TimeOfDay.now();
+    final now = TimeOfDay.fromDateTime(clock.now());
 
     final hourController = useWheelPickerController(
       min: 1,

@@ -1,5 +1,6 @@
 library;
 
+import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/models/macro_nutrient_value.dart';
 import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
