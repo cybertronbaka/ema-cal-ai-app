@@ -1,11 +1,13 @@
 library;
 
 import 'package:ema_cal_ai/app/colors.dart';
+import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/macro_nutrient_value.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OnboardingCompleteOverviewPage extends ConsumerWidget {
@@ -157,7 +159,9 @@ class OnboardingCompleteOverviewPage extends ConsumerWidget {
               width: double.infinity,
               child: CustomFilledButton(
                 enabled: true,
-                onPressed: () {},
+                onPressed: () {
+                  context.pushReplacementNamed(Routes.home.name);
+                },
                 label: "Let's get started!",
               ),
             ),
