@@ -1,22 +1,21 @@
 part of '../home_page.dart';
 
-class _StreaksWeekSection extends StatelessWidget {
+class _StreaksWeekSection extends ConsumerWidget {
   const _StreaksWeekSection();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weekData = ref.watch(thisWeekMealDataProvider);
     final today = clock.now();
     final weekDates = getWeekDates(today);
-    final List<StreakEntry> entries = [];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(weekDates.length, (i) {
         final date = weekDates[i];
-        final streakItem = entries.findByDate(date);
+        final streakItem = weekData.findByDate(date);
         final isInFuture = date.difference(today).inDays > 0;
-        final isStreakComplete =
-            !isInFuture && streakItem != null && streakItem.isCompleted;
+        final isStreakComplete = !isInFuture && streakItem != null;
 
         return Column(
           spacing: 4,

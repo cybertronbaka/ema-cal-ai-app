@@ -1,13 +1,19 @@
 part of '../home_page.dart';
 
-class _DailyMacroNutrientIntakeCard extends StatelessWidget {
+class _DailyMacroNutrientIntakeCard extends ConsumerWidget {
   const _DailyMacroNutrientIntakeCard({required this.type});
 
   final MacroNutrients type;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
+    final plan = ref.watch(currentNutritionPlanProvider);
+    final mealData = ref.watch(collectiveMealDataTodayProvider);
+
+    final max = plan?.goal.fromNutrientType(type).toDouble() ?? 0.0;
+    final value = mealData?.fromNutrientType(type) ?? 0;
+    final remaining = (max - value).clamp(0.0, max);
 
     return Expanded(
       child: Container(
@@ -20,7 +26,10 @@ class _DailyMacroNutrientIntakeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('168${type.unit}', style: textTheme.titleMedium),
+            Text(
+              '${remaining.toInt()}${type.unit}',
+              style: textTheme.titleMedium,
+            ),
             const SizedBox(height: 2),
             Text('${type.label} left', style: textTheme.bodySmall),
             const SizedBox(height: 16),
@@ -33,7 +42,7 @@ class _DailyMacroNutrientIntakeCard extends StatelessWidget {
                   children: [
                     Positioned.fill(
                       child: CircularProgressIndicator(
-                        value: 0.5,
+                        value: (value / max).clamp(0.0, 1.0),
                         backgroundColor: Colors.grey.withAlpha(100),
                         color: type.color,
                         strokeWidth: 5,

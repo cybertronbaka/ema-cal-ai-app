@@ -2,8 +2,12 @@ library;
 
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/colors.dart';
+import 'package:ema_cal_ai/controllers/home_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
-import 'package:ema_cal_ai/models/stream_entry.dart';
+import 'package:ema_cal_ai/models/meal_data.dart';
+import 'package:ema_cal_ai/states/meal_data.dart';
+import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,11 +20,18 @@ part 'widgets/recently_eaten_section.dart';
 part 'widgets/no_meal_data_card.dart';
 part 'widgets/streak_week_section.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends HookConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(homeControllerProvider);
+
+    useInitHook(() {
+      controller.getTodaysMealData();
+      controller.getThisWeekMealData();
+    }, []);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Ema Cal AI')),
       body: LayoutBuilder(
@@ -45,6 +56,10 @@ class HomePage extends ConsumerWidget {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add_rounded),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:hive/hive.dart';
 
 class NutritionPlan {
@@ -72,6 +73,15 @@ class DailyNutrition {
       'carbs_g': carbsG,
       'fats_g': fatsG,
       'water_liters': waterLiters,
+    };
+  }
+
+  double fromNutrientType(MacroNutrients type) {
+    return switch (type) {
+      MacroNutrients.calories => calories.toDouble(),
+      MacroNutrients.protein => proteinG,
+      MacroNutrients.carbs => carbsG,
+      MacroNutrients.fats => fatsG,
     };
   }
 }

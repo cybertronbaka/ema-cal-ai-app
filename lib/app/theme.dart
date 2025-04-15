@@ -96,6 +96,9 @@ abstract class AppTheme {
           fontFamily: fontFamily,
         ),
       ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
+      ),
     );
   }
 }
