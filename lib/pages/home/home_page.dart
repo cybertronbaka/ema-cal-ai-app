@@ -59,7 +59,7 @@ class HomePage extends HookConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(Icons.add_rounded),
+        child: const Icon(Icons.add_rounded, size: 32),
       ),
     );
   }
