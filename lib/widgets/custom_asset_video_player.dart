@@ -78,7 +78,7 @@ class CustomAssetVideoPlayer extends HookWidget {
                             width: double.infinity,
                             color:
                                 !controller.value.isPlaying
-                                    ? Colors.black.withAlpha(100)
+                                    ? AppColors.darkGrey
                                     : Colors.transparent,
                           );
                         },

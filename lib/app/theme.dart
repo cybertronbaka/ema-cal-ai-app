@@ -17,7 +17,7 @@ abstract class AppTheme {
       appBarTheme: const AppBarTheme(backgroundColor: AppColors.bgColor),
       textTheme: TextTheme(
         displayLarge: baseTextStyle.copyWith(
-          fontSize: 32,
+          fontSize: 40,
           fontWeight: FontWeight.w600,
         ),
         displayMedium: baseTextStyle.copyWith(
@@ -82,7 +82,7 @@ abstract class AppTheme {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: Colors.white.withAlpha(100),
+        fillColor: const Color.fromARGB(100, 255, 255, 255),
         filled: true,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(

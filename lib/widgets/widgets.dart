@@ -1,5 +1,7 @@
 library;
 
+import 'dart:math' as math;
+
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
@@ -17,6 +19,7 @@ part 'custom_dialog.dart';
 part 'custom_filled_button.dart';
 part 'custom_outlined_button.dart';
 part 'custom_text_field.dart';
+part 'dotted_circle_border.dart';
 part 'macro_nutrition_plan_card.dart';
 part 'options_list.dart';
 part 'scanner_overlay_box.dart';
