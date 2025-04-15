@@ -1,3 +1,4 @@
+import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/states/meal_data.dart';
 import 'package:flutter/widgets.dart';
@@ -19,8 +20,11 @@ class HomeController {
 
       if (data.isEmpty) return;
 
-      final summedData = data.reduce((sum, meal) => sum + meal);
-      ref.read(collectiveMealDataTodayProvider.notifier).state = summedData;
+      MealDataSum sum = const MealDataSum.zero();
+      for (var e in data) {
+        sum = sum + e;
+      }
+      ref.read(collectiveMealDataTodayProvider.notifier).state = sum;
     } catch (e, st) {
       debugPrint('$e\n$st');
     }

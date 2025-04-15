@@ -28,9 +28,10 @@ class LocalMealDataRepo extends MealDataRepo {
     // Todo: move to drift
     // Hive is definitely not useful
     final fullList = await all();
+    final id = (fullList.lastOrNull?.id ?? 0) + 1;
     await box.put(_valuesKey, [
       ...fullList.map((e) => e.toJson()),
-      data.toJson(),
+      {...data.toJson(), 'id': id},
     ]);
   }
 

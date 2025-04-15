@@ -3,6 +3,7 @@ import 'package:ema_cal_ai/enums/enums.dart';
 
 class MealData {
   const MealData({
+    this.id,
     required this.calories,
     required this.protein,
     required this.carbs,
@@ -13,6 +14,7 @@ class MealData {
 
   factory MealData.fromJson(Map<String, dynamic> json) {
     return MealData(
+      id: json['id'],
       calories: json['calories'] as double,
       protein: json['protein'] as double,
       carbs: json['carbs'] as double,
@@ -22,6 +24,7 @@ class MealData {
     );
   }
 
+  final int? id;
   final double calories;
   final double protein;
   final double carbs;
@@ -31,6 +34,7 @@ class MealData {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'calories': calories,
       'protein': protein,
       'carbs': carbs,
@@ -40,14 +44,45 @@ class MealData {
     };
   }
 
-  MealData operator +(MealData other) {
-    return MealData(
+  double fromNutrientType(MacroNutrients type) {
+    return switch (type) {
+      MacroNutrients.calories => calories.toDouble(),
+      MacroNutrients.protein => protein,
+      MacroNutrients.carbs => carbs,
+      MacroNutrients.fats => fats,
+    };
+  }
+}
+
+class MealDataSum {
+  const MealDataSum({
+    required this.calories,
+    required this.protein,
+    required this.carbs,
+    required this.fats,
+    required this.water,
+  });
+
+  const MealDataSum.zero()
+    : calories = 0,
+      protein = 0,
+      carbs = 0,
+      fats = 0,
+      water = 0;
+
+  final double calories;
+  final double protein;
+  final double carbs;
+  final double fats;
+  final double water;
+
+  MealDataSum operator +(MealData other) {
+    return MealDataSum(
       calories: calories + other.calories,
       protein: protein + other.protein,
       carbs: carbs + other.carbs,
       fats: fats + other.fats,
       water: water + other.water,
-      createdAt: createdAt,
     );
   }
 
