@@ -58,6 +58,8 @@ class CustomCameraState extends State<CustomCamera>
     _zoomLevels = _getZoomLevels(_minZoom, _maxZoom);
     _currentZoom = 1;
     await _controller.setZoomLevel(_currentZoom);
+    _baseScale = 1.0;
+    _currentScale = 1.0;
     if (mounted) setState(() {});
   }
 
@@ -194,6 +196,9 @@ class CustomCameraState extends State<CustomCamera>
 
                                           _changeCameraFuture = Future(
                                             () async {
+                                              await _controller.setZoomLevel(
+                                                _minZoom,
+                                              );
                                               await _controller.setDescription(
                                                 _cameras[nextIndex],
                                               );

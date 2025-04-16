@@ -59,6 +59,11 @@ class LinearGauge extends HookWidget {
     final timer = useValueNotifier<Timer?>(null);
     final calledForValue = useValueNotifier<double?>(null);
 
+    useInitHook(() {
+      controller.value = initialValue;
+      controller.scrollToValue(initialValue);
+    }, []);
+
     return SizedBox(
       width: wrapperWidth,
       child: Stack(
