@@ -55,6 +55,10 @@ dependencies:
   video_player: ^2.9.5
   clock: ^1.1.2
   image_picker: ^1.1.2
+  device_info_plus: ^11.3.3
+  permission_handler: ^12.0.0+1
+  camera: ^0.11.1
+  syncfusion_flutter_gauges: ^29.1.38
 
 dev_dependencies:
   flutter_test:

@@ -57,7 +57,9 @@ class CustomDatePicker extends HookWidget {
                 );
               },
               builder: (context, value) {
-                return Text(DateFormat('MMMM').format(DateTime(1900, value)));
+                return Text(
+                  intl.DateFormat('MMMM').format(DateTime(1900, value)),
+                );
               },
             ),
           ),
@@ -72,7 +74,9 @@ class CustomDatePicker extends HookWidget {
                 );
               },
               builder: (context, value) {
-                return Text(DateFormat('DD').format(DateTime(1900, 1, value)));
+                return Text(
+                  intl.DateFormat('DD').format(DateTime(1900, 1, value)),
+                );
               },
             ),
           ),
@@ -93,7 +97,7 @@ class CustomDatePicker extends HookWidget {
                 );
               },
               builder: (context, value) {
-                return Text(DateFormat('yyy').format(DateTime(value)));
+                return Text(intl.DateFormat('yyy').format(DateTime(value)));
               },
             ),
           ),

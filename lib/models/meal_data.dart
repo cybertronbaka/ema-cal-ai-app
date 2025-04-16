@@ -15,11 +15,11 @@ class MealData {
   factory MealData.fromJson(Map<String, dynamic> json) {
     return MealData(
       id: json['id'],
-      calories: json['calories'] as double,
-      protein: json['protein'] as double,
-      carbs: json['carbs'] as double,
-      fats: json['fats'] as double,
-      water: json['water'] as double,
+      calories: double.parse(json['calories'].toString()),
+      protein: double.parse(json['protein'].toString()),
+      carbs: double.parse(json['carbs'].toString()),
+      fats: double.parse(json['fats'].toString()),
+      water: double.parse(json['water'].toString()),
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }

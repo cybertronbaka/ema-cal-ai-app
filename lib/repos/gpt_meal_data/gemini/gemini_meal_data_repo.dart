@@ -36,7 +36,7 @@ class GeminiMealDataRepo extends GptMealDataRepo {
     final content = [
       Content.multi([
         TextPart(_prompt),
-        DataPart(image.mimeType!, await image.readAsBytes()),
+        DataPart(image.mimeType ?? 'image/jpeg', await image.readAsBytes()),
         if (userNote != null)
           TextPart(
             'This is the user\'s note about the picture.'
@@ -53,9 +53,14 @@ class GeminiMealDataRepo extends GptMealDataRepo {
     }
 
     final json = jsonDecode(response.text!);
+
+    print('GOT RESPONSE: ${json}');
     _validateResponse(json);
 
-    return MealData.fromJson(json);
+    return MealData.fromJson({
+      ...json,
+      'created_at': clock.now().toIso8601String(),
+    });
   }
 
   void _validateResponse(Map<String, dynamic> json) {

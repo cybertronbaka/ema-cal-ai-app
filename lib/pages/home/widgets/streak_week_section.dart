@@ -34,7 +34,7 @@ class _StreaksWeekSection extends ConsumerWidget {
                 ),
                 child: Center(
                   child: Text(
-                    DateFormat('EEEEE').format(date),
+                    intl.DateFormat('EEEEE').format(date),
                     style: TextStyle(
                       color: isStreakComplete ? Colors.white : null,
                     ),

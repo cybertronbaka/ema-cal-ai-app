@@ -10,7 +10,7 @@ final _responseSchema = Schema.object(
       nullable: true,
       description: 'Grams of protein, null if unknown',
     ),
-    'carbohydrates': Schema.number(
+    'carbs': Schema.number(
       nullable: true,
       description: 'Grams of carbs, null if unknown',
     ),
