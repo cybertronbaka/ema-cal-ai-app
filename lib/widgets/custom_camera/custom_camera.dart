@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CustomCamera extends StatefulWidget {
@@ -292,11 +291,6 @@ class _ZoomControl extends StatelessWidget {
         onValueChangedDelay: const Duration(milliseconds: 50),
         onValueChanged: (value) {
           controller.setZoomLevel(value);
-          if (zoomLevels.contains(value)) {
-            HapticFeedback.heavyImpact();
-          } else {
-            HapticFeedback.heavyImpact();
-          }
         },
       ),
     );

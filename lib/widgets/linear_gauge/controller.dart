@@ -48,6 +48,29 @@ class LinearGaugeController extends ChangeNotifier {
     }
     return 0.0;
   }
+
+  double _valueFromOffset(double offset) {
+    if (_cache == null) throw 'This is not expected';
+
+    final rangeIndex = offset ~/ _cache!.rangeWidth;
+    final start = _cache!.majorValues[rangeIndex];
+    final end = _cache!.majorValues[rangeIndex + 1];
+    final startOffset = rangeIndex * _cache!.rangeWidth;
+    final delta = (offset - startOffset) / _cache!.rangeWidth;
+    final valueRange = end - start;
+    final value = start + (valueRange * delta);
+
+    if (debug) {
+      debugPrint('rangeIndex: $rangeIndex');
+      debugPrint('offset: $offset');
+      debugPrint('start: $start');
+      debugPrint('end: $end');
+      debugPrint('startOffset: $startOffset');
+      debugPrint('delta: $delta');
+    }
+
+    return value;
+  }
 }
 
 LinearGaugeController useLinerGaugeController({

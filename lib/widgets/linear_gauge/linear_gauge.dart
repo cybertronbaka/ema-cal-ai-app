@@ -27,6 +27,7 @@ class LinearGauge extends HookWidget {
     this.debug = false,
     this.onValueChangedDelay = const Duration(milliseconds: 100),
     this.controller,
+    this.haptics = true,
   });
 
   final List<double> majorValues;
@@ -42,6 +43,7 @@ class LinearGauge extends HookWidget {
   final bool debug;
   final Duration onValueChangedDelay;
   final LinearGaugeController? controller;
+  final bool haptics;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class LinearGauge extends HookWidget {
       stepSpacing: stepSpacing,
     );
     controller._cache = cache;
-    final timer = useValueNotifier<Timer?>(null);
+
     final calledForValue = useValueNotifier<double?>(null);
 
     useInitHook(() {
@@ -78,7 +80,6 @@ class LinearGauge extends HookWidget {
                   notification.metrics.pixels,
                   controller,
                   cache,
-                  timer,
                   calledForValue,
                 );
               }
@@ -94,7 +95,7 @@ class LinearGauge extends HookWidget {
                 scrollDirection: Axis.horizontal,
                 physics: SlowScrollPhysics(
                   parent: const AlwaysScrollableScrollPhysics(),
-                  maxFlingVelocity: cache.rangeWidth,
+                  maxFlingVelocity: cache.rangeWidth * 2,
                 ),
                 child: Container(
                   width: wrapperWidth + cache.totalWidth,
@@ -136,7 +137,7 @@ class LinearGauge extends HookWidget {
   void _callOnValueChanged(
     double value,
     LinearGaugeController controller,
-    ValueNotifier<Timer?> timer,
+    _GaugeCache cache,
     ValueNotifier<double?> calledForValue,
   ) {
     value = double.parse(value.toStringAsFixed(1));
@@ -150,17 +151,13 @@ class LinearGauge extends HookWidget {
     }
 
     if (debug) debugPrint('-----------value: $value');
-    timer.value?.cancel();
-    calledForValue.value = null;
-    timer.value = Timer(onValueChangedDelay, () {
-      if (debug) debugPrint('----------timer finished so jumping to $value');
-      calledForValue.value = value;
-      controller.scrollToValue(value);
-      timer.value?.cancel();
-      timer.value = null;
-      controller.value = value;
-      onValueChanged?.call(value);
-    });
+    calledForValue.value = value;
+    if (haptics) {
+      if (cache.majorValues.contains(value)) {
+        HapticFeedback.selectionClick();
+      }
+    }
+    onValueChanged?.call(value);
   }
 
   /// Converts the current scroll offset to the corresponding gauge value.
@@ -168,49 +165,21 @@ class LinearGauge extends HookWidget {
     double offset,
     LinearGaugeController controller,
     _GaugeCache cache,
-    ValueNotifier<Timer?> timer,
     ValueNotifier<double?> calledForValue,
   ) {
     // todo: Handle snapping and haptics
 
-    final rangeIndex = offset ~/ cache.rangeWidth;
-
+    double value;
     if (offset <= 0) {
-      _callOnValueChanged(
-        cache.majorValues.first,
-        controller,
-        timer,
-        calledForValue,
-      );
+      value = cache.majorValues.first;
       return;
+    } else if (offset >= cache.totalWidth) {
+      value = cache.majorValues.last;
+    } else {
+      value = controller._valueFromOffset(offset);
     }
 
-    if (offset >= cache.totalWidth) {
-      _callOnValueChanged(
-        cache.majorValues.last,
-        controller,
-        timer,
-        calledForValue,
-      );
-      return;
-    }
-
-    final start = cache.majorValues[rangeIndex];
-    final end = cache.majorValues[rangeIndex + 1];
-    final startOffset = rangeIndex * cache.rangeWidth;
-    final delta = (offset - startOffset) / cache.rangeWidth;
-    final valueRange = end - start;
-    final value = start + (valueRange * delta);
-    if (debug) {
-      debugPrint('rangeIndex: $rangeIndex');
-      debugPrint('offset: $offset');
-      debugPrint('start: $start');
-      debugPrint('end: $end');
-      debugPrint('startOffset: $startOffset');
-      debugPrint('delta: $delta');
-    }
-
-    _callOnValueChanged(value, controller, timer, calledForValue);
+    _callOnValueChanged(value, controller, cache, calledForValue);
   }
 }
 
