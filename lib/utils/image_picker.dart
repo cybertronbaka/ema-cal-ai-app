@@ -17,7 +17,7 @@ abstract class CustomImagePicker {
     final granted = await requestPermission(context, source);
     if (!granted) return null;
 
-    return await ImagePicker().pickImage(
+    return ImagePicker().pickImage(
       source: Platform.isMacOS ? ImageSource.gallery : source,
     );
   }

@@ -1,15 +1,12 @@
-import 'package:camera/camera.dart';
 import 'package:ema_cal_ai/controllers/set_gpt_api_key_controller.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/repos/gpt_meal_data/gpt_meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/states/meal_data.dart';
-import 'package:ema_cal_ai/utils/image_picker.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:ema_cal_ai/widgets/custom_camera/custom_camera.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 

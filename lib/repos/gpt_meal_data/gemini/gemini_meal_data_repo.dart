@@ -54,7 +54,7 @@ class GeminiMealDataRepo extends GptMealDataRepo {
 
     final json = jsonDecode(response.text!);
 
-    print('GOT RESPONSE: ${json}');
+    debugPrint('GOT RESPONSE: $json');
     _validateResponse(json);
 
     return MealData.fromJson({

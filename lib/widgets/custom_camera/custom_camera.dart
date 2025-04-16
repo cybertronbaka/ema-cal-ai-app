@@ -16,13 +16,20 @@ class CustomCameraState extends State<CustomCamera>
     with SingleTickerProviderStateMixin {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  late final LinearGaugeController _gaugeController;
   List<CameraDescription> _cameras = [];
   double _maxZoom = 1;
   double _minZoom = 1;
   late Future<void> _changeCameraFuture;
   List<double> _zoomLevels = [];
   double _currentZoom = 1;
-  bool _isPreviewFullScreen = true;
+  bool _isFullscreen = true;
+  static const _fullscreenAnimationDuration = Duration(milliseconds: 500);
+  double _currentScale = 1.0;
+  double _baseScale = 1.0;
+
+  // Counting pointers (number of user fingers on screen)
+  int _pointers = 0;
 
   @override
   void initState() {
@@ -41,6 +48,7 @@ class CustomCameraState extends State<CustomCamera>
     await _controller.initialize();
     _changeCameraFuture = _setZoomRange();
     await _changeCameraFuture;
+    _gaugeController = LinearGaugeController(initialValue: _currentZoom);
     if (mounted) setState(() {});
   }
 
@@ -50,16 +58,13 @@ class CustomCameraState extends State<CustomCamera>
     _zoomLevels = _getZoomLevels(_minZoom, _maxZoom);
     _currentZoom = 1;
     await _controller.setZoomLevel(_currentZoom);
-    print('max zoom is ${_maxZoom}');
-    print('_minZoom is ${_minZoom}');
-    print('_zoomLevels is ${_zoomLevels}');
-    print('_currentZoom is ${_currentZoom}');
     if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _gaugeController.dispose();
     super.dispose();
   }
 
@@ -70,126 +75,176 @@ class CustomCameraState extends State<CustomCamera>
     final switchCameraBtnSize = cameraBtnSize * 0.8;
     final zoomSliderWidth = screenSize.width * 0.6;
 
+    final viewPadding = MediaQuery.of(context).viewPadding;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        top: !_isPreviewFullScreen,
+        top: false,
         bottom: false,
-        child: FutureBuilder<void>(
-          future: _initializeControllerFuture,
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              var camera = _controller.value;
-              final size = MediaQuery.of(context).size;
-              var scale = size.aspectRatio * camera.aspectRatio;
+        child: AnimatedPadding(
+          duration: _fullscreenAnimationDuration,
+          padding: EdgeInsets.only(top: _isFullscreen ? 0 : viewPadding.top),
+          child: FutureBuilder<void>(
+            future: _initializeControllerFuture,
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var camera = _controller.value;
+                final size = MediaQuery.of(context).size;
+                var fsScale = size.aspectRatio * camera.aspectRatio;
 
-              if (scale < 1) scale = 1 / scale;
-              return Stack(
-                children: [
-                  SizedBox.fromSize(size: screenSize),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child:
-                        _isPreviewFullScreen
-                            ? Transform.scale(
-                              scale: scale,
-                              child: Center(child: CameraPreview(_controller)),
-                            )
-                            : Align(
-                              alignment: Alignment.topCenter,
-                              child: CameraPreview(_controller),
+                if (fsScale < 1) fsScale = 1 / fsScale;
+                return Stack(
+                  children: [
+                    SizedBox.fromSize(size: screenSize),
+                    Listener(
+                      onPointerDown: (_) => _pointers++,
+                      onPointerUp: (_) => _pointers--,
+                      child: AnimatedScale(
+                        scale: _isFullscreen ? fsScale : 1,
+                        duration: _fullscreenAnimationDuration,
+                        child: AnimatedAlign(
+                          alignment:
+                              _isFullscreen
+                                  ? Alignment.center
+                                  : Alignment.topCenter,
+                          duration: _fullscreenAnimationDuration,
+                          child: CameraPreview(
+                            _controller,
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onScaleStart: _handleScaleStart,
+                                  onScaleUpdate: _handleScaleUpdate,
+                                  // onTapDown:
+                                  //     (TapDownDetails details) =>
+                                  //         onViewFinderTap(details, constraints),
+                                );
+                              },
                             ),
-                  ),
-
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: FutureBuilder<void>(
-                        future: _changeCameraFuture,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState !=
-                              ConnectionState.done) {
-                            return const SizedBox.shrink();
-                          }
-
-                          return Column(
-                            spacing: 16,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              _ZoomControl(
-                                zoomSliderWidth: zoomSliderWidth,
-                                zoomLevels: _zoomLevels,
-                                controller: _controller,
-                              ),
-                              Container(
-                                color:
-                                    !_isPreviewFullScreen ? Colors.black : null,
-                                padding: const EdgeInsets.only(
-                                  top: 60,
-                                  bottom: 100,
-                                  left: 16,
-                                  right: 16,
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    _SwitchPreviewModeButton(
-                                      size: switchCameraBtnSize,
-                                      isFullscreen: _isPreviewFullScreen,
-                                      switchMode: () {
-                                        setState(() {
-                                          _isPreviewFullScreen =
-                                              !_isPreviewFullScreen;
-                                        });
-                                      },
-                                    ),
-                                    _TakePhotoButton(
-                                      controller: _controller,
-                                      size: cameraBtnSize,
-                                    ),
-                                    _ChangeCameraButton(
-                                      size: switchCameraBtnSize,
-                                      changeCamera: () async {
-                                        if (_cameras.length <= 1) return;
-
-                                        int currentIndex = _cameras.indexWhere(
-                                          (cam) =>
-                                              cam == _controller.description,
-                                        );
-                                        int nextIndex =
-                                            (currentIndex + 1) %
-                                            _cameras.length;
-
-                                        _changeCameraFuture = Future(() async {
-                                          await _controller.setDescription(
-                                            _cameras[nextIndex],
-                                          );
-                                          await _setZoomRange();
-                                        });
-                                        if (mounted) setState(() {});
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FutureBuilder<void>(
+                          future: _changeCameraFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState !=
+                                ConnectionState.done) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return Column(
+                              spacing: 16,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                _ZoomControl(
+                                  gaugeController: _gaugeController,
+                                  zoomSliderWidth: zoomSliderWidth,
+                                  zoomLevels: _zoomLevels,
+                                  controller: _controller,
+                                ),
+
+                                AnimatedContainer(
+                                  duration: _fullscreenAnimationDuration,
+                                  padding: const EdgeInsets.only(
+                                    top: 60,
+                                    bottom: 100,
+                                    left: 16,
+                                    right: 16,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: _isFullscreen ? null : Colors.black,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      _SwitchPreviewModeButton(
+                                        size: switchCameraBtnSize,
+                                        isFullscreen: _isFullscreen,
+                                        switchMode: _toggleFullScreen,
+                                      ),
+                                      _TakePhotoButton(
+                                        controller: _controller,
+                                        size: cameraBtnSize,
+                                      ),
+                                      _ChangeCameraButton(
+                                        size: switchCameraBtnSize,
+                                        changeCamera: () async {
+                                          if (_cameras.length <= 1) return;
+
+                                          int currentIndex = _cameras
+                                              .indexWhere(
+                                                (cam) =>
+                                                    cam ==
+                                                    _controller.description,
+                                              );
+                                          int nextIndex =
+                                              (currentIndex + 1) %
+                                              _cameras.length;
+
+                                          _changeCameraFuture = Future(
+                                            () async {
+                                              await _controller.setDescription(
+                                                _cameras[nextIndex],
+                                              );
+                                              await _setZoomRange();
+                                            },
+                                          );
+                                          if (mounted) setState(() {});
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
       ),
     );
+  }
+
+  void _toggleFullScreen() {
+    setState(() {
+      _isFullscreen = !_isFullscreen;
+    });
+  }
+
+  void _handleScaleStart(ScaleStartDetails details) {
+    _baseScale = _currentScale;
+  }
+
+  Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
+    // When there are not exactly two fingers on screen don't scale
+    if (_pointers != 2) {
+      return;
+    }
+
+    _currentScale = (_baseScale * details.scale).clamp(_minZoom, _maxZoom);
+
+    await _controller.setZoomLevel(_currentScale);
+    _gaugeController.value = _currentScale;
+    _gaugeController.scrollToValue(_currentScale);
   }
 }
 
@@ -198,8 +253,10 @@ class _ZoomControl extends StatelessWidget {
     required this.zoomSliderWidth,
     required this.zoomLevels,
     required this.controller,
+    required this.gaugeController,
   });
 
+  final LinearGaugeController gaugeController;
   final double zoomSliderWidth;
   final List<double> zoomLevels;
   final CameraController controller;
@@ -218,6 +275,7 @@ class _ZoomControl extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: LinearGauge(
+        controller: gaugeController,
         debug: true,
         wrapperWidth: zoomSliderWidth,
         majorValues: zoomLevels,
@@ -355,15 +413,14 @@ class _SwitchPreviewModeButton extends HookWidget {
     useEffect(() {
       if (animationController.isAnimating) return null;
 
-      print('is animation');
       isFullscreen.value = this.isFullscreen;
       return null;
     }, [this.isFullscreen, animationController]);
 
     return GestureDetector(
       onTapDown: (_) => animationController.animateTo(1),
-      onTapUp: (_) async {
-        await animationController.animateBack(0);
+      onTapUp: (_) {
+        animationController.animateBack(0);
 
         switchMode.call();
       },
