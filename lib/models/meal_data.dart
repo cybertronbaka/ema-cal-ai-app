@@ -12,7 +12,7 @@ class MealData {
     required this.createdAt,
   });
 
-  factory MealData.fromJson(Map<String, dynamic> json) {
+  factory MealData.fromJson(Map<dynamic, dynamic> json) {
     return MealData(
       id: json['id'],
       calories: double.parse(json['calories'].toString()),
