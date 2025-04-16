@@ -67,21 +67,17 @@ class CustomCameraState extends State<CustomCamera>
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final cameraBtnSize = screenSize.width * 0.2;
-    final cameraBtnRadius = cameraBtnSize / 2;
     final switchCameraBtnSize = cameraBtnSize * 0.8;
-    final switchCameraBtnRadius = switchCameraBtnSize / 2;
-    final btnSizeDiff = cameraBtnSize - switchCameraBtnSize;
-    final cameraBtnBottomY = screenSize.height * 0.1;
     final zoomSliderWidth = screenSize.width * 0.6;
 
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         top: !_isPreviewFullScreen,
-        bottom: !_isPreviewFullScreen,
+        bottom: false,
         child: FutureBuilder<void>(
           future: _initializeControllerFuture,
-          builder: (context, snapshot) {
+          builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               var camera = _controller.value;
               final size = MediaQuery.of(context).size;
@@ -105,132 +101,84 @@ class CustomCameraState extends State<CustomCamera>
                             ),
                   ),
 
-                  Positioned(
-                    bottom: cameraBtnBottomY,
-                    left: (screenSize.width / 2) - cameraBtnRadius,
-                    child: FutureBuilder<void>(
-                      future: _changeCameraFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return const SizedBox.shrink();
-                        }
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: FutureBuilder<void>(
+                        future: _changeCameraFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState !=
+                              ConnectionState.done) {
+                            return const SizedBox.shrink();
+                          }
 
-                        return _TakePhotoButton(
-                          controller: _controller,
-                          size: cameraBtnSize,
-                        );
-                      },
-                    ),
-                  ),
+                          return Column(
+                            spacing: 16,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              _ZoomControl(
+                                zoomSliderWidth: zoomSliderWidth,
+                                zoomLevels: _zoomLevels,
+                                controller: _controller,
+                              ),
+                              Container(
+                                color:
+                                    !_isPreviewFullScreen ? Colors.black : null,
+                                padding: const EdgeInsets.only(
+                                  top: 60,
+                                  bottom: 100,
+                                  left: 16,
+                                  right: 16,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    _SwitchPreviewModeButton(
+                                      size: switchCameraBtnSize,
+                                      isFullscreen: _isPreviewFullScreen,
+                                      switchMode: () {
+                                        setState(() {
+                                          _isPreviewFullScreen =
+                                              !_isPreviewFullScreen;
+                                        });
+                                      },
+                                    ),
+                                    _TakePhotoButton(
+                                      controller: _controller,
+                                      size: cameraBtnSize,
+                                    ),
+                                    _ChangeCameraButton(
+                                      size: switchCameraBtnSize,
+                                      changeCamera: () async {
+                                        if (_cameras.length <= 1) return;
 
-                  Positioned(
-                    bottom: cameraBtnBottomY + (btnSizeDiff / 2),
-                    right: (screenSize.width / 5) - switchCameraBtnRadius,
-                    child: FutureBuilder<void>(
-                      future: _changeCameraFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return const SizedBox.shrink();
-                        }
+                                        int currentIndex = _cameras.indexWhere(
+                                          (cam) =>
+                                              cam == _controller.description,
+                                        );
+                                        int nextIndex =
+                                            (currentIndex + 1) %
+                                            _cameras.length;
 
-                        return _ChangeCameraButton(
-                          size: switchCameraBtnSize,
-                          changeCamera: () async {
-                            if (_cameras.length <= 1) return;
-
-                            int currentIndex = _cameras.indexWhere(
-                              (cam) => cam == _controller.description,
-                            );
-                            int nextIndex =
-                                (currentIndex + 1) % _cameras.length;
-
-                            _changeCameraFuture = Future(() async {
-                              await _controller.setDescription(
-                                _cameras[nextIndex],
-                              );
-                              await _setZoomRange();
-                            });
-                            if (mounted) setState(() {});
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    bottom: cameraBtnBottomY + (btnSizeDiff / 2),
-                    left: (screenSize.width / 5) - switchCameraBtnRadius,
-                    child: FutureBuilder<void>(
-                      future: _changeCameraFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return const SizedBox.shrink();
-                        }
-
-                        return _SwitchPreviewModeButton(
-                          size: switchCameraBtnSize,
-                          isFullscreen: _isPreviewFullScreen,
-                          switchMode: () {
-                            setState(() {
-                              _isPreviewFullScreen = !_isPreviewFullScreen;
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    bottom: cameraBtnBottomY + (cameraBtnSize * 1.75),
-                    left: (screenSize.width - zoomSliderWidth) / 2,
-                    child: FutureBuilder<void>(
-                      future: _changeCameraFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return const SizedBox.shrink();
-                        }
-
-                        if (_zoomLevels.length < 2) {
-                          return const SizedBox.shrink();
-                        }
-
-                        return Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.black.withAlpha(100),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: LinearGauge(
-                            debug: true,
-                            wrapperWidth: zoomSliderWidth,
-                            majorValues: _zoomLevels,
-                            initialValue: 1,
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                            majorLine: const GaugeLineConfig.major(
-                              color: Colors.white,
-                            ),
-                            minorLine: const GaugeLineConfig.minor(
-                              color: Colors.white,
-                            ),
-                            indicator: const GaugeLineConfig.indicator(
-                              color: Colors.blue,
-                            ),
-                            onValueChangedDelay: const Duration(
-                              milliseconds: 50,
-                            ),
-                            onValueChanged: (value) {
-                              _controller.setZoomLevel(value);
-                              if (_zoomLevels.contains(value)) {
-                                HapticFeedback.heavyImpact();
-                              } else {
-                                HapticFeedback.heavyImpact();
-                              }
-                            },
-                          ),
-                        );
-                      },
+                                        _changeCameraFuture = Future(() async {
+                                          await _controller.setDescription(
+                                            _cameras[nextIndex],
+                                          );
+                                          await _setZoomRange();
+                                        });
+                                        if (mounted) setState(() {});
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -240,6 +188,53 @@ class CustomCameraState extends State<CustomCamera>
             }
           },
         ),
+      ),
+    );
+  }
+}
+
+class _ZoomControl extends StatelessWidget {
+  const _ZoomControl({
+    required this.zoomSliderWidth,
+    required this.zoomLevels,
+    required this.controller,
+  });
+
+  final double zoomSliderWidth;
+  final List<double> zoomLevels;
+  final CameraController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    if (zoomLevels.length < 2) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Colors.black.withAlpha(100),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: LinearGauge(
+        debug: true,
+        wrapperWidth: zoomSliderWidth,
+        majorValues: zoomLevels,
+        initialValue: 1,
+        textStyle: const TextStyle(color: Colors.white, fontSize: 12),
+        majorLine: const GaugeLineConfig.major(color: Colors.white),
+        minorLine: const GaugeLineConfig.minor(color: Colors.white),
+        indicator: const GaugeLineConfig.indicator(color: Colors.blue),
+        onValueChangedDelay: const Duration(milliseconds: 50),
+        onValueChanged: (value) {
+          controller.setZoomLevel(value);
+          if (zoomLevels.contains(value)) {
+            HapticFeedback.heavyImpact();
+          } else {
+            HapticFeedback.heavyImpact();
+          }
+        },
       ),
     );
   }
