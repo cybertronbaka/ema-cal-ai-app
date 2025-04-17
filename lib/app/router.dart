@@ -1,7 +1,7 @@
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/pages/add_meal_data/add_meal_data_page.dart';
-import 'package:ema_cal_ai/pages/auth_entry/auth_entry_page.dart';
+import 'package:ema_cal_ai/pages/onboarding_entry/onboarding_entry_page.dart';
 import 'package:ema_cal_ai/pages/home/home_page.dart';
 import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
 import 'package:ema_cal_ai/pages/onboarding_complete_overview/onboarding_complete_overview_page.dart';
@@ -16,8 +16,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final router = GoRouter(
   routes: [
-    Routes.authEntry.generateRoute(
-      child: const AuthEntryPage(),
+    Routes.onboardingEntry.generateRoute(
+      child: const OnboardingEntryPage(),
       redirect: (context, state) async {
         final container = ProviderScope.containerOf(context);
 
