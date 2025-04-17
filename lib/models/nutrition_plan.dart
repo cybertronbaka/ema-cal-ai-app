@@ -82,6 +82,7 @@ class DailyNutrition {
       MacroNutrients.protein => proteinG,
       MacroNutrients.carbs => carbsG,
       MacroNutrients.fats => fatsG,
+      MacroNutrients.water => waterLiters,
     };
   }
 }

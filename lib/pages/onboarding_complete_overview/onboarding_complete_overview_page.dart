@@ -207,6 +207,13 @@ class _NutritionGrid extends StatelessWidget {
   const _NutritionGrid({required this.nutritionPlan});
 
   final NutritionPlan nutritionPlan;
+
+  static const _types = [
+    MacroNutrients.calories,
+    MacroNutrients.protein,
+    MacroNutrients.carbs,
+    MacroNutrients.fats,
+  ];
   @override
   Widget build(BuildContext context) {
     return GridView(
@@ -218,22 +225,11 @@ class _NutritionGrid extends StatelessWidget {
         crossAxisSpacing: 8,
       ),
       children: [
-        MacroNutritionPlanCard(
-          value: nutritionPlan.goal.calories.toDouble(),
-          type: MacroNutrients.calories,
-        ),
-        MacroNutritionPlanCard(
-          value: nutritionPlan.goal.proteinG,
-          type: MacroNutrients.protein,
-        ),
-        MacroNutritionPlanCard(
-          value: nutritionPlan.goal.carbsG,
-          type: MacroNutrients.carbs,
-        ),
-        MacroNutritionPlanCard(
-          value: nutritionPlan.goal.fatsG,
-          type: MacroNutrients.fats,
-        ),
+        for (final type in _types)
+          MacroNutritionPlanCard(
+            value: nutritionPlan.goal.fromNutrientType(type),
+            type: type,
+          ),
       ],
     );
   }

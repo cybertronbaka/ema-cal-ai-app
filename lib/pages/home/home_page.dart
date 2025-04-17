@@ -5,6 +5,7 @@ import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/controllers/home_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
+import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/meal_data.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/hooks/init_hook.dart';

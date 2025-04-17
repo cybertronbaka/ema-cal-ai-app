@@ -58,6 +58,7 @@ class MealData {
       MacroNutrients.protein => protein,
       MacroNutrients.carbs => carbs,
       MacroNutrients.fats => fats,
+      MacroNutrients.water => water,
     };
   }
 
@@ -81,6 +82,7 @@ class MealData {
       MacroNutrients.protein => copyWith(protein: value),
       MacroNutrients.carbs => copyWith(carbs: value),
       MacroNutrients.fats => copyWith(fats: value),
+      MacroNutrients.water => copyWith(water: value),
     };
   }
 
@@ -145,6 +147,7 @@ class MealDataSum {
       MacroNutrients.protein => protein,
       MacroNutrients.carbs => carbs,
       MacroNutrients.fats => fats,
+      MacroNutrients.water => water,
     };
   }
 }

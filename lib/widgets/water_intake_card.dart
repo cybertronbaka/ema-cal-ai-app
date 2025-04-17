@@ -45,10 +45,8 @@ class WaterIntakeCard extends StatelessWidget {
           Expanded(
             child: Column(
               spacing: 4,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       description,
@@ -78,27 +76,12 @@ class WaterIntakeCard extends StatelessWidget {
                       ),
                   ],
                 ),
-                Stack(
-                  children: [
-                    Container(
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppColors.secondary,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    ),
-
-                    FractionallySizedBox(
-                      widthFactor: (value / max).clamp(0.0, 1.0),
-                      child: Container(
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                      ),
-                    ),
-                  ],
+                LinearProgressIndicator(
+                  value: (value / max).clamp(0.0, 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  color: Colors.blue,
+                  minHeight: 8,
+                  backgroundColor: AppColors.secondary,
                 ),
               ],
             ),

@@ -20,7 +20,11 @@ class _WaterIntakeSection extends ConsumerWidget {
               value: data.water,
               description: 'Water Level',
               isEditable: true,
-              onEdit: () => controller.editWaterIntake(context),
+              onEdit:
+                  () => controller.editNutritionValue(
+                    context,
+                    MacroNutrients.water,
+                  ),
             );
           },
         ),

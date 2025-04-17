@@ -79,20 +79,6 @@ class AddMealDataController {
     data.value = data.value.copyNutrientValue(value, type);
   }
 
-  void editWaterIntake(BuildContext context) async {
-    final value = await showEditFieldDialog<double>(
-      context,
-      hintText: 'Water',
-      initialValue: data.value.water,
-      title: 'Edit the value for water intake',
-      validators: [Validators.required],
-    );
-
-    if (value == null) return;
-
-    data.value = data.value.copyWith(water: value);
-  }
-
   void dispose() {
     data.dispose();
   }
