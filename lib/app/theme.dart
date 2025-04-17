@@ -14,10 +14,13 @@ abstract class AppTheme {
       fontFamilyFallback: const [fontFamily, 'Roboto'],
       colorScheme: const ColorScheme.light(primary: AppColors.primary),
       scaffoldBackgroundColor: AppColors.bgColor,
-      appBarTheme: const AppBarTheme(backgroundColor: AppColors.bgColor),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.bgColor,
+        surfaceTintColor: Colors.transparent,
+      ),
       textTheme: TextTheme(
         displayLarge: baseTextStyle.copyWith(
-          fontSize: 32,
+          fontSize: 40,
           fontWeight: FontWeight.w600,
         ),
         displayMedium: baseTextStyle.copyWith(
@@ -82,7 +85,7 @@ abstract class AppTheme {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: Colors.white.withAlpha(100),
+        fillColor: const Color.fromARGB(100, 255, 255, 255),
         filled: true,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
@@ -96,6 +99,10 @@ abstract class AppTheme {
           fontFamily: fontFamily,
         ),
       ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
+      ),
+      dialogTheme: const DialogThemeData(insetPadding: EdgeInsets.all(20)),
     );
   }
 }

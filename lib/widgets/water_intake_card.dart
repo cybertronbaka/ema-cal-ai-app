@@ -1,9 +1,33 @@
 part of 'widgets.dart';
 
+enum WaterIntakeValueTextType { fraction, onlyValue }
+
 class WaterIntakeCard extends StatelessWidget {
-  const WaterIntakeCard({super.key, required this.max, required this.value});
+  const WaterIntakeCard({
+    super.key,
+    required this.max,
+    required this.value,
+    this.description = 'Water Intake',
+    this.valueTextType = WaterIntakeValueTextType.fraction,
+    this.isEditable = false,
+    this.onEdit,
+  });
+
+  const WaterIntakeCard.onlyValue({
+    super.key,
+    required this.value,
+    this.description = 'Water Intake',
+    this.isEditable = false,
+    this.onEdit,
+  }) : valueTextType = WaterIntakeValueTextType.onlyValue,
+       max = value;
+
   final double max;
   final double value;
+  final String description;
+  final WaterIntakeValueTextType valueTextType;
+  final bool isEditable;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -21,46 +45,43 @@ class WaterIntakeCard extends StatelessWidget {
           Expanded(
             child: Column(
               spacing: 4,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
-                      'Water Intake',
-                      style: TextStyle(
+                    Text(
+                      description,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Text(
-                      '${value.toStringAsFixed(1)}/${max.toStringAsFixed(1)} L',
-                      style: const TextStyle(fontSize: 12),
-                    ),
+                    if (isEditable) ...[
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: onEdit,
+                        child: const Icon(Icons.edit_rounded, size: 20),
+                      ),
+                    ],
+                    const Spacer(),
+                    if (valueTextType == WaterIntakeValueTextType.fraction)
+                      Text(
+                        '${value.toStringAsFixed(1)}/${max.toStringAsFixed(1)} L',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+
+                    if (valueTextType == WaterIntakeValueTextType.onlyValue)
+                      Text(
+                        '${value.toStringAsFixed(1)} L',
+                        style: const TextStyle(fontSize: 12),
+                      ),
                   ],
                 ),
-                Stack(
-                  children: [
-                    Container(
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppColors.secondary,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    ),
-
-                    FractionallySizedBox(
-                      widthFactor: (value / max).clamp(0.0, 1.0),
-                      child: Container(
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                      ),
-                    ),
-                  ],
+                LinearProgressIndicator(
+                  value: (value / max).clamp(0.0, 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  color: Colors.blue,
+                  minHeight: 8,
+                  backgroundColor: AppColors.secondary,
                 ),
               ],
             ),

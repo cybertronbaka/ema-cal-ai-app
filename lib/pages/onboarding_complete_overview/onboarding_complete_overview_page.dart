@@ -2,7 +2,7 @@ library;
 
 import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/app/routes.dart';
-import 'package:ema_cal_ai/models/macro_nutrient_value.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
@@ -207,6 +207,13 @@ class _NutritionGrid extends StatelessWidget {
   const _NutritionGrid({required this.nutritionPlan});
 
   final NutritionPlan nutritionPlan;
+
+  static const _types = [
+    MacroNutrients.calories,
+    MacroNutrients.protein,
+    MacroNutrients.carbs,
+    MacroNutrients.fats,
+  ];
   @override
   Widget build(BuildContext context) {
     return GridView(
@@ -218,30 +225,11 @@ class _NutritionGrid extends StatelessWidget {
         crossAxisSpacing: 8,
       ),
       children: [
-        NutritionProgressCard(
-          value: MacroNutrientValue.calories(
-            value: nutritionPlan.goal.calories / 2.0,
-            maxValue: nutritionPlan.goal.calories.toDouble(),
+        for (final type in _types)
+          MacroNutritionPlanCard(
+            value: nutritionPlan.goal.fromNutrientType(type),
+            type: type,
           ),
-        ),
-        NutritionProgressCard(
-          value: MacroNutrientValue.protein(
-            value: nutritionPlan.goal.proteinG / 2.0,
-            maxValue: nutritionPlan.goal.proteinG.toDouble(),
-          ),
-        ),
-        NutritionProgressCard(
-          value: MacroNutrientValue.carbs(
-            value: nutritionPlan.goal.carbsG / 2.0,
-            maxValue: nutritionPlan.goal.carbsG.toDouble(),
-          ),
-        ),
-        NutritionProgressCard(
-          value: MacroNutrientValue.fats(
-            value: nutritionPlan.goal.fatsG / 2.0,
-            maxValue: nutritionPlan.goal.fatsG.toDouble(),
-          ),
-        ),
       ],
     );
   }

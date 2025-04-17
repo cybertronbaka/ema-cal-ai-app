@@ -1,41 +1,87 @@
 library;
 
-import 'dart:convert';
-
+import 'package:clock/clock.dart';
+import 'package:ema_cal_ai/app/colors.dart';
+import 'package:ema_cal_ai/controllers/home_controller.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/models/meal_data.dart';
+import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
+import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart' as intl;
 
-class HomePage extends ConsumerWidget {
+part 'widgets/calories_intake_card.dart';
+part 'widgets/macro_nutrients_section.dart';
+part 'widgets/macro_nutrient_card.dart';
+part 'widgets/recently_eaten_section.dart';
+part 'widgets/no_meal_data_card.dart';
+part 'widgets/streak_week_section.dart';
+part 'widgets/water_intake_section.dart';
+
+class HomePage extends HookConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final plan = ref.watch(currentNutritionPlanProvider);
-    final profile = ref.watch(userProfileProvider);
-    const encoder = JsonEncoder.withIndent('    ');
+    final controller = ref.watch(homeControllerProvider);
+    final streaks = ref.watch(streaksCountProvider);
+
+    useInitHook(() {
+      controller.getTodaysMealData();
+      controller.getThisWeekMealData();
+    }, []);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          const Text(
-            'Plan',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      appBar: AppBar(
+        title: const Text('Ema Cal AI'),
+        actions: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+            ),
+            child: Text(
+              '🔥 $streaks',
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
           ),
-          const SizedBox(height: 10),
-          Text(encoder.convert(plan?.toJson())),
-          const SizedBox(height: 20),
-          const Divider(),
-          const Text(
-            'Profile',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 10),
-          Text(encoder.convert(profile?.toJson())),
-          const SizedBox(height: 50),
         ],
+      ),
+      resizeToAvoidBottomInset: false,
+      body: const SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 24),
+              _StreaksWeekSection(),
+              SizedBox(height: 24),
+              // Todo: Collapse Calories, Macro Nutrients and Water intake into
+              // Todo: New design where all are Listed in small icons and text
+              // Todo: and linear progress bar when scrolled.
+              _DailyCaloriesIntakeCard(),
+              SizedBox(height: 16),
+              _MacroNutrientsSection(),
+              SizedBox(height: 16),
+              _WaterIntakeSection(),
+              SizedBox(height: 16),
+              _RecentlyEatenSection(),
+              SizedBox(height: 50),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.showImageSrcSelectionSheet(context);
+        },
+        child: const Icon(Icons.add_rounded, size: 32),
       ),
     );
   }

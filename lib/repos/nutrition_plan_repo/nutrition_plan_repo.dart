@@ -11,6 +11,7 @@ final nutritionPlanRepoProvider = Provider<NutritionPlanRepo>(
 abstract class NutritionPlanRepo {
   Future<NutritionPlan?> get();
   Future<void> save(NutritionPlan plan);
+  Future<void> clear();
 }
 
 class LocalNutritionPlanRepo extends NutritionPlanRepo {
@@ -31,4 +32,10 @@ class LocalNutritionPlanRepo extends NutritionPlanRepo {
   }
 
   Future<Box> _openBox() => Hive.openBox(boxName);
+
+  @override
+  Future<void> clear() async {
+    final box = await _openBox();
+    await box.clear();
+  }
 }

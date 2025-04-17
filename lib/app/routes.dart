@@ -73,4 +73,9 @@ abstract class Routes {
     name: 'home',
     path: ([args]) => '/home',
   );
+
+  static final CustomRoute addMealData = CustomRoute(
+    name: 'addMealData',
+    path: ([args]) => '/addMealData',
+  );
 }

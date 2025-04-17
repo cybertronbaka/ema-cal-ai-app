@@ -33,10 +33,10 @@ class CustomSnackBar {
   ) {
     final snackBar = SnackBar(
       content: Row(
+        spacing: 10,
         children: [
           Icon(_notificationIcons[capsule.type], color: Colors.white),
-          const SizedBox(width: 10),
-          Text(capsule.message, overflow: TextOverflow.ellipsis),
+          Expanded(child: Text(capsule.message)),
         ],
       ),
       duration: Duration(seconds: capsule.durationInSeconds),
