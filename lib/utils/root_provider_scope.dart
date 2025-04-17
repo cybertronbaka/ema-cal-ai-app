@@ -7,6 +7,7 @@ import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
+import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -23,6 +24,7 @@ ProviderScope createRootProviderScope({
   OnboardingSaveRepo? onboardingSaveRepo,
   MealDataRepo? mealDataRepo,
   GptMealDataRepo? gptMealDataRepo,
+  StreaksRepo? streaksRepo,
   required Widget child,
 }) {
   final overrides = [
@@ -56,6 +58,8 @@ ProviderScope createRootProviderScope({
 
     if (gptMealDataRepo != null)
       gptMealDataRepoProvider.overrideWithValue(gptMealDataRepo),
+
+    if (streaksRepo != null) streaksRepoProvider.overrideWithValue(streaksRepo),
   ];
 
   return ProviderScope(overrides: overrides, child: child);

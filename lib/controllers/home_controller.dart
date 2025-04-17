@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:ema_cal_ai/app/routes.dart';
-import 'package:ema_cal_ai/controllers/set_gpt_api_key_controller.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/repos/gpt_meal_data/gpt_meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
-import 'package:ema_cal_ai/states/meal_data.dart';
+import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:ema_cal_ai/utils/image_picker.dart';
@@ -26,6 +25,17 @@ class HomeController {
   HomeController(this.ref);
 
   Ref ref;
+
+  Future<void> addStreak() async {
+    try {
+      final newCount = await ref.read(streaksRepoProvider).add();
+      if (newCount == ref.read(streaksCountProvider)) return;
+
+      ref.read(streaksCountProvider.notifier).state = newCount;
+    } catch (e, st) {
+      debugPrint('$e\n$st');
+    }
+  }
 
   Future<void> getTodaysMealData() async {
     try {
@@ -118,6 +128,7 @@ class HomeController {
         if (shouldAdd != null && shouldAdd is bool && shouldAdd) {
           await getTodaysMealData();
           await getThisWeekMealData();
+          await addStreak();
         }
       },
     ).run(
@@ -125,62 +136,5 @@ class HomeController {
           .read(gptMealDataRepoProvider)
           .estimate(apiKey, image, imageDescription),
     );
-  }
-
-  // ignore: unused_element
-  Future<void> _getNutritionDataFromGpt(
-    BuildContext context,
-    XFile image,
-  ) async {
-    String? apiKey;
-    try {
-      apiKey = await ref.read(setGptApiKeyControllerProvider).getApiKey();
-    } catch (e, st) {
-      debugPrint('$e\n$st');
-      if (!context.mounted) return;
-
-      CustomSnackBar.showErrorNotification(
-        context,
-        'Something unexpected happened while getting your Gemini API Key',
-      );
-
-      return;
-    }
-
-    if (apiKey == null) {
-      if (context.mounted) {
-        CustomSnackBar.showErrorNotification(
-          context,
-          'Your Gemini API Key seems to be lost please go to settings and set the API Key',
-        );
-      }
-
-      return;
-    }
-
-    try {
-      // Todo: Need to compress image file
-      // Todo: To Get input from user
-      final data = await ref
-          .read(gptMealDataRepoProvider)
-          .estimate(
-            apiKey,
-            image,
-            'Mushroom, cheese, oil, spring onion, chilli',
-          );
-      // todo: Show data in pop up and let user update values if they want
-      debugPrint('got data: ${data.toJson()}');
-
-      await ref.read(mealDataRepoProvider).add(data);
-
-      await getTodaysMealData();
-      await getThisWeekMealData();
-    } catch (e, st) {
-      debugPrint('$e\n$st');
-
-      if (!context.mounted) return;
-
-      CustomSnackBar.showErrorNotification(context, e.toString());
-    }
   }
 }

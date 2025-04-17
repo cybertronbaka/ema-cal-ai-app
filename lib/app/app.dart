@@ -9,6 +9,7 @@ import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
+import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -32,6 +33,7 @@ class EmaCalAIApp extends StatelessWidget {
       onboardingSaveRepo: LocalOnboardingSaveRepo(),
       mealDataRepo: LocalMealDataRepo(),
       gptMealDataRepo: GeminiMealDataRepo(),
+      streaksRepo: LocalStreaksRepo(),
       child: const EmaCalAIAppMaterialApp(),
     );
   }

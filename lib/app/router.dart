@@ -9,6 +9,7 @@ import 'package:ema_cal_ai/repos/gpt_api_key_repo/gpt_api_key_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
+import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,6 +29,9 @@ final router = GoRouter(
 
         final apiKey = await container.read(gptApiKeyRepoProvider).get();
         container.read(gptApiKeyProvider.notifier).state = apiKey;
+
+        final streaks = await container.read(streaksRepoProvider).get();
+        container.read(streaksCountProvider.notifier).state = streaks;
 
         if (profile != null && profile.isOnboardingComplete) {
           return Routes.home.path();

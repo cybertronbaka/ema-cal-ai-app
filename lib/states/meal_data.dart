@@ -1,5 +1,4 @@
-import 'package:ema_cal_ai/models/meal_data.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+part of 'states.dart';
 
 final collectiveMealDataTodayProvider = StateProvider<MealDataSum?>(
   (_) => null,

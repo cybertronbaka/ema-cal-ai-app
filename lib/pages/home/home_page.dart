@@ -6,7 +6,6 @@ import 'package:ema_cal_ai/controllers/home_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
-import 'package:ema_cal_ai/states/meal_data.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
@@ -28,6 +27,7 @@ class HomePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(homeControllerProvider);
+    final streaks = ref.watch(streaksCountProvider);
 
     useInitHook(() {
       controller.getTodaysMealData();
@@ -35,7 +35,23 @@ class HomePage extends HookConsumerWidget {
     }, []);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Ema Cal AI')),
+      appBar: AppBar(
+        title: const Text('Ema Cal AI'),
+        actions: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+            ),
+            child: Text(
+              '🔥 $streaks',
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
+      ),
       resizeToAvoidBottomInset: false,
       body: const SafeArea(
         child: SingleChildScrollView(
