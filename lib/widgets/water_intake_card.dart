@@ -1,9 +1,27 @@
 part of 'widgets.dart';
 
+enum WaterIntakeValueTextType { fraction, onlyValue }
+
 class WaterIntakeCard extends StatelessWidget {
-  const WaterIntakeCard({super.key, required this.max, required this.value});
+  const WaterIntakeCard({
+    super.key,
+    required this.max,
+    required this.value,
+    this.description = 'Water Intake',
+    this.valueTextType = WaterIntakeValueTextType.fraction,
+  });
+
+  const WaterIntakeCard.onlyValue({
+    super.key,
+    required this.value,
+    this.description = 'Water Intake',
+  }) : valueTextType = WaterIntakeValueTextType.onlyValue,
+       max = value;
+
   final double max;
   final double value;
+  final String description;
+  final WaterIntakeValueTextType valueTextType;
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +45,24 @@ class WaterIntakeCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
-                      'Water Intake',
-                      style: TextStyle(
+                    Text(
+                      description,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Text(
-                      '${value.toStringAsFixed(1)}/${max.toStringAsFixed(1)} L',
-                      style: const TextStyle(fontSize: 12),
-                    ),
+                    if (valueTextType == WaterIntakeValueTextType.fraction)
+                      Text(
+                        '${value.toStringAsFixed(1)}/${max.toStringAsFixed(1)} L',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+
+                    if (valueTextType == WaterIntakeValueTextType.onlyValue)
+                      Text(
+                        '${value.toStringAsFixed(1)} L',
+                        style: const TextStyle(fontSize: 12),
+                      ),
                   ],
                 ),
                 Stack(

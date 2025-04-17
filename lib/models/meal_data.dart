@@ -2,13 +2,14 @@ import 'package:collection/collection.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 
 class MealData {
-  const MealData({
+  MealData({
     this.id,
     required this.calories,
     required this.protein,
     required this.carbs,
     required this.fats,
     required this.water,
+    required this.mealName,
     required this.createdAt,
   });
 
@@ -20,6 +21,7 @@ class MealData {
       carbs: double.parse(json['carbs'].toString()),
       fats: double.parse(json['fats'].toString()),
       water: double.parse(json['water'].toString()),
+      mealName: json['meal_name'],
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
@@ -30,6 +32,7 @@ class MealData {
   final double carbs;
   final double fats;
   final double water;
+  final String mealName;
   final DateTime createdAt;
 
   Map<String, dynamic> toJson() {
@@ -40,6 +43,7 @@ class MealData {
       'carbs': carbs,
       'fats': fats,
       'water': water,
+      'meal_name': mealName,
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -51,6 +55,19 @@ class MealData {
       MacroNutrients.carbs => carbs,
       MacroNutrients.fats => fats,
     };
+  }
+
+  MealData operator *(num scalar) {
+    return MealData(
+      id: id,
+      calories: calories * scalar,
+      protein: protein * scalar,
+      carbs: carbs * scalar,
+      water: water * scalar,
+      fats: fats * scalar,
+      mealName: mealName,
+      createdAt: createdAt,
+    );
   }
 }
 

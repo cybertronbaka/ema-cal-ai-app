@@ -26,5 +26,9 @@ final _responseSchema = Schema.object(
       nullable: true,
       description: 'Rejection reason or null if accepted',
     ),
+    'meal_name': Schema.string(
+      nullable: true,
+      description: 'Name of the meal like Chilly Cheese',
+    ),
   },
 );

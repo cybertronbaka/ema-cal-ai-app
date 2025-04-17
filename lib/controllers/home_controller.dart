@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/set_gpt_api_key_controller.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
+import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/repos/gpt_meal_data/gpt_meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/states/meal_data.dart';
@@ -7,6 +11,7 @@ import 'package:ema_cal_ai/utils/image_picker.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -72,6 +77,40 @@ class HomeController {
     if (image == null) return;
 
     if (!context.mounted) return;
+    // final apiKey = ref.read(gptApiKeyProvider);
+    const String? apiKey = null;
+    if (apiKey == null || apiKey.isEmpty) {
+      if (context.mounted) {
+        CustomSnackBar.showErrorNotification(
+          context,
+          'We seem to have lost your API key. Please set it in your settings',
+        );
+      }
+
+      return;
+    }
+
+    await ref.read(gptMealDataRepoProvider).estimate(apiKey, image, '');
+
+    if (!context.mounted) return;
+
+    unawaited(
+      context.pushNamed(
+        Routes.addMealData.name,
+        extra: AddMealDataPageData(
+          data: MealData(
+            calories: 1,
+            protein: 2,
+            fats: 3,
+            carbs: 4,
+            water: 5,
+            mealName: 'Ema Datsi',
+            createdAt: DateTime.now(),
+          ),
+          image: image,
+        ),
+      ),
+    );
   }
 
   // ignore: unused_element
