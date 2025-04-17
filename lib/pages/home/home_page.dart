@@ -36,33 +36,29 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Ema Cal AI')),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: constraints.maxHeight),
-            child: const SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  SizedBox(height: 24),
-                  _StreaksWeekSection(),
-                  SizedBox(height: 24),
-                  // Todo: Collapse Calories, Macro Nutrients and Water intake into
-                  // Todo: New design where all are Listed in small icons and text
-                  // Todo: and linear progress bar when scrolled.
-                  _DailyCaloriesIntakeCard(),
-                  SizedBox(height: 16),
-                  _MacroNutrientsSection(),
-                  SizedBox(height: 16),
-                  _WaterIntakeSection(),
-                  SizedBox(height: 16),
-                  _RecentlyEatenSection(),
-                  SizedBox(height: 50),
-                ],
-              ),
-            ),
-          );
-        },
+      body: const SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 24),
+              _StreaksWeekSection(),
+              SizedBox(height: 24),
+              // Todo: Collapse Calories, Macro Nutrients and Water intake into
+              // Todo: New design where all are Listed in small icons and text
+              // Todo: and linear progress bar when scrolled.
+              _DailyCaloriesIntakeCard(),
+              SizedBox(height: 16),
+              _MacroNutrientsSection(),
+              SizedBox(height: 16),
+              _WaterIntakeSection(),
+              SizedBox(height: 16),
+              _RecentlyEatenSection(),
+              SizedBox(height: 50),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
