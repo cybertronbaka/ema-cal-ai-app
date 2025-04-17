@@ -36,6 +36,7 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Ema Cal AI')),
+      resizeToAvoidBottomInset: false,
       body: const SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16),
