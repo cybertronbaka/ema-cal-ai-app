@@ -99,6 +99,7 @@ abstract class AppTheme {
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
       ),
+      dialogTheme: const DialogThemeData(insetPadding: EdgeInsets.all(20)),
     );
   }
 }

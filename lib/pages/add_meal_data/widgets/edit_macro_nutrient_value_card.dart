@@ -12,24 +12,24 @@ class _EditMacroNutrientValueCard extends ConsumerWidget {
     final textTheme = TextTheme.of(context);
 
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white.withAlpha(150),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.black.withAlpha(10)),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(type.label),
-                  Row(
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withAlpha(150),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.black.withAlpha(10)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    spacing: 4,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(type.label),
                       ValueListenableBuilder(
                         valueListenable: controller.data,
                         builder: (_, data, _) {
@@ -39,18 +39,21 @@ class _EditMacroNutrientValueCard extends ConsumerWidget {
                           );
                         },
                       ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {},
-                        child: const Icon(Icons.edit_rounded, size: 20),
-                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: IconButton(
+              onPressed: () => controller.editNutritionValue(context, type),
+              icon: const Icon(Icons.edit_rounded, size: 20),
+            ),
+          ),
+        ],
       ),
     );
   }

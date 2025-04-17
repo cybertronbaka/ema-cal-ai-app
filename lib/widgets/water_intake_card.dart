@@ -9,12 +9,16 @@ class WaterIntakeCard extends StatelessWidget {
     required this.value,
     this.description = 'Water Intake',
     this.valueTextType = WaterIntakeValueTextType.fraction,
+    this.isEditable = false,
+    this.onEdit,
   });
 
   const WaterIntakeCard.onlyValue({
     super.key,
     required this.value,
     this.description = 'Water Intake',
+    this.isEditable = false,
+    this.onEdit,
   }) : valueTextType = WaterIntakeValueTextType.onlyValue,
        max = value;
 
@@ -22,6 +26,8 @@ class WaterIntakeCard extends StatelessWidget {
   final double value;
   final String description;
   final WaterIntakeValueTextType valueTextType;
+  final bool isEditable;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +48,6 @@ class WaterIntakeCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
@@ -52,6 +57,14 @@ class WaterIntakeCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    if (isEditable) ...[
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: onEdit,
+                        child: const Icon(Icons.edit_rounded, size: 20),
+                      ),
+                    ],
+                    const Spacer(),
                     if (valueTextType == WaterIntakeValueTextType.fraction)
                       Text(
                         '${value.toStringAsFixed(1)}/${max.toStringAsFixed(1)} L',

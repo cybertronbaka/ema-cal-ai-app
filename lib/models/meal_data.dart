@@ -74,6 +74,37 @@ class MealData {
       createdAt: createdAt,
     );
   }
+
+  MealData copyNutrientValue(double value, MacroNutrients type) {
+    return switch (type) {
+      MacroNutrients.calories => copyWith(calories: value),
+      MacroNutrients.protein => copyWith(protein: value),
+      MacroNutrients.carbs => copyWith(carbs: value),
+      MacroNutrients.fats => copyWith(fats: value),
+    };
+  }
+
+  MealData copyWith({
+    double? calories,
+    double? protein,
+    double? carbs,
+    double? fats,
+    double? water,
+    String? mealName,
+    String? mealDescription,
+  }) {
+    return MealData(
+      id: id,
+      calories: calories ?? this.calories,
+      protein: protein ?? this.protein,
+      carbs: carbs ?? this.carbs,
+      fats: fats ?? this.fats,
+      water: water ?? this.water,
+      mealName: mealName ?? this.mealName,
+      mealDescription: mealDescription,
+      createdAt: createdAt,
+    );
+  }
 }
 
 class MealDataSum {

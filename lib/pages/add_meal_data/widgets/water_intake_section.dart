@@ -19,6 +19,8 @@ class _WaterIntakeSection extends ConsumerWidget {
             return WaterIntakeCard.onlyValue(
               value: data.water,
               description: 'Water Level',
+              isEditable: true,
+              onEdit: () => controller.editWaterIntake(context),
             );
           },
         ),

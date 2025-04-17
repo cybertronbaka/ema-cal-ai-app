@@ -10,3 +10,4 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 part 'image_description_sheet.dart';
+part 'edit_field_dialog.dart';

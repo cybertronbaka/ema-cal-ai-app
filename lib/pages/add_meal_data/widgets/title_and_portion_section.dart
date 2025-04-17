@@ -16,13 +16,15 @@ class _TitleAndPortionsSection extends ConsumerWidget {
           flex: 3,
           child: Row(
             children: [
-              Text(
-                controller.data.value.mealName,
-                style: textTheme.titleMedium,
+              ValueListenableBuilder(
+                valueListenable: controller.data,
+                builder: (_, value, _) {
+                  return Text(value.mealName, style: textTheme.titleMedium);
+                },
               ),
               IconButton(
                 icon: const Icon(Icons.edit_rounded, size: 18),
-                onPressed: () {},
+                onPressed: () => controller.editTitle(context),
               ),
             ],
           ),
