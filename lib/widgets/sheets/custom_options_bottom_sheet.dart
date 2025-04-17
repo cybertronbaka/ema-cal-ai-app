@@ -1,4 +1,4 @@
-part of 'widgets.dart';
+part of 'sheets.dart';
 
 class CustomOptionsBottomSheetItem {
   factory CustomOptionsBottomSheetItem.fromIcon({

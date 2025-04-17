@@ -37,7 +37,7 @@ class AddMealDataController {
     await FutureRunner(
       context: context,
       onDone: (_) {
-        if (context.mounted) context.pop();
+        if (context.mounted) context.pop(true);
       },
     ).run(
       Future(() async {

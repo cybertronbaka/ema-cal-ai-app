@@ -11,8 +11,11 @@ import 'package:permission_handler/permission_handler.dart';
 abstract class CustomImagePicker {
   static Future<XFile?> pickImage(
     BuildContext context,
-    ImageSource source,
-  ) async {
+    ImageSource source, {
+
+    /// if the function returns true, it means we will use the image
+    Future<bool> Function(BuildContext, XFile)? afterPicked,
+  }) async {
     if (!context.mounted) return null;
 
     final permission = await _getPermissionType(source);
@@ -24,20 +27,27 @@ abstract class CustomImagePicker {
     if (!granted) return null;
 
     if (source == ImageSource.camera && !Platform.isMacOS) {
+      if (!context.mounted) return null;
+
       return Navigator.push(
-        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const CustomCamera();
+            return CustomCamera(afterImageSelected: afterPicked);
           },
         ),
       );
     }
 
-    return ImagePicker().pickImage(
+    final result = await ImagePicker().pickImage(
       source: Platform.isMacOS ? ImageSource.gallery : source,
     );
+    if (result != null && context.mounted) {
+      final value = await afterPicked?.call(context, result);
+      if (value != null && !value) return null;
+    }
+
+    return result;
   }
 
   static Future<Permission> _getPermissionType(ImageSource source) async {

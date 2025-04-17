@@ -10,6 +10,7 @@ class MealData {
     required this.fats,
     required this.water,
     required this.mealName,
+    required this.mealDescription,
     required this.createdAt,
   });
 
@@ -22,6 +23,7 @@ class MealData {
       fats: double.parse(json['fats'].toString()),
       water: double.parse(json['water'].toString()),
       mealName: json['meal_name'],
+      mealDescription: json['meal_name'],
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
@@ -33,6 +35,7 @@ class MealData {
   final double fats;
   final double water;
   final String mealName;
+  final String? mealDescription;
   final DateTime createdAt;
 
   Map<String, dynamic> toJson() {
@@ -44,6 +47,7 @@ class MealData {
       'fats': fats,
       'water': water,
       'meal_name': mealName,
+      'meal_description': mealDescription,
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -66,6 +70,7 @@ class MealData {
       water: water * scalar,
       fats: fats * scalar,
       mealName: mealName,
+      mealDescription: mealDescription,
       createdAt: createdAt,
     );
   }

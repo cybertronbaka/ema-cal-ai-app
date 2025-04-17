@@ -7,28 +7,29 @@ class CustomTextField<T> extends StatelessWidget {
     this.hintText,
     this.suffixIcon,
     this.obscureText = false,
-    this.borderRadius = 32,
     this.keyboardType,
     this.textInputAction,
     this.onSubmitted,
     this.onEditingComplete,
     this.readOnly = false,
+    this.maxLines = 1,
   });
 
   final String formControlName;
   final String? hintText;
   final bool obscureText;
   final Widget? suffixIcon;
-  final double borderRadius;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final void Function(FormControl<T>)? onSubmitted;
   final void Function(FormControl<T>)? onEditingComplete;
   final bool readOnly;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
     return ReactiveTextField<T>(
+      maxLines: maxLines,
       formControlName: formControlName,
       obscureText: obscureText,
       onEditingComplete: onEditingComplete,

@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 part 'widgets/edit_macro_nutrient_value_card.dart';
 part 'widgets/image_section.dart';
 part 'widgets/macro_nutrients_section.dart';
+part 'widgets/meal_description_section.dart';
 part 'widgets/title_and_portion_section.dart';
 part 'widgets/water_intake_section.dart';
 
@@ -67,6 +68,7 @@ class AddMealDataPage extends ConsumerWidget {
                               children: [
                                 SizedBox(height: 20),
                                 _TitleAndPortionsSection(),
+                                _MealDescriptionSection(),
                                 SizedBox(height: 20),
                                 _MacroNutrientsSection(),
                                 _WaterIntakeSection(),

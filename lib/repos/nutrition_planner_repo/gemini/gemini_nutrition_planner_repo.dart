@@ -5,7 +5,7 @@ class GeminiNutritionPlannerRepo extends NutritionPlannerRepo {
   Future<NutritionPlan> plan(UserProfile profile, String gptApiKey) async {
     final response = await GenerativeModel(
       model: 'gemini-2.0-flash', // Todo: Make this selectable by UI
-      apiKey: gptApiKey, // Todo: Make this input from user
+      apiKey: gptApiKey,
       systemInstruction: _systemInstruction,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',

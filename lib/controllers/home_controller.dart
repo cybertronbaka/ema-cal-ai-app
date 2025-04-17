@@ -7,9 +7,12 @@ import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/repos/gpt_meal_data/gpt_meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/states/meal_data.dart';
+import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:ema_cal_ai/utils/image_picker.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
-import 'package:ema_cal_ai/widgets/widgets.dart';
+import 'package:ema_cal_ai/widgets/dialogs/dialogs.dart';
+import 'package:ema_cal_ai/widgets/sheets/sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -72,13 +75,27 @@ class HomeController {
     );
   }
 
+  String? imageDescription;
+
+  Future<bool> _askForImageDescription(
+    BuildContext context,
+    XFile image,
+  ) async {
+    imageDescription = await showImageDescriptionSheet(context, image: image);
+
+    return imageDescription != null;
+  }
+
   Future<void> _pickImage(BuildContext context, ImageSource source) async {
-    final image = await CustomImagePicker.pickImage(context, source);
+    final image = await CustomImagePicker.pickImage(
+      context,
+      source,
+      afterPicked: _askForImageDescription,
+    );
     if (image == null) return;
 
     if (!context.mounted) return;
-    // final apiKey = ref.read(gptApiKeyProvider);
-    const String? apiKey = null;
+    final apiKey = ref.read(gptApiKeyProvider);
     if (apiKey == null || apiKey.isEmpty) {
       if (context.mounted) {
         CustomSnackBar.showErrorNotification(
@@ -89,27 +106,24 @@ class HomeController {
 
       return;
     }
+    await FutureRunner<MealData>(
+      context: context,
+      onDone: (data) async {
+        if (!context.mounted) return;
 
-    await ref.read(gptMealDataRepoProvider).estimate(apiKey, image, '');
-
-    if (!context.mounted) return;
-
-    unawaited(
-      context.pushNamed(
-        Routes.addMealData.name,
-        extra: AddMealDataPageData(
-          data: MealData(
-            calories: 1,
-            protein: 2,
-            fats: 3,
-            carbs: 4,
-            water: 5,
-            mealName: 'Ema Datsi',
-            createdAt: DateTime.now(),
-          ),
-          image: image,
-        ),
-      ),
+        final shouldAdd = await context.pushNamed(
+          Routes.addMealData.name,
+          extra: AddMealDataPageData(data: data, image: image),
+        );
+        if (shouldAdd != null && shouldAdd is bool && shouldAdd) {
+          await getTodaysMealData();
+          await getThisWeekMealData();
+        }
+      },
+    ).run(
+      ref
+          .read(gptMealDataRepoProvider)
+          .estimate(apiKey, image, imageDescription),
     );
   }
 

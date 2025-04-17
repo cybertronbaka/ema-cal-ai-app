@@ -5,6 +5,7 @@ import 'package:ema_cal_ai/pages/auth_entry/auth_entry_page.dart';
 import 'package:ema_cal_ai/pages/home/home_page.dart';
 import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
 import 'package:ema_cal_ai/pages/onboarding_complete_overview/onboarding_complete_overview_page.dart';
+import 'package:ema_cal_ai/repos/gpt_api_key_repo/gpt_api_key_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
@@ -24,6 +25,9 @@ final router = GoRouter(
 
         final plan = await container.read(nutritionPlanRepoProvider).get();
         container.read(currentNutritionPlanProvider.notifier).state = plan;
+
+        final apiKey = await container.read(gptApiKeyRepoProvider).get();
+        container.read(gptApiKeyProvider.notifier).state = apiKey;
 
         if (profile != null && profile.isOnboardingComplete) {
           return Routes.home.path();

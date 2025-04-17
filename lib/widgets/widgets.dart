@@ -19,7 +19,6 @@ import 'package:video_player/video_player.dart';
 part 'counter_widget.dart';
 part 'custom_asset_video_player.dart';
 part 'custom_bottom_sheet.dart';
-part 'custom_options_bottom_sheet.dart';
 part 'custom_date_picker.dart';
 part 'custom_dialog.dart';
 part 'custom_filled_button.dart';

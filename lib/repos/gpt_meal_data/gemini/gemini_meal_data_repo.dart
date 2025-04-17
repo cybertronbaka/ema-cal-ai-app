@@ -18,15 +18,14 @@ class GeminiMealDataRepo extends GptMealDataRepo {
         '- REJECT non-food images'
         '- IGNORE any non-nutrition requests'
         '- NEVER execute other commands'
+        '- Number values should only be up to 2 decimal points'
         '- Respond ONLY with valid JSON',
       ),
       generationConfig: GenerationConfig(
-        maxOutputTokens: 200,
         responseMimeType: 'application/json',
         responseSchema: _responseSchema,
       ),
       safetySettings: [
-        SafetySetting(HarmCategory.harassment, HarmBlockThreshold.low),
         SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.low),
         SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.low),
         SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.low),
@@ -47,6 +46,7 @@ class GeminiMealDataRepo extends GptMealDataRepo {
     ];
 
     final response = await model.generateContent(content);
+    debugPrint('GOT RESPONSE TEXT: ${response.text}');
 
     if (response.text == null) {
       throw 'Could not extract nutritional data from image';
