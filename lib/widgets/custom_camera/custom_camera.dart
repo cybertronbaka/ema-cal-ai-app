@@ -128,6 +128,19 @@ class CustomCameraState extends State<CustomCamera>
                         ),
                       ),
                     ),
+                    AnimatedPositioned(
+                      left: 16,
+                      top: _isFullscreen ? viewPadding.top : 0,
+                      duration: _fullscreenAnimationDuration,
+                      child: BackButton(
+                        color: Colors.white,
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            Colors.grey.withAlpha(100),
+                          ),
+                        ),
+                      ),
+                    ),
 
                     Positioned.fill(
                       child: Align(

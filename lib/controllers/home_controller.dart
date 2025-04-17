@@ -3,8 +3,8 @@ import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/repos/gpt_meal_data/gpt_meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/states/meal_data.dart';
+import 'package:ema_cal_ai/utils/image_picker.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
-import 'package:ema_cal_ai/widgets/custom_camera/custom_camera.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -68,19 +68,10 @@ class HomeController {
   }
 
   Future<void> _pickImage(BuildContext context, ImageSource source) async {
-    // final image = await CustomImagePicker.pickImage(context, source);
-    // if (image == null) return;
+    final image = await CustomImagePicker.pickImage(context, source);
+    if (image == null) return;
 
     if (!context.mounted) return;
-
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return const CustomCamera();
-        },
-      ),
-    );
   }
 
   // ignore: unused_element
