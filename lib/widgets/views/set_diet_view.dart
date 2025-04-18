@@ -74,7 +74,7 @@ class SetDietView extends HookWidget {
                                   spacing: 4,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(value.name),
+                                    Text(value.label),
                                     Text(
                                       value.description,
                                       style: const TextStyle(

@@ -31,7 +31,7 @@ class NutritionPlannerController {
       ref.notifyListeners();
       await ref.read(profileRepoProvider).save(profile);
 
-      await ref.read(mealTimeRemindersRepoProvider).save(reminders);
+      await ref.read(mealTimeRemindersRepoProvider).saveAll(reminders);
 
       await ref.read(profileRepoProvider).get().then((value) {
         debugPrint(value?.toJson().toString());
@@ -48,6 +48,7 @@ class NutritionPlannerController {
       debugPrint(plan.toJson().toString());
       nutritionPlan = AsyncData(plan);
     } catch (e, st) {
+      debugPrint('$e\n$st');
       nutritionPlan = AsyncError(e, st);
     } finally {
       ref.read(nutritionPlannerCanGoBack.notifier).state = true;

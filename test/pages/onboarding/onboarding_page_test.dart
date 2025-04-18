@@ -1,7 +1,6 @@
 import 'package:adaptive_test/adaptive_test.dart';
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/controllers/onboarding_controller.dart';
-import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
 import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
@@ -27,7 +26,6 @@ void main() {
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
   late MockProfileRepo profileRepo;
   late MockGptApiKeyVerifyRepo gptApiKeyVerifyRepo;
-  late MockGptApiKeyRepo gptApiKeyRepo;
   late MockNutritionPlannerRepo nutritionPlannerRepo;
   late MockOnboardingSaveRepo onboardingSaveRepo;
   bool verifiedApiKey = false;
@@ -36,7 +34,6 @@ void main() {
     keyboardVisibilityController = MockKeyboardVisibilityController();
     MockVideoPlayerPlatform().setup();
     gptApiKeyVerifyRepo = MockGptApiKeyVerifyRepo();
-    gptApiKeyRepo = MockGptApiKeyRepo();
     nutritionPlannerRepo = MockNutritionPlannerRepo();
     profileRepo = MockProfileRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
@@ -50,17 +47,19 @@ void main() {
       () => gptApiKeyVerifyRepo.verify(any()),
     ).thenAnswer((_) => Future.value(verifiedApiKey));
 
-    when(() => gptApiKeyRepo.save(any())).thenAnswer((_) async {});
-
-    when(() => profileRepo.save(any())).thenAnswer((_) async {});
+    when(
+      () => profileRepo.save(any()),
+    ).thenAnswer((_) => Future.value(genFakeUserProfile()));
     when(
       () => profileRepo.get(),
     ).thenAnswer((_) => Future.value(genFakeUserProfile()));
 
-    when(() => mealTimeRemindersRepo.save(any())).thenAnswer((_) async {});
-
     when(
       () => mealTimeRemindersRepo.get(),
+    ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
+
+    when(
+      () => mealTimeRemindersRepo.saveAll(any()),
     ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
 
     when<Future<NutritionPlan>>(
@@ -74,7 +73,9 @@ void main() {
       return genFakeNutritionPlan();
     });
 
-    when(() => onboardingSaveRepo.save(any())).thenAnswer((_) async {});
+    when(
+      () => onboardingSaveRepo.save(any()),
+    ).thenAnswer((_) => Future.value(genFakeOnboardingData()));
     when(() => onboardingSaveRepo.clear()).thenAnswer((_) async {});
   });
 
@@ -87,11 +88,10 @@ void main() {
           child: createRootProviderScope(
             keyboardVisibilityController: keyboardVisibilityController,
             gptApiKeyVerifyRepo: gptApiKeyVerifyRepo,
-            gptApiKeyRepo: gptApiKeyRepo,
             profileRepo: profileRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
             nutritionPlannerRepo: nutritionPlannerRepo,
-            onboardingSaveRepo: onboardingSaveRepo,
+            onboardingSaveRepo: (ref) => onboardingSaveRepo,
             child: createTestMaterialApp(const OnboardingPage()),
           ),
         ),
@@ -153,8 +153,7 @@ void main() {
         path: '${prefix}_step_5.png',
       );
 
-      container.read(onboardingControllerProvider).measurementSystem =
-          MeasurementSystem.imperial;
+      container.read(onboardingControllerProvider).isMetric = false;
       await tester.tap(find.byType(CustomBackButton));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Next'));
@@ -163,8 +162,7 @@ void main() {
         variant,
         path: '${prefix}_step_5_imperial.png',
       );
-      container.read(onboardingControllerProvider).measurementSystem =
-          MeasurementSystem.metric;
+      container.read(onboardingControllerProvider).isMetric = true;
       await tester.tap(find.text('Next'));
 
       // step 6

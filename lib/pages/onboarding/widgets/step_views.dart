@@ -54,9 +54,9 @@ class _SetHeightAndWeightStep extends ConsumerWidget {
       btnLabel: 'Next',
       initialHeight: controller.height,
       initialWeight: controller.weight,
-      initialMeasurementSystem: controller.measurementSystem,
-      onBtnPressed: (measurementSystem, height, weight) {
-        controller.measurementSystem = measurementSystem;
+      isMetric: controller.isMetric,
+      onBtnPressed: (isMetric, height, weight) {
+        controller.isMetric = isMetric;
         controller.height = height;
         controller.weight = weight;
         controller.moveToNextStep(context, DefaultTabController.of(context));
@@ -95,7 +95,7 @@ class _SetWeightGoalStep extends ConsumerWidget {
       description: 'Your personalized plan will be tailored based on this.',
       btnLabel: 'Next',
       initialValue: controller.weightGoal,
-      measurementSystem: controller.measurementSystem,
+      isMetric: controller.isMetric,
       onBtnPressed: (weight) {
         controller.weightGoal = weight;
         controller.moveToNextStep(context, DefaultTabController.of(context));
@@ -160,7 +160,6 @@ class _SetGeminiApiKeyStep extends ConsumerWidget {
       initialValue: controller.gptApiKey,
       onBtnPressed: (value) {
         controller.gptApiKey = value;
-        ref.read(gptApiKeyProvider.notifier).state = value;
         controller.moveToNextStep(context, DefaultTabController.of(context));
       },
     );
@@ -179,7 +178,6 @@ class _GenerateNutritionPlanStep extends ConsumerWidget {
       btnLabel: 'Next',
       profile: controller.profile,
       reminders: controller.mealTimeReminders,
-      gptApiKey: controller.gptApiKey!,
       plan: controller.nutritionPlan,
       onGenerationDone: (plan) {
         controller.nutritionPlan = plan;

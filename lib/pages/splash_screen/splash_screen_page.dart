@@ -3,8 +3,8 @@ library;
 import 'dart:ui';
 
 import 'package:ema_cal_ai/app/routes.dart';
+import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
-import 'package:ema_cal_ai/repos/gpt_api_key_repo/gpt_api_key_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
@@ -41,7 +41,6 @@ class SplashScreenPage extends HookConsumerWidget {
       if (profile != null && profile.isOnboardingComplete) {
         await Future.wait([
           _setNutritionPlanIfExists(ref),
-          _setGptApiKeyIfExists(ref),
           _validateAndSetStreaks(ref),
           _setMealDataIfExists(ref),
           Future.delayed(const Duration(seconds: 1)),
@@ -89,7 +88,6 @@ class SplashScreenPage extends HookConsumerWidget {
   // Future<void> _clearAll(WidgetRef ref) async {
   //   await ref.read(profileRepoProvider).clear();
   //   await ref.read(nutritionPlanRepoProvider).clear();
-  //   await ref.read(gptApiKeyRepoProvider).clear();
   //   await ref.read(streaksRepoProvider).clear();
   //   await ref.read(onboardingSaveRepoProvider).clear();
   //   await ref.read(mealDataRepoProvider).clear();
@@ -98,17 +96,13 @@ class SplashScreenPage extends HookConsumerWidget {
   Future<UserProfile?> _setCurrentProfileIfExists(WidgetRef ref) async {
     final profile = await ref.read(profileRepoProvider).get();
     ref.read(userProfileProvider.notifier).state = profile;
+    ref.read(gptApiKeyProvider.notifier).state = profile?.gptApiKey;
     return profile;
   }
 
   Future<void> _setNutritionPlanIfExists(WidgetRef ref) async {
     final plan = await ref.read(nutritionPlanRepoProvider).get();
     ref.read(currentNutritionPlanProvider.notifier).state = plan;
-  }
-
-  Future<void> _setGptApiKeyIfExists(WidgetRef ref) async {
-    final apiKey = await ref.read(gptApiKeyRepoProvider).get();
-    ref.read(gptApiKeyProvider.notifier).state = apiKey;
   }
 
   Future<void> _validateAndSetStreaks(WidgetRef ref) async {
@@ -122,6 +116,7 @@ class SplashScreenPage extends HookConsumerWidget {
     if (stepIndex != null) {
       ref.read(onboardingDataProvider.notifier).state = onboardingData;
     }
+    ref.read(gptApiKeyProvider.notifier).state = onboardingData?.gptApiKey;
   }
 
   Future<void> _setMealDataIfExists(WidgetRef ref) async {
@@ -129,5 +124,11 @@ class SplashScreenPage extends HookConsumerWidget {
     ref.read(mealDataTodayProvider.notifier).state = today;
     final thisWeek = await ref.read(mealDataRepoProvider).thisWeek();
     ref.read(thisWeekMealDataProvider.notifier).state = thisWeek;
+
+    var sum = const MealDataSum.zero();
+    for (var data in today) {
+      sum += data;
+    }
+    ref.read(collectiveMealDataTodayProvider.notifier).state = sum;
   }
 }

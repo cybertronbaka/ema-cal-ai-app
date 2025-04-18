@@ -1,28 +1,20 @@
 /// Represents a measurable weight with metric/imperial conversion capabilities
 abstract final class UnitWeight {
-  static UnitWeight fromJson(Map<dynamic, dynamic> json) {
-    if (json[_isMetricKey] == null) {
-      throw 'Cannot determine measurement system for unit weight';
+  static UnitWeight fromKg(double kg, bool isMetric) {
+    if (isMetric) {
+      return MetricWeight(kg);
     }
-
-    if (json[_isMetricKey]) {
-      return MetricWeight(json[_kgKey]);
-    }
-
-    return ImperialWeight(json[_lbsKey]);
+    return ImperialWeight.fromKg(kg);
   }
 
   double get kg;
-  static const _kgKey = 'kg';
   double get lbs;
-  static const _lbsKey = 'lbs';
   bool get isMetric;
-  static const _isMetricKey = 'isMetric';
 
   UnitWeight operator -(double other);
 
   Map<String, dynamic> toJson() {
-    return {_isMetricKey: isMetric, _kgKey: kg, _lbsKey: lbs};
+    return {'isMetric': isMetric, 'kg': kg, 'lbs': lbs};
   }
 
   @override
@@ -38,9 +30,15 @@ abstract final class UnitWeight {
 }
 
 /// Imperial units implementation (pounds)
-final class ImperialWeight implements UnitWeight {
-  const ImperialWeight(this.lbs)
-    : assert(lbs >= 0, 'Weight must be non-negative');
+final class ImperialWeight extends UnitWeight {
+  ImperialWeight(this.lbs) : assert(lbs >= 0, 'Weight must be non-negative');
+
+  factory ImperialWeight.fromKg(double kg) {
+    if (kg < 0) return ImperialWeight(0);
+
+    final lbs = kg / 0.45359237;
+    return ImperialWeight(lbs);
+  }
 
   @override
   final double lbs;
@@ -57,17 +55,12 @@ final class ImperialWeight implements UnitWeight {
   }
 
   @override
-  Map<String, dynamic> toJson() {
-    return {UnitWeight._isMetricKey: isMetric, UnitWeight._lbsKey: lbs};
-  }
-
-  @override
-  String toString() => '$kg lbs';
+  String toString() => '$lbs lbs';
 }
 
 /// Metric units implementation (kilograms)
-final class MetricWeight implements UnitWeight {
-  const MetricWeight(this.kg) : assert(kg >= 0, 'Weight must be non-negative');
+final class MetricWeight extends UnitWeight {
+  MetricWeight(this.kg) : assert(kg >= 0, 'Weight must be non-negative');
 
   @override
   final double kg;
@@ -81,11 +74,6 @@ final class MetricWeight implements UnitWeight {
   @override
   MetricWeight operator -(double other) {
     return MetricWeight(kg - other);
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {UnitWeight._isMetricKey: isMetric, UnitWeight._kgKey: kg};
   }
 
   @override

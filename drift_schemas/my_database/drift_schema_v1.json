@@ -1,0 +1,793 @@
+{
+    "_meta": {
+      "description": "This file contains a serialized version of schema entities for drift.",
+      "version": "1.2.0"
+    },
+    "options": {
+      "store_date_time_values_as_text": false
+    },
+    "entities": [
+      {
+        "id": 0,
+        "references": [],
+        "type": "table",
+        "data": {
+          "name": "db_user_profiles",
+          "was_declared_in_moor": false,
+          "columns": [
+            {
+              "name": "id",
+              "getter_name": "id",
+              "moor_type": "bigInt",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "PRIMARY KEY AUTOINCREMENT",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "PRIMARY KEY AUTOINCREMENT"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [
+                "auto-increment"
+              ]
+            },
+            {
+              "name": "gender",
+              "getter_name": "gender",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<Gender>(Gender.values)",
+                "dart_type_name": "Gender"
+              }
+            },
+            {
+              "name": "workout_frequency",
+              "getter_name": "workoutFrequency",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<WorkoutFrequency>(WorkoutFrequency.values)",
+                "dart_type_name": "WorkoutFrequency"
+              }
+            },
+            {
+              "name": "is_metric",
+              "getter_name": "isMetric",
+              "moor_type": "bool",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "CHECK (\"is_metric\" IN (0, 1))",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "CHECK (\"is_metric\" IN (0, 1))"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "diet",
+              "getter_name": "diet",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<Diet>(Diet.values)",
+                "dart_type_name": "Diet"
+              }
+            },
+            {
+              "name": "is_onboarding_complete",
+              "getter_name": "isOnboardingComplete",
+              "moor_type": "bool",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "CHECK (\"is_onboarding_complete\" IN (0, 1))",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "CHECK (\"is_onboarding_complete\" IN (0, 1))"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "dob",
+              "getter_name": "dob",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "gpt_api_key",
+              "getter_name": "gptApiKey",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "height_cm",
+              "getter_name": "heightCm",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "weight_kg",
+              "getter_name": "weightKg",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "weight_goal_kg",
+              "getter_name": "weightGoalKg",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "updated_at",
+              "getter_name": "updatedAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "created_at",
+              "getter_name": "createdAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            }
+          ],
+          "is_virtual": false,
+          "without_rowid": false,
+          "constraints": []
+        }
+      },
+      {
+        "id": 1,
+        "references": [],
+        "type": "table",
+        "data": {
+          "name": "db_onboarding_datas",
+          "was_declared_in_moor": false,
+          "columns": [
+            {
+              "name": "id",
+              "getter_name": "id",
+              "moor_type": "bigInt",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "PRIMARY KEY AUTOINCREMENT",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "PRIMARY KEY AUTOINCREMENT"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [
+                "auto-increment"
+              ]
+            },
+            {
+              "name": "current_step",
+              "getter_name": "currentStep",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<OnboardingStep>(OnboardingStep.values)",
+                "dart_type_name": "OnboardingStep"
+              }
+            },
+            {
+              "name": "gender",
+              "getter_name": "gender",
+              "moor_type": "string",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<Gender>(Gender.values)",
+                "dart_type_name": "Gender"
+              }
+            },
+            {
+              "name": "workout_frequency",
+              "getter_name": "workoutFrequency",
+              "moor_type": "string",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<WorkoutFrequency>(WorkoutFrequency.values)",
+                "dart_type_name": "WorkoutFrequency"
+              }
+            },
+            {
+              "name": "is_metric",
+              "getter_name": "isMetric",
+              "moor_type": "bool",
+              "nullable": true,
+              "customConstraints": null,
+              "defaultConstraints": "CHECK (\"is_metric\" IN (0, 1))",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "CHECK (\"is_metric\" IN (0, 1))"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "diet",
+              "getter_name": "diet",
+              "moor_type": "string",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<Diet>(Diet.values)",
+                "dart_type_name": "Diet"
+              }
+            },
+            {
+              "name": "dob",
+              "getter_name": "dob",
+              "moor_type": "dateTime",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "gpt_api_key",
+              "getter_name": "gptApiKey",
+              "moor_type": "string",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "height_cm",
+              "getter_name": "heightCm",
+              "moor_type": "double",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "weight_kg",
+              "getter_name": "weightKg",
+              "moor_type": "double",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "weight_goal_kg",
+              "getter_name": "weightGoalKg",
+              "moor_type": "double",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "updated_at",
+              "getter_name": "updatedAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "created_at",
+              "getter_name": "createdAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            }
+          ],
+          "is_virtual": false,
+          "without_rowid": false,
+          "constraints": []
+        }
+      },
+      {
+        "id": 2,
+        "references": [
+          1
+        ],
+        "type": "table",
+        "data": {
+          "name": "db_reminders",
+          "was_declared_in_moor": false,
+          "columns": [
+            {
+              "name": "id",
+              "getter_name": "id",
+              "moor_type": "bigInt",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "PRIMARY KEY AUTOINCREMENT",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "PRIMARY KEY AUTOINCREMENT"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [
+                "auto-increment"
+              ]
+            },
+            {
+              "name": "type",
+              "getter_name": "type",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [],
+              "type_converter": {
+                "dart_expr": "const EnumNameConverter<DbReminderType>(DbReminderType.values)",
+                "dart_type_name": "DbReminderType"
+              }
+            },
+            {
+              "name": "label",
+              "getter_name": "label",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "hour",
+              "getter_name": "hour",
+              "moor_type": "int",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "minute",
+              "getter_name": "minute",
+              "moor_type": "int",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "updated_at",
+              "getter_name": "updatedAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "created_at",
+              "getter_name": "createdAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "onboarding_data",
+              "getter_name": "onboardingData",
+              "moor_type": "bigInt",
+              "nullable": true,
+              "customConstraints": null,
+              "defaultConstraints": "REFERENCES db_onboarding_datas (id)",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "REFERENCES db_onboarding_datas (id)"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [
+                "unknown"
+              ]
+            }
+          ],
+          "is_virtual": false,
+          "without_rowid": false,
+          "constraints": []
+        }
+      },
+      {
+        "id": 3,
+        "references": [],
+        "type": "table",
+        "data": {
+          "name": "db_meal_datas",
+          "was_declared_in_moor": false,
+          "columns": [
+            {
+              "name": "id",
+              "getter_name": "id",
+              "moor_type": "bigInt",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "PRIMARY KEY AUTOINCREMENT",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "PRIMARY KEY AUTOINCREMENT"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [
+                "auto-increment"
+              ]
+            },
+            {
+              "name": "calories",
+              "getter_name": "calories",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "protein",
+              "getter_name": "protein",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "carbs",
+              "getter_name": "carbs",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "fats",
+              "getter_name": "fats",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "water",
+              "getter_name": "water",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "meal_name",
+              "getter_name": "mealName",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "meal_description",
+              "getter_name": "mealDescription",
+              "moor_type": "string",
+              "nullable": true,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "updated_at",
+              "getter_name": "updatedAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "created_at",
+              "getter_name": "createdAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            }
+          ],
+          "is_virtual": false,
+          "without_rowid": false,
+          "constraints": []
+        }
+      },
+      {
+        "id": 4,
+        "references": [],
+        "type": "table",
+        "data": {
+          "name": "db_nutrition_plans",
+          "was_declared_in_moor": false,
+          "columns": [
+            {
+              "name": "id",
+              "getter_name": "id",
+              "moor_type": "bigInt",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "PRIMARY KEY AUTOINCREMENT",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "PRIMARY KEY AUTOINCREMENT"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [
+                "auto-increment"
+              ]
+            },
+            {
+              "name": "timeframe_in_weeks",
+              "getter_name": "timeframeInWeeks",
+              "moor_type": "int",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "bmi_index",
+              "getter_name": "bmiIndex",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "calories",
+              "getter_name": "calories",
+              "moor_type": "int",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "protein_g",
+              "getter_name": "proteinG",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "carbs_g",
+              "getter_name": "carbsG",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "fats_g",
+              "getter_name": "fatsG",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "water_liters",
+              "getter_name": "waterLiters",
+              "moor_type": "double",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "gym_advice",
+              "getter_name": "gymAdvice",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "medical_advice",
+              "getter_name": "medicalAdvice",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "warnings",
+              "getter_name": "warnings",
+              "moor_type": "string",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "updated_at",
+              "getter_name": "updatedAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "created_at",
+              "getter_name": "createdAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            }
+          ],
+          "is_virtual": false,
+          "without_rowid": false,
+          "constraints": []
+        }
+      },
+      {
+        "id": 5,
+        "references": [],
+        "type": "table",
+        "data": {
+          "name": "db_streak_records",
+          "was_declared_in_moor": false,
+          "columns": [
+            {
+              "name": "id",
+              "getter_name": "id",
+              "moor_type": "int",
+              "nullable": false,
+              "customConstraints": null,
+              "defaultConstraints": "PRIMARY KEY AUTOINCREMENT",
+              "dialectAwareDefaultConstraints": {
+                "sqlite": "PRIMARY KEY AUTOINCREMENT"
+              },
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": [
+                "auto-increment"
+              ]
+            },
+            {
+              "name": "count",
+              "getter_name": "count",
+              "moor_type": "int",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "updated_at",
+              "getter_name": "updatedAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            },
+            {
+              "name": "created_at",
+              "getter_name": "createdAt",
+              "moor_type": "dateTime",
+              "nullable": false,
+              "customConstraints": null,
+              "default_dart": null,
+              "default_client_dart": null,
+              "dsl_features": []
+            }
+          ],
+          "is_virtual": false,
+          "without_rowid": false,
+          "constraints": []
+        }
+      }
+    ]
+  }

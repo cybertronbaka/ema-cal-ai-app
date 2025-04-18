@@ -106,7 +106,7 @@ class HomeController {
     if (image == null) return;
 
     if (!context.mounted) return;
-    final apiKey = ref.read(gptApiKeyProvider);
+    final apiKey = ref.read(userProfileProvider)?.gptApiKey;
     if (apiKey == null || apiKey.isEmpty) {
       if (context.mounted) {
         CustomSnackBar.showErrorNotification(

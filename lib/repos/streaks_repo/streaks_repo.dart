@@ -1,5 +1,7 @@
 import 'package:clock/clock.dart';
-import 'package:hive/hive.dart';
+import 'package:ema_cal_ai/app/globals.dart';
+import 'package:ema_cal_ai/database/database.dart';
+import 'package:ema_cal_ai/extensions/db_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final streaksRepoProvider = Provider<StreaksRepo>(
@@ -13,92 +15,124 @@ abstract class StreaksRepo {
   Future<void> validateAndReset();
 }
 
-class LocalStreaksRepo implements StreaksRepo {
-  static const boxName = 'streaks';
+class LocalStreaksRepo extends StreaksRepo {
+  DbStreakRecord? current;
 
   @override
   Future<int> get() async {
-    final box = await _openBox();
-    return _getStreakValue(box)?.count ?? 0;
+    final data = await _getAndSaveCurrent();
+
+    if (data == null) return 0;
+
+    current = data;
+    return data.count;
   }
 
-  _StreakValue? _getStreakValue(Box box) {
-    if (box.isEmpty) return null;
+  Future<DbStreakRecord?> _getAndSaveCurrent() async {
+    final query = database.select(database.dbStreakRecords)..limit(1);
+    final data = await query.getSingleOrNull();
 
-    return _StreakValue.fromHive(box);
-  }
-
-  Future<void> _save(Box box, _StreakValue value) async {
-    await box.putAll(value.toJson());
+    current = data;
+    return data;
   }
 
   @override
   Future<int> add() async {
-    final box = await _openBox();
-    final current = _getStreakValue(box);
-    if (current == null) {
-      await _save(box, _StreakValue(count: 1, updatedAt: clock.now()));
-      return 1;
-    }
+    await database.transaction(() async {
+      DbStreakRecord? record =
+          current == null ? await _getAndSaveCurrent() : current!;
 
-    final now = clock.now();
-    final lastUpdated = current.updatedAt;
+      if (record == null) {
+        await _saveAndSaveCurrent(1);
+        return 1;
+      }
 
-    if (_isSameDay(lastUpdated, now)) return current.count;
+      final now = clock.now();
+      final lastUpdated = record.updatedAt;
 
-    final daysBetween = now.difference(lastUpdated).inDays;
-    final newCount = daysBetween == 1 ? current.count + 1 : 1;
+      if (_isSameDay(lastUpdated, now)) return record.count;
 
-    await _save(box, _StreakValue(count: newCount, updatedAt: now));
+      final daysBetween = now.difference(lastUpdated).inDays;
+      final newCount = daysBetween == 1 ? record.count + 1 : 1;
+      await _saveAndSaveCurrent(newCount);
+    });
 
-    return newCount;
+    return current!.count;
   }
 
   bool _isSameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
+  Future<void> _saveAndSaveCurrent(int count) async {
+    final createdAt = current == null ? clock.now() : current!.createdAt;
+    final updatedAt = clock.now();
+
+    int id;
+    if (current == null) {
+      id = await _insert(count, createdAt, updatedAt);
+    } else {
+      await _update(count, current!.id, createdAt, updatedAt);
+      id = current!.id;
+    }
+
+    current = DbStreakRecord(
+      id: id,
+      count: count,
+      updatedAt: updatedAt,
+      createdAt: createdAt,
+    );
+  }
+
+  Future<int> _insert(int count, DateTime createdAt, DateTime updatedAt) {
+    return database
+        .into(database.dbStreakRecords)
+        .insert(
+          DbStreakRecordsCompanion.insert(
+            count: count,
+            updatedAt: updatedAt,
+            createdAt: createdAt,
+          ),
+        );
+  }
+
+  Future<void> _update(
+    int count,
+    int id,
+    DateTime createdAt,
+    DateTime updatedAt,
+  ) async {
+    await database
+        .update(database.dbStreakRecords)
+        .replace(
+          DbStreakRecordsCompanion(
+            id: id.toDbValue(),
+            count: count.toDbValue(),
+            updatedAt: updatedAt.toDbValue(),
+            createdAt: createdAt.toDbValue(),
+          ),
+        );
+  }
+
   @override
   Future<void> clear() async {
-    final box = await _openBox();
-    await box.clear();
+    await database.managers.dbStreakRecords.delete();
   }
 
   @override
   Future<void> validateAndReset() async {
-    final box = await _openBox();
-    final value = _getStreakValue(box);
+    DbStreakRecord? record =
+        current == null ? await _getAndSaveCurrent() : current!;
 
-    // No streak exists - nothing to validate
-    if (value == null) return;
+    if (record == null) return;
 
     final now = clock.now();
-    final daysSinceUpdate = now.difference(value.updatedAt).inDays;
+    final daysSinceUpdate = now.difference(record.updatedAt).inDays;
 
-    // Clear if: Negative count, future date, or 2+ days inactive
-    if (value.count < 0 ||
-        value.updatedAt.isAfter(now) ||
+    if (record.count < 0 ||
+        record.updatedAt.isAfter(now) ||
         daysSinceUpdate >= 2) {
       await clear();
     }
-  }
-
-  Future<Box> _openBox() => Hive.openBox(boxName);
-}
-
-class _StreakValue {
-  const _StreakValue({required this.count, required this.updatedAt});
-
-  factory _StreakValue.fromHive(Box box) {
-    return _StreakValue(
-      count: box.get('count') as int,
-      updatedAt: DateTime.parse(box.get('updated_at') as String),
-    );
-  }
-  final int count;
-  final DateTime updatedAt;
-
-  Map<String, dynamic> toJson() {
-    return {'count': count, 'updated_at': updatedAt.toIso8601String()};
   }
 }

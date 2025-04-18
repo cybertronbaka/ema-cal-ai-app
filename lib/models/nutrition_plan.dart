@@ -1,45 +1,105 @@
+import 'package:clock/clock.dart';
+import 'package:ema_cal_ai/database/database.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/extensions/db_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
 
+// Todo: Simply use DbNutritionPlan instead of this.
+// Todo: Will need to adapt the ui to and rest of the logic.
+// So once the db setup is done, we will do that
 class NutritionPlan {
   NutritionPlan({
+    this.id,
     required this.goal,
     required this.timeframeInWeeks,
     required this.notes,
     required this.bmiIndex,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory NutritionPlan.fromJson(Map<dynamic, dynamic> json) {
     return NutritionPlan(
+      id: null,
       goal: DailyNutrition.fromJson(json['goal']),
       timeframeInWeeks: json['timeframe_in_weeks'] as int,
       bmiIndex: json['bmi_index'] as double,
       notes: NutritionNotes.fromJson(json['notes']),
+      createdAt: clock.now(),
+      updatedAt: clock.now(),
     );
   }
 
-  factory NutritionPlan.fromHive(Box box) {
+  factory NutritionPlan.fromDB(DbNutritionPlan data) {
     return NutritionPlan(
-      goal: DailyNutrition.fromJson(box.get('goal')),
-      timeframeInWeeks: box.get('timeframe_in_weeks') as int,
-      bmiIndex: box.get('bmi_index') as double,
-      notes: NutritionNotes.fromJson(box.get('notes')),
+      goal: DailyNutrition(
+        calories: data.calories,
+        proteinG: data.proteinG,
+        carbsG: data.carbsG,
+        fatsG: data.fatsG,
+        waterLiters: data.waterLiters,
+      ),
+      timeframeInWeeks: data.timeframeInWeeks,
+      notes: NutritionNotes(
+        gymAdvice: data.gymAdvice,
+        medicalAdvice: data.medicalAdvice,
+        warnings: data.warnings,
+      ),
+      bmiIndex: data.bmiIndex,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
     );
   }
+
+  DbNutritionPlan toDB() {
+    return DbNutritionPlan(
+      id: -1.toBigInt(),
+      calories: goal.calories,
+      proteinG: goal.proteinG,
+      carbsG: goal.carbsG,
+      fatsG: goal.fatsG,
+      waterLiters: goal.waterLiters,
+      timeframeInWeeks: timeframeInWeeks,
+      gymAdvice: notes.gymAdvice,
+      medicalAdvice: notes.medicalAdvice,
+      warnings: notes.warnings,
+      bmiIndex: bmiIndex,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
+
+  final int? id;
   final DailyNutrition goal;
   final int timeframeInWeeks;
   final NutritionNotes notes;
   final double bmiIndex;
+  final DateTime updatedAt;
+  final DateTime createdAt;
 
   Map<String, dynamic> toJson() {
     return {
+      'id': 'id',
       'goal': goal.toJson(),
       'timeframe_in_weeks': timeframeInWeeks,
       'notes': notes.toJson(),
       'bmi_index': bmiIndex,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
+  }
+
+  NutritionPlan copyWith({int? id, DateTime? createdAt, DateTime? updatedAt}) {
+    return NutritionPlan(
+      id: id,
+      goal: goal,
+      timeframeInWeeks: timeframeInWeeks,
+      notes: notes,
+      bmiIndex: bmiIndex,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
   }
 }
 

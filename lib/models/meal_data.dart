@@ -1,4 +1,6 @@
+import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
+import 'package:ema_cal_ai/database/database.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 
 class MealData {
@@ -11,6 +13,7 @@ class MealData {
     required this.water,
     required this.mealName,
     required this.mealDescription,
+    required this.updatedAt,
     required this.createdAt,
   });
 
@@ -24,7 +27,29 @@ class MealData {
       water: double.parse(json['water'].toString()),
       mealName: json['meal_name'],
       mealDescription: json['meal_name'],
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt:
+          json['created_at'] == null
+              ? clock.now()
+              : DateTime.parse(json['created_at'] as String),
+      updatedAt:
+          json['updated_at'] == null
+              ? clock.now()
+              : DateTime.parse(json['updated_at'] as String),
+    );
+  }
+
+  factory MealData.fromDB(DbMealData data) {
+    return MealData(
+      id: data.id.toInt(),
+      calories: data.calories,
+      protein: data.protein,
+      carbs: data.carbs,
+      fats: data.fats,
+      water: data.water,
+      mealName: data.mealName,
+      mealDescription: data.mealDescription,
+      updatedAt: data.updatedAt,
+      createdAt: data.createdAt,
     );
   }
 
@@ -36,6 +61,7 @@ class MealData {
   final double water;
   final String mealName;
   final String? mealDescription;
+  final DateTime updatedAt;
   final DateTime createdAt;
 
   Map<String, dynamic> toJson() {
@@ -73,6 +99,7 @@ class MealData {
       mealName: mealName,
       mealDescription: mealDescription,
       createdAt: createdAt,
+      updatedAt: clock.now(),
     );
   }
 
@@ -87,6 +114,7 @@ class MealData {
   }
 
   MealData copyWith({
+    int? id,
     double? calories,
     double? protein,
     double? carbs,
@@ -96,7 +124,7 @@ class MealData {
     String? mealDescription,
   }) {
     return MealData(
-      id: id,
+      id: id ?? this.id,
       calories: calories ?? this.calories,
       protein: protein ?? this.protein,
       carbs: carbs ?? this.carbs,
@@ -105,6 +133,7 @@ class MealData {
       mealName: mealName ?? this.mealName,
       mealDescription: mealDescription,
       createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 }

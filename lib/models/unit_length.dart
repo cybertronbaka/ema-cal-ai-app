@@ -1,33 +1,19 @@
 /// Represents a measurable length with imperial/metric conversion capabilities
 abstract final class UnitLength {
-  static UnitLength fromJson(Map<dynamic, dynamic> json) {
-    if (json[_isMetricKey] == null) {
-      throw 'Cannot determine measurement system for unit length';
+  static UnitLength fromCm(double cm, bool isMetric) {
+    if (isMetric) {
+      return MetricLength(cm);
     }
-
-    if (json[_isMetricKey]) {
-      return MetricLength(json[_cmKey]);
-    }
-
-    return ImperialLength(json[_feetKey], json[_inchesKey]);
+    return ImperialLength.fromCm(cm);
   }
 
   double get cm;
-  static const _cmKey = 'cm';
   int get feet;
-  static const _feetKey = 'feet';
   double get inches;
-  static const _inchesKey = 'inches';
   bool get isMetric;
-  static const _isMetricKey = 'isMetric';
 
   Map<String, dynamic> toJson() {
-    return {
-      _isMetricKey: isMetric,
-      _cmKey: cm,
-      _feetKey: feet,
-      _inchesKey: inches,
-    };
+    return {'isMetric': isMetric, 'cm': cm, 'feet': feet, 'inches': inches};
   }
 
   @override
@@ -46,11 +32,21 @@ abstract final class UnitLength {
 }
 
 /// Imperial units implementation
-final class ImperialLength implements UnitLength {
-  const ImperialLength(this.feet, [double inches = 0])
+final class ImperialLength extends UnitLength {
+  ImperialLength(this.feet, [double inches = 0])
     : assert(feet >= 0, 'Feet must be non-negative'),
       // Clamping here
       inches = inches < 0 ? 0 : (inches > 11.99 ? 11.99 : inches);
+
+  factory ImperialLength.fromCm(double cm) {
+    if (cm < 0) return ImperialLength(0, 0);
+
+    final totalInches = cm / 2.54;
+    final feet = totalInches ~/ 12;
+    final inches = totalInches % 12;
+
+    return ImperialLength(feet, inches);
+  }
 
   @override
   final int feet;
@@ -64,20 +60,11 @@ final class ImperialLength implements UnitLength {
 
   @override
   bool get isMetric => false;
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      UnitLength._isMetricKey: isMetric,
-      UnitLength._feetKey: feet,
-      UnitLength._inchesKey: inches,
-    };
-  }
 }
 
 /// Metric units implementation
-final class MetricLength implements UnitLength {
-  const MetricLength(this.cm) : assert(cm >= 0, 'CM must be non-negative');
+final class MetricLength extends UnitLength {
+  MetricLength(this.cm) : assert(cm >= 0, 'CM must be non-negative');
 
   @override
   final double cm;
@@ -90,9 +77,4 @@ final class MetricLength implements UnitLength {
 
   @override
   bool get isMetric => true;
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {UnitLength._isMetricKey: isMetric, UnitLength._cmKey: cm};
-  }
 }
