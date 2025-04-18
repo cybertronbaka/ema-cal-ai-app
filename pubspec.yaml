@@ -58,7 +58,7 @@ dependencies:
   device_info_plus: ^11.3.3
   permission_handler: ^12.0.0+1
   camera: ^0.11.1
-  syncfusion_flutter_gauges: ^29.1.38
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -77,8 +77,7 @@ dev_dependencies:
   mocktail: ^1.0.4
   recase: ^4.1.0
   test: ^1.25.15
-  flutter_native_splash: ^2.4.6
-
+  
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

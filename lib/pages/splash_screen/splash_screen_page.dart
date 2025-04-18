@@ -23,11 +23,15 @@ class SplashScreenPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final animationController = useAnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
     );
 
     useInitHook(() {
-      animationController.forward();
+      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+        if (context.mounted) {
+          animationController.forward();
+        }
+      });
     }, []);
 
     useInitHook(() async {
@@ -38,8 +42,8 @@ class SplashScreenPage extends HookConsumerWidget {
           _setGptApiKeyIfExists(ref),
           _validateAndSetStreaks(ref),
           _setMealDataIfExists(ref),
-          // Added So that user will see animation
           Future.delayed(const Duration(seconds: 1)),
+          // Added So that user will see animation
         ]);
 
         if (context.mounted) {
@@ -48,8 +52,11 @@ class SplashScreenPage extends HookConsumerWidget {
 
         return;
       }
-
-      await _setOnboardingDataIfExists(ref);
+      await Future.wait([
+        _setOnboardingDataIfExists(ref),
+        Future.delayed(const Duration(seconds: 1)),
+        // Added So that user will see animation
+      ]);
       if (context.mounted) {
         context.replaceNamed(Routes.onboardingEntry.name);
       }
