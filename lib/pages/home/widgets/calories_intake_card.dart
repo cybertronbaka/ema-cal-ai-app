@@ -9,8 +9,6 @@ class _DailyCaloriesIntakeCard extends ConsumerWidget {
     final plan = ref.watch(currentNutritionPlanProvider);
     final mealData = ref.watch(collectiveMealDataTodayProvider);
 
-    print('mealDat: ${mealData}');
-
     final max = plan?.goal.calories.toDouble() ?? 0.0;
     final value = mealData?.calories ?? 0;
     final remaining = (max - value).clamp(0.0, max);

@@ -48,6 +48,7 @@ class NutritionPlannerController {
       debugPrint(plan.toJson().toString());
       nutritionPlan = AsyncData(plan);
     } catch (e, st) {
+      debugPrint('$e\n$st');
       nutritionPlan = AsyncError(e, st);
     } finally {
       ref.read(nutritionPlannerCanGoBack.notifier).state = true;

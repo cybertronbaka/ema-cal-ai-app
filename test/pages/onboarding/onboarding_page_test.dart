@@ -58,6 +58,10 @@ void main() {
       () => mealTimeRemindersRepo.get(),
     ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
 
+    when(
+      () => mealTimeRemindersRepo.saveAll(any()),
+    ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
+
     when<Future<NutritionPlan>>(
       () => nutritionPlannerRepo.plan(
         any<UserProfile>(that: isA<UserProfile>()),
