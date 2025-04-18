@@ -58,7 +58,7 @@ class HomePage extends ConsumerWidget {
         ],
       ),
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
+      body: const SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -78,10 +78,6 @@ class HomePage extends ConsumerWidget {
               SizedBox(height: 16),
               _RecentlyEatenSection(),
               SizedBox(height: 50),
-
-              const CustomAssetVideoPlayer(
-                source: 'assets/videos/get_gemini_api_key_instruction.mp4',
-              ),
             ],
           ),
         ),
