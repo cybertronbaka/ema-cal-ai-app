@@ -3,6 +3,7 @@ library;
 import 'dart:ui';
 
 import 'package:ema_cal_ai/app/routes.dart';
+import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
@@ -123,5 +124,11 @@ class SplashScreenPage extends HookConsumerWidget {
     ref.read(mealDataTodayProvider.notifier).state = today;
     final thisWeek = await ref.read(mealDataRepoProvider).thisWeek();
     ref.read(thisWeekMealDataProvider.notifier).state = thisWeek;
+
+    var sum = const MealDataSum.zero();
+    for (var data in today) {
+      sum += data;
+    }
+    ref.read(collectiveMealDataTodayProvider.notifier).state = sum;
   }
 }
