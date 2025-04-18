@@ -12,6 +12,7 @@ final gptApiKeyRepoProvider = Provider<GptApiKeyRepo>(
 abstract class GptApiKeyRepo {
   Future<String?> get();
   Future<void> save(String apiKey);
+  Future<void> clear();
 }
 
 class LocalGptApiKeyRepo extends GptApiKeyRepo {
@@ -32,4 +33,10 @@ class LocalGptApiKeyRepo extends GptApiKeyRepo {
   }
 
   Future<Box> _openBox() => Hive.openBox(boxName);
+
+  @override
+  Future<void> clear() async {
+    final box = await _openBox();
+    await box.clear();
+  }
 }

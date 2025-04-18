@@ -10,7 +10,7 @@ class OptionsList<T extends Enum> extends HookWidget {
     this.initialValue,
   });
   final void Function(T selected)? onSelected;
-  final Widget Function(T value) builder;
+  final Widget Function(T value, bool selected) builder;
   final List<T> options;
   final T? initialValue;
 
@@ -41,7 +41,7 @@ class OptionsList<T extends Enum> extends HookWidget {
               onSelected?.call(value);
               selected.value = value;
             },
-            child: builder(value),
+            child: builder(value, selected.value == value),
           ),
       ],
     );

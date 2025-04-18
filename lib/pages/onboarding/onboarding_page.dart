@@ -14,6 +14,7 @@ import 'package:ema_cal_ai/widgets/views/set_meal_time_reminders_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_weight_goal_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_workout_frequency_view.dart';
 import 'package:ema_cal_ai/widgets/views/set_gender_view.dart';
+import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

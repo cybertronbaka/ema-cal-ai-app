@@ -23,7 +23,9 @@ class _TitleAndPortionsSection extends ConsumerWidget {
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.edit_rounded, size: 18),
+                icon: const Center(
+                  child: FaIcon(FontAwesomeIcons.pencil, size: 16),
+                ),
                 onPressed: () => controller.editTitle(context),
               ),
             ],

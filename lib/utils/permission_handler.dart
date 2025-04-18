@@ -4,6 +4,7 @@ import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract class PermissionHandler {
@@ -48,9 +49,9 @@ extension _PermissionExt on Permission {
   };
 
   IconData? get icon => switch (this) {
-    Permission.camera => Icons.camera_alt,
-    Permission.storage => Icons.photo_library,
-    Permission.photos => Icons.photo_library,
+    Permission.camera => FontAwesomeIcons.camera,
+    Permission.storage => FontAwesomeIcons.images,
+    Permission.photos => FontAwesomeIcons.images,
     _ => null,
   };
 }
@@ -75,12 +76,12 @@ class _PermissionDeniedDialog extends StatelessWidget {
         children: [
           if (permission.icon != null) ...[
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
                 color: AppColors.primary,
                 shape: BoxShape.circle,
               ),
-              child: Icon(permission.icon, size: 60, color: Colors.white),
+              child: FaIcon(permission.icon, size: 38, color: Colors.white),
             ),
             const SizedBox(height: 16),
           ],
@@ -95,7 +96,7 @@ class _PermissionDeniedDialog extends StatelessWidget {
             style: textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           CustomFilledButton(
             onPressed: () async {
               final openedSettings = await openAppSettings();

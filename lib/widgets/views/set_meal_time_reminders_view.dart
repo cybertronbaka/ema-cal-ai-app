@@ -4,7 +4,7 @@ import 'package:ema_cal_ai/utils/time_utils.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SetMealTimeRemindersView extends HookWidget {
   const SetMealTimeRemindersView({
@@ -112,13 +112,11 @@ class _MealTimeReminderCard extends HookWidget {
         ],
       ),
       child: Row(
-        spacing: 12,
+        spacing: 16,
         children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: SvgPicture.asset(reminder.icon, height: 40, width: 40),
-            ),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: FaIcon(FontAwesomeIcons.bowlFood, size: 30),
           ),
           Expanded(
             flex: 5,
@@ -143,7 +141,7 @@ class _MealTimeReminderCard extends HookWidget {
                             time.value = null;
                             reminder.timeOfDay = null;
                           },
-                          child: const Icon(Icons.delete_rounded, size: 16),
+                          child: const FaIcon(FontAwesomeIcons.trash, size: 14),
                         ),
                     ],
                   ),
@@ -169,8 +167,8 @@ class _MealTimeReminderCard extends HookWidget {
             },
             icon:
                 time.value == null
-                    ? const Icon(Icons.add_rounded)
-                    : const Icon(Icons.edit_rounded),
+                    ? const FaIcon(FontAwesomeIcons.plus, size: 18)
+                    : const FaIcon(FontAwesomeIcons.pencil, size: 18),
           ),
         ],
       ),

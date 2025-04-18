@@ -29,7 +29,7 @@ class _ConfirmImageButton extends HookWidget {
         builder: (_, _) {
           final value = animationController.value;
           final padding = (1 - value) * 7;
-          final iconSize = lerpDouble(size * 0.4, size * 0.6, value);
+          final iconSize = lerpDouble(size * 0.3, size * 0.5, value);
           final iconColor = Color.lerp(Colors.black, Colors.white, value);
 
           return Container(
@@ -48,10 +48,12 @@ class _ConfirmImageButton extends HookWidget {
                 shape: BoxShape.circle,
                 color: value == 1 ? Colors.amber : Colors.white,
               ),
-              child: Icon(
-                Icons.check_rounded,
-                size: iconSize,
-                color: iconColor,
+              child: Center(
+                child: FaIcon(
+                  FontAwesomeIcons.check,
+                  color: iconColor,
+                  size: iconSize,
+                ),
               ),
             ),
           );

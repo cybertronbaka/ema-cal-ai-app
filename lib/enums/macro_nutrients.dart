@@ -1,13 +1,13 @@
 part of 'enums.dart';
 
 enum MacroNutrients {
-  calories('Calories', null, AppColors.primary),
-  protein('Protein', 'g', Colors.amber),
-  carbs('Carbs', 'g', Colors.pink),
-  water('water', 'L', Colors.blue),
-  fats('Fats', 'g', Colors.blueAccent);
+  calories('Calories', null, AppColors.primary, FontAwesomeIcons.bolt),
+  protein('Protein', 'g', Colors.amber, FontAwesomeIcons.egg),
+  carbs('Carbs', 'g', Colors.pink, FontAwesomeIcons.wheatAwn),
+  water('water', 'L', Colors.blue, FontAwesomeIcons.droplet),
+  fats('Fats', 'g', Colors.blueAccent, FontAwesomeIcons.bacon);
 
-  const MacroNutrients(this.label, this.unit, this.color);
+  const MacroNutrients(this.label, this.unit, this.color, this.icon);
 
   factory MacroNutrients.parse(String value) {
     return switch (value) {
@@ -22,4 +22,5 @@ enum MacroNutrients {
   final String label;
   final String? unit;
   final Color color;
+  final IconData icon;
 }

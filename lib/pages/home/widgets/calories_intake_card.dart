@@ -57,14 +57,15 @@ class _DailyCaloriesIntakeCard extends ConsumerWidget {
                 Positioned.fill(
                   child: Center(
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.darkGrey.withAlpha(20),
+                        color: MacroNutrients.calories.color.withAlpha(20),
                       ),
-                      child: const Icon(
-                        // Todo: Change the icon Use SVGs
-                        Icons.bolt_rounded,
+                      child: FaIcon(
+                        MacroNutrients.calories.icon,
+                        size: 20,
+                        color: MacroNutrients.calories.color,
                       ),
                     ),
                   ),

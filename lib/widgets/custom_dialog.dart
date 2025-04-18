@@ -11,7 +11,7 @@ class CustomDialog extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 32, 20, 32),
+            padding: const EdgeInsets.fromLTRB(20, 32, 20, 20),
             child: child,
           ),
           Positioned(
@@ -21,7 +21,7 @@ class CustomDialog extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
               },
-              child: const Icon(Icons.close_rounded),
+              child: const FaIcon(FontAwesomeIcons.xmark),
             ),
           ),
         ],

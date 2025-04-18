@@ -51,14 +51,12 @@ class _DailyMacroNutrientIntakeCard extends ConsumerWidget {
                     Positioned.fill(
                       child: Center(
                         child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.darkGrey.withAlpha(20),
+                            color: type.color.withAlpha(20),
                           ),
-                          child: const Icon(
-                            Icons.bolt_rounded,
-                          ), // Todo: Change the icon Use SVGs
+                          child: FaIcon(type.icon, size: 16, color: type.color),
                         ),
                       ),
                     ),

@@ -1,14 +1,30 @@
 part of 'sheets.dart';
 
 class CustomOptionsBottomSheetItem {
-  factory CustomOptionsBottomSheetItem.fromIcon({
+  // factory CustomOptionsBottomSheetItem.fromIcon({
+  //   required String text,
+  //   required IconData icon,
+  //   Color iconColor = const Color(0xFF98A2B3),
+  //   double iconSize = 18,
+  //   VoidCallback? onSelected,
+  // }) {
+  //   return CustomOptionsBottomSheetItem._(
+  //     text: text,
+  //     icon: Icon(icon, color: iconColor, size: iconSize),
+  //     onSelected: onSelected,
+  //   );
+  // }
+
+  factory CustomOptionsBottomSheetItem.fromFaIcon({
     required String text,
     required IconData icon,
+    Color iconColor = const Color(0xFF98A2B3),
+    double iconSize = 18,
     VoidCallback? onSelected,
   }) {
     return CustomOptionsBottomSheetItem._(
       text: text,
-      icon: Icon(icon, color: const Color(0xFF98A2B3), size: 24),
+      icon: FaIcon(icon, color: iconColor, size: iconSize),
       onSelected: onSelected,
     );
   }
