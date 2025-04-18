@@ -34,10 +34,9 @@ class SensitiveField extends HookWidget {
         canRequestFocus: false,
         descendantsAreFocusable: false,
         child: IconButton(
-          icon: Icon(
-            isObscure.value
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
+          icon: FaIcon(
+            isObscure.value ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
+            size: 18,
           ),
           onPressed: () {
             isObscure.value = !isObscure.value;

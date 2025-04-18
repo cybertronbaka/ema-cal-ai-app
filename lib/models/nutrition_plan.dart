@@ -1,4 +1,6 @@
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 
 class NutritionPlan {
@@ -114,4 +116,28 @@ class NutritionNotes {
       'warnings': warnings,
     };
   }
+
+  String fromNoteType(NutritionNoteType type) {
+    return switch (type) {
+      NutritionNoteType.warnings => warnings,
+      NutritionNoteType.gymAdvice => gymAdvice,
+      NutritionNoteType.medicalAdvice => medicalAdvice,
+    };
+  }
+}
+
+enum NutritionNoteType {
+  warnings('Warnings', FontAwesomeIcons.triangleExclamation, Color(0xFFFAF5E5)),
+  gymAdvice('Gym Advice', FontAwesomeIcons.dumbbell, Color(0xFFEFF6FF)),
+  medicalAdvice(
+    'Medical Advice',
+    FontAwesomeIcons.stethoscope,
+    Color(0xFFFFD6D6),
+  );
+
+  const NutritionNoteType(this.label, this.icon, this.bgColor);
+
+  final String label;
+  final IconData icon;
+  final Color bgColor;
 }

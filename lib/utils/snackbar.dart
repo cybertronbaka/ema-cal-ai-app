@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 enum CustomSnackBarType { error, success, info }
 
@@ -21,9 +22,9 @@ final Map<CustomSnackBarType, Color> _notificationColors = {
 };
 
 final _notificationIcons = {
-  CustomSnackBarType.error: Icons.error_outline,
-  CustomSnackBarType.info: Icons.info_outline,
-  CustomSnackBarType.success: Icons.done,
+  CustomSnackBarType.error: FontAwesomeIcons.circleExclamation,
+  CustomSnackBarType.info: FontAwesomeIcons.circleInfo,
+  CustomSnackBarType.success: FontAwesomeIcons.check,
 };
 
 class CustomSnackBar {
@@ -35,7 +36,11 @@ class CustomSnackBar {
       content: Row(
         spacing: 10,
         children: [
-          Icon(_notificationIcons[capsule.type], color: Colors.white),
+          FaIcon(
+            _notificationIcons[capsule.type],
+            color: Colors.white,
+            size: 18,
+          ),
           Expanded(child: Text(capsule.message)),
         ],
       ),

@@ -35,6 +35,8 @@ class SplashScreenPage extends HookConsumerWidget {
     }, []);
 
     useInitHook(() async {
+      // Only used in dev when I have to clear stuff
+      // await _clearAll(ref);
       final profile = await _setCurrentProfileIfExists(ref);
       if (profile != null && profile.isOnboardingComplete) {
         await Future.wait([
@@ -82,6 +84,16 @@ class SplashScreenPage extends HookConsumerWidget {
       ),
     );
   }
+
+  // Only used in dev when I have to clear stuff
+  // Future<void> _clearAll(WidgetRef ref) async {
+  //   await ref.read(profileRepoProvider).clear();
+  //   await ref.read(nutritionPlanRepoProvider).clear();
+  //   await ref.read(gptApiKeyRepoProvider).clear();
+  //   await ref.read(streaksRepoProvider).clear();
+  //   await ref.read(onboardingSaveRepoProvider).clear();
+  //   await ref.read(mealDataRepoProvider).clear();
+  // }
 
   Future<UserProfile?> _setCurrentProfileIfExists(WidgetRef ref) async {
     final profile = await ref.read(profileRepoProvider).get();

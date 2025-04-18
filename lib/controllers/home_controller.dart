@@ -13,6 +13,7 @@ import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:ema_cal_ai/widgets/dialogs/dialogs.dart';
 import 'package:ema_cal_ai/widgets/sheets/sheets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -69,14 +70,14 @@ class HomeController {
       builder: (ctx) {
         return CustomOptionsBottomSheet(
           items: [
-            CustomOptionsBottomSheetItem.fromIcon(
+            CustomOptionsBottomSheetItem.fromFaIcon(
               text: 'Take photo',
-              icon: Icons.camera_alt,
+              icon: FontAwesomeIcons.camera,
               onSelected: () => _pickImage(context, ImageSource.camera),
             ),
-            CustomOptionsBottomSheetItem.fromIcon(
+            CustomOptionsBottomSheetItem.fromFaIcon(
               text: 'Select from Gallery',
-              icon: Icons.photo_library,
+              icon: FontAwesomeIcons.images,
               onSelected: () => _pickImage(context, ImageSource.gallery),
             ),
           ],

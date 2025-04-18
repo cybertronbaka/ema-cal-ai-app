@@ -58,7 +58,7 @@ class SetGenderView extends HookWidget {
                         options: Gender.values,
                         initialValue: selected.value,
                         onSelected: (value) => selected.value = value,
-                        builder: (value) => Text(value.name),
+                        builder: (value, _) => Text(value.name),
                       ),
                     ),
                   ),

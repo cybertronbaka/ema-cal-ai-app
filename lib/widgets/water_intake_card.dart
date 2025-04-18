@@ -39,9 +39,13 @@ class WaterIntakeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
-        spacing: 8,
+        spacing: 16,
         children: [
-          const Text('💧', style: TextStyle(fontSize: 22)),
+          FaIcon(
+            MacroNutrients.water.icon,
+            size: 20,
+            color: MacroNutrients.water.color,
+          ),
           Expanded(
             child: Column(
               spacing: 4,
@@ -56,10 +60,10 @@ class WaterIntakeCard extends StatelessWidget {
                       ),
                     ),
                     if (isEditable) ...[
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 8),
                       GestureDetector(
                         onTap: onEdit,
-                        child: const Icon(Icons.edit_rounded, size: 20),
+                        child: const FaIcon(FontAwesomeIcons.pencil, size: 16),
                       ),
                     ],
                     const Spacer(),

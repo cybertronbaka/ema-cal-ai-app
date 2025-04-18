@@ -9,6 +9,7 @@ import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -39,15 +40,25 @@ class HomePage extends ConsumerWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(32),
             ),
-            child: Text(
-              '🔥 $streaks',
-              style: const TextStyle(fontWeight: FontWeight.w500),
+            child: Row(
+              spacing: 4,
+              children: [
+                const FaIcon(
+                  FontAwesomeIcons.fire,
+                  color: Colors.orange,
+                  size: 18,
+                ),
+                Text(
+                  streaks.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+              ],
             ),
           ),
         ],
       ),
       resizeToAvoidBottomInset: false,
-      body: const SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -67,6 +78,10 @@ class HomePage extends ConsumerWidget {
               SizedBox(height: 16),
               _RecentlyEatenSection(),
               SizedBox(height: 50),
+
+              const CustomAssetVideoPlayer(
+                source: 'assets/videos/get_gemini_api_key_instruction.mp4',
+              ),
             ],
           ),
         ),
@@ -75,7 +90,7 @@ class HomePage extends ConsumerWidget {
         onPressed: () {
           controller.showImageSrcSelectionSheet(context);
         },
-        child: const Icon(Icons.add_rounded, size: 32),
+        child: const Center(child: FaIcon(FontAwesomeIcons.plus, size: 20)),
       ),
     );
   }

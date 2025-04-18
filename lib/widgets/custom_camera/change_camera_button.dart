@@ -35,10 +35,12 @@ class _ChangeCameraButton extends HookWidget {
               decoration: const BoxDecoration(shape: BoxShape.circle),
               child: Transform.rotate(
                 angle: rotationAngle,
-                child: Icon(
-                  Icons.flip_camera_android_outlined,
-                  size: size * 0.5,
-                  color: Colors.white,
+                child: Center(
+                  child: FaIcon(
+                    FontAwesomeIcons.repeat,
+                    color: Colors.white,
+                    size: size * 0.4,
+                  ),
                 ),
               ),
             ),

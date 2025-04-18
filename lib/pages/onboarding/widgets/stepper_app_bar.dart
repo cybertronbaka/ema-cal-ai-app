@@ -14,7 +14,8 @@ class _StepperAppBar extends ConsumerWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           children: [
-            BackButton(
+            CustomBackButton(
+              backgroundColor: Colors.transparent,
               onPressed: () {
                 if (!canMovePrevStep) return;
 
@@ -22,37 +23,20 @@ class _StepperAppBar extends ConsumerWidget implements PreferredSizeWidget {
               },
             ),
             Expanded(
-              child: Stack(
-                children: [
-                  Container(
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: AppColors.secondary,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  ),
+              child: AnimatedBuilder(
+                animation: tabController,
+                builder: (context, child) {
+                  final animationValue = tabController.animation!.value;
+                  final progress = (animationValue + 1) / tabController.length;
 
-                  AnimatedBuilder(
-                    animation: tabController,
-                    builder: (context, child) {
-                      final animationValue = tabController.animation!.value;
-                      final progress =
-                          (animationValue + 1) / tabController.length;
-
-                      return FractionallySizedBox(
-                        widthFactor: progress.clamp(0.0, 1.0),
-                        child: child,
-                      );
-                    },
-                    child: Container(
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    ),
-                  ),
-                ],
+                  return LinearProgressIndicator(
+                    value: progress.clamp(0.0, 1.0),
+                    minHeight: 10,
+                    borderRadius: BorderRadius.circular(5),
+                    backgroundColor: AppColors.secondary,
+                    color: AppColors.primary,
+                  );
+                },
               ),
             ),
             const SizedBox(width: 16),

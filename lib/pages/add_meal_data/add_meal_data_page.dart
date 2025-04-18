@@ -5,6 +5,7 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'widgets/edit_macro_nutrient_value_card.dart';
@@ -34,14 +35,7 @@ class AddMealDataPage extends ConsumerWidget {
           Positioned(
             left: 16,
             top: MediaQuery.of(context).viewPadding.top,
-            child: BackButton(
-              color: Colors.white,
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(
-                  Colors.grey.withAlpha(100),
-                ),
-              ),
-            ),
+            child: const CustomBackButton.white(),
           ),
           Column(
             children: [

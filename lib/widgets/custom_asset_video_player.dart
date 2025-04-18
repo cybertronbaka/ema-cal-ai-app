@@ -94,10 +94,12 @@ class CustomAssetVideoPlayer extends HookWidget {
                             return const SizedBox.shrink();
                           }
 
-                          return const Icon(
-                            Icons.play_circle_filled_rounded,
-                            color: Colors.white,
-                            size: 60,
+                          return const Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.circlePlay,
+                              color: Colors.white,
+                              size: 50,
+                            ),
                           );
                         },
                       ),

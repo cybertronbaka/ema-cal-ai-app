@@ -35,10 +35,12 @@ class _ResetImageButton extends HookWidget {
               decoration: const BoxDecoration(shape: BoxShape.circle),
               child: Transform.rotate(
                 angle: rotationAngle,
-                child: Icon(
-                  Icons.undo_rounded,
-                  size: size * 0.5,
-                  color: Colors.white,
+                child: Center(
+                  child: FaIcon(
+                    FontAwesomeIcons.arrowRotateLeft,
+                    size: size * 0.4,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

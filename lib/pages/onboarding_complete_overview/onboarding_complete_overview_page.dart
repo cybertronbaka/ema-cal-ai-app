@@ -7,6 +7,7 @@ import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -105,47 +106,34 @@ class OnboardingCompleteOverviewPage extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 24),
-                          _Card(
-                            bgColor: const Color(0xFFFAF5E5),
-                            children: [
-                              Text('Warnings ⚠️', style: textTheme.titleSmall),
-                              const SizedBox(height: 8),
-                              Text(
-                                nutritionPlan.notes.warnings,
-                                style: const TextStyle(fontSize: 14),
+                          for (final noteType in NutritionNoteType.values)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24),
+                              child: _Card(
+                                bgColor: noteType.bgColor,
+                                children: [
+                                  Row(
+                                    spacing: 8,
+                                    children: [
+                                      Text(
+                                        noteType.label,
+                                        style: textTheme.titleSmall,
+                                      ),
+                                      FaIcon(
+                                        noteType.icon,
+                                        size: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    nutritionPlan.notes.fromNoteType(noteType),
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
-                          _Card(
-                            children: [
-                              Text(
-                                'Gym Advice 💪',
-                                style: textTheme.titleSmall,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                nutritionPlan.notes.gymAdvice,
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
-                          _Card(
-                            bgColor: const Color(0xFFFFD6D6),
-                            children: [
-                              Text(
-                                'Medical Advice 🏥',
-                                style: textTheme.titleSmall,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                nutritionPlan.notes.medicalAdvice,
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ],
-                          ),
+                            ),
                           const SizedBox(height: 50),
                         ],
                       ),

@@ -9,6 +9,7 @@ import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:recase/recase.dart';
@@ -17,6 +18,7 @@ import '../../fake_data/fakes.dart';
 import '../../mocks/keyboard_visibility_controller.dart';
 import '../../mocks/repositories.dart';
 import '../../mocks/video_player_platform.dart';
+import '../../utils/fa_icon.dart';
 import '../../utils/material_app.dart';
 import '../../utils/tester.dart';
 
@@ -153,7 +155,7 @@ void main() {
 
       container.read(onboardingControllerProvider).measurementSystem =
           MeasurementSystem.imperial;
-      await tester.tap(find.byType(BackButton));
+      await tester.tap(find.byType(CustomBackButton));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
@@ -182,7 +184,7 @@ void main() {
         path: '${prefix}_step_7.png',
       );
 
-      await tester.tap(find.byIcon(Icons.add_rounded).first);
+      await tester.tap(find.byFaIcon(FontAwesomeIcons.plus).first);
       await tester.pumpAndSettle();
       await tester.expectGolden<OnboardingPage>(
         variant,
@@ -196,11 +198,11 @@ void main() {
         path: '${prefix}_step_7_picked_time.png',
       );
 
-      await tester.tap(find.byIcon(Icons.edit_rounded).first);
+      await tester.tap(find.byFaIcon(FontAwesomeIcons.pencil).first);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Apply'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.delete_rounded).first);
+      await tester.tap(find.byFaIcon(FontAwesomeIcons.trash).first);
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Next'));

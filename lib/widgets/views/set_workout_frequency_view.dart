@@ -2,6 +2,7 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SetWorkoutFrequencyView extends HookConsumerWidget {
@@ -59,27 +60,37 @@ class SetWorkoutFrequencyView extends HookConsumerWidget {
                         options: WorkoutFrequency.values,
                         initialValue: selected.value,
                         onSelected: (value) => selected.value = value,
-                        builder: (value) {
+                        builder: (value, selected) {
                           // Todo: Add Icons here
-                          return Align(
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              spacing: 4,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  value.label,
-                                  style: const TextStyle(fontSize: 12),
+                          return Row(
+                            spacing: 16,
+                            children: [
+                              FaIcon(
+                                value.icon,
+                                color: selected ? Colors.white : Colors.black54,
+                                size: 24,
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  spacing: 4,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      value.label,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    Text(
+                                      value.description,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  value.description,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           );
                         },
                       ),

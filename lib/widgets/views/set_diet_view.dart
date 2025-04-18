@@ -2,6 +2,7 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SetDietView extends HookWidget {
   const SetDietView({
@@ -58,23 +59,33 @@ class SetDietView extends HookWidget {
                         options: Diet.values,
                         initialValue: selected.value,
                         onSelected: (value) => selected.value = value,
-                        builder: (value) {
-                          return Align(
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              spacing: 4,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(value.name),
-                                Text(
-                                  value.description,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                        builder: (value, selected) {
+                          return Row(
+                            spacing: 16,
+                            children: [
+                              FaIcon(
+                                value.icon,
+                                color: selected ? Colors.white : Colors.black54,
+                                size: 24,
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  spacing: 4,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(value.name),
+                                    Text(
+                                      value.description,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           );
                         },
                       ),

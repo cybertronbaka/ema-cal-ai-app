@@ -80,9 +80,9 @@ class OnboardingController {
   Diet? diet;
 
   List<MealTimeReminder> mealTimeReminders = [
-    MealTimeReminder(label: 'Breakfast', icon: 'assets/images/meal.svg'),
-    MealTimeReminder(label: 'Lunch', icon: 'assets/images/meal.svg'),
-    MealTimeReminder(label: 'Dinner ', icon: 'assets/images/meal.svg'),
+    MealTimeReminder(label: 'Breakfast'),
+    MealTimeReminder(label: 'Lunch'),
+    MealTimeReminder(label: 'Dinner '),
   ];
 
   String? gptApiKey;

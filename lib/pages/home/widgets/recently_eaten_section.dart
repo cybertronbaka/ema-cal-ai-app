@@ -65,13 +65,11 @@ class _MealDataCard extends StatelessWidget {
           ),
           for (final type in MacroNutrients.values)
             Row(
-              spacing: 8,
+              spacing: 16,
               children: [
+                Expanded(child: FaIcon(type.icon, size: 16, color: type.color)),
                 Expanded(
-                  child: Text(type.label, style: const TextStyle(fontSize: 14)),
-                ),
-                Expanded(
-                  flex: 3,
+                  flex: 20,
                   child: LinearProgressIndicator(
                     value: (data.fromNutrientType(type) /
                             plan.goal.fromNutrientType(type))

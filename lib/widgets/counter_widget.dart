@@ -19,10 +19,13 @@ class CounterWidget extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: onReduce,
-          child: const Icon(Icons.remove_rounded),
+          child: const FaIcon(FontAwesomeIcons.minus, size: 18),
         ),
         Text(value.toString(), style: TextTheme.of(context).titleMedium),
-        GestureDetector(onTap: onAdd, child: const Icon(Icons.add_rounded)),
+        GestureDetector(
+          onTap: onAdd,
+          child: const FaIcon(FontAwesomeIcons.plus, size: 18),
+        ),
       ],
     );
   }
