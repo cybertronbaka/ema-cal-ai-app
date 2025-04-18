@@ -167,8 +167,6 @@ class LinearGauge extends HookWidget {
     _GaugeCache cache,
     ValueNotifier<double?> calledForValue,
   ) {
-    // todo: Handle snapping and haptics
-
     double value;
     if (offset <= 0) {
       value = cache.majorValues.first;

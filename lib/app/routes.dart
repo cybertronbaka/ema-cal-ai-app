@@ -54,9 +54,14 @@ class CustomRoute {
 }
 
 abstract class Routes {
-  static final CustomRoute authEntry = CustomRoute(
-    name: 'authEntry',
+  static final CustomRoute splashScreen = CustomRoute(
+    name: 'splashScreen',
     path: ([args]) => '/',
+  );
+
+  static final CustomRoute onboardingEntry = CustomRoute(
+    name: 'onboardingEntry',
+    path: ([args]) => '/onboardingEntry',
   );
 
   static final CustomRoute onboarding = CustomRoute(

@@ -1,4 +1,4 @@
-part of '../auth_entry_page.dart';
+part of '../onboarding_entry_page.dart';
 
 enum _OnboardingStep {
   intro(

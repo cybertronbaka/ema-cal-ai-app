@@ -10,9 +10,8 @@ part 'enums/onboarding_step.dart';
 part 'widgets/image_section.dart';
 part 'widgets/indicators.dart';
 
-// Todo: This no longer functions like auth entry instead like OnboardingEntry
-class AuthEntryPage extends HookConsumerWidget {
-  const AuthEntryPage({super.key});
+class OnboardingEntryPage extends HookConsumerWidget {
+  const OnboardingEntryPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,4 +1,4 @@
-part of '../auth_entry_page.dart';
+part of '../onboarding_entry_page.dart';
 
 class _Indicators extends StatelessWidget {
   const _Indicators({required this.pageController, required this.isAttached});

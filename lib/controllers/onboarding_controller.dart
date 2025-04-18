@@ -120,7 +120,7 @@ class OnboardingController {
     if (!ref.read(nutritionPlannerCanGoBack)) return;
 
     if (currentStep == OnboardingStep.gender) {
-      context.pushReplacementNamed(Routes.authEntry.name);
+      context.pushReplacementNamed(Routes.onboardingEntry.name);
       clearData();
       return;
     }
