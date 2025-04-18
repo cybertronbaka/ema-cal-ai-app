@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
-import 'package:ema_cal_ai/repos/gpt_api_key_repo/gpt_api_key_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
@@ -41,7 +40,6 @@ class SplashScreenPage extends HookConsumerWidget {
       if (profile != null && profile.isOnboardingComplete) {
         await Future.wait([
           _setNutritionPlanIfExists(ref),
-          _setGptApiKeyIfExists(ref),
           _validateAndSetStreaks(ref),
           _setMealDataIfExists(ref),
           Future.delayed(const Duration(seconds: 1)),
@@ -86,14 +84,13 @@ class SplashScreenPage extends HookConsumerWidget {
   }
 
   // Only used in dev when I have to clear stuff
-  // Future<void> _clearAll(WidgetRef ref) async {
-  //   await ref.read(profileRepoProvider).clear();
-  //   await ref.read(nutritionPlanRepoProvider).clear();
-  //   await ref.read(gptApiKeyRepoProvider).clear();
-  //   await ref.read(streaksRepoProvider).clear();
-  //   await ref.read(onboardingSaveRepoProvider).clear();
-  //   await ref.read(mealDataRepoProvider).clear();
-  // }
+  Future<void> _clearAll(WidgetRef ref) async {
+    await ref.read(profileRepoProvider).clear();
+    await ref.read(nutritionPlanRepoProvider).clear();
+    await ref.read(streaksRepoProvider).clear();
+    await ref.read(onboardingSaveRepoProvider).clear();
+    await ref.read(mealDataRepoProvider).clear();
+  }
 
   Future<UserProfile?> _setCurrentProfileIfExists(WidgetRef ref) async {
     final profile = await ref.read(profileRepoProvider).get();
@@ -106,11 +103,6 @@ class SplashScreenPage extends HookConsumerWidget {
     ref.read(currentNutritionPlanProvider.notifier).state = plan;
   }
 
-  Future<void> _setGptApiKeyIfExists(WidgetRef ref) async {
-    final apiKey = await ref.read(gptApiKeyRepoProvider).get();
-    ref.read(gptApiKeyProvider.notifier).state = apiKey;
-  }
-
   Future<void> _validateAndSetStreaks(WidgetRef ref) async {
     final streaks = await ref.read(streaksRepoProvider).get();
     ref.read(streaksCountProvider.notifier).state = streaks;
@@ -118,6 +110,7 @@ class SplashScreenPage extends HookConsumerWidget {
 
   Future<void> _setOnboardingDataIfExists(WidgetRef ref) async {
     final onboardingData = await ref.read(onboardingSaveRepoProvider).get();
+    print('----onboardingdata: ${onboardingData?.toJson()}');
     final stepIndex = onboardingData?.currentStep.index;
     if (stepIndex != null) {
       ref.read(onboardingDataProvider.notifier).state = onboardingData;

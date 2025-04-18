@@ -1,6 +1,5 @@
 import 'package:ema_cal_ai/app/router.dart';
 import 'package:ema_cal_ai/app/theme.dart';
-import 'package:ema_cal_ai/repos/gpt_api_key_repo/gpt_api_key_repo.dart';
 import 'package:ema_cal_ai/repos/gpt_api_key_verify_repo/gpt_api_key_verify_repo.dart';
 import 'package:ema_cal_ai/repos/gpt_meal_data/gpt_meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
@@ -29,8 +28,7 @@ class EmaCalAIApp extends StatelessWidget {
       nutritionPlannerRepo: GeminiNutritionPlannerRepo(),
       nutritionPlanRepo: LocalNutritionPlanRepo(),
       gptApiKeyVerifyRepo: GeminiApiKeyVerifyRepo(),
-      gptApiKeyRepo: LocalGptApiKeyRepo(),
-      onboardingSaveRepo: LocalOnboardingSaveRepo(),
+      onboardingSaveRepo: (ref) => LocalOnboardingSaveRepo(ref),
       mealDataRepo: LocalMealDataRepo(),
       gptMealDataRepo: GeminiMealDataRepo(),
       streaksRepo: LocalStreaksRepo(),

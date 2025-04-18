@@ -19,7 +19,6 @@ class GenerateNutritionPlanView extends HookConsumerWidget {
     this.onBtnPressed,
     this.reminders,
     required this.profile,
-    required this.gptApiKey,
     this.plan,
     this.onGenerationDone,
   });
@@ -31,7 +30,6 @@ class GenerateNutritionPlanView extends HookConsumerWidget {
   final void Function(NutritionPlan value)? onGenerationDone;
   final UserProfile profile;
   final List<MealTimeReminder>? reminders;
-  final String gptApiKey;
   final NutritionPlan? plan;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
@@ -52,7 +50,7 @@ class GenerateNutritionPlanView extends HookConsumerWidget {
         return;
       }
 
-      controller.generatePlan(profile, reminders ?? [], gptApiKey);
+      controller.generatePlan(profile, reminders ?? [], profile.gptApiKey);
     }, [plan]);
 
     useEffect(() {
@@ -184,7 +182,7 @@ class GenerateNutritionPlanView extends HookConsumerWidget {
                       controller.generatePlan(
                         profile,
                         reminders ?? [],
-                        gptApiKey,
+                        profile.gptApiKey,
                       );
                     },
                     label: 'Retry',

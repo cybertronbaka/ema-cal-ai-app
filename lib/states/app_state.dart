@@ -4,6 +4,4 @@ part of 'states.dart';
 final keyboardVisibilityControllerProvider =
     Provider<KeyboardVisibilityController>((ref) => throw UnimplementedError());
 
-final gptApiKeyProvider = StateProvider<String?>((_) => null);
-
 final userProfileProvider = StateProvider<UserProfile?>((_) => null);

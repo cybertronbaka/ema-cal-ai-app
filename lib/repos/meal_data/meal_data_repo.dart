@@ -1,8 +1,11 @@
 library;
 
 import 'package:clock/clock.dart';
+import 'package:drift/drift.dart';
+import 'package:ema_cal_ai/app/globals.dart';
+import 'package:ema_cal_ai/database/database.dart';
+import 'package:ema_cal_ai/extensions/db_extension.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
-import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final mealDataRepoProvider = Provider<MealDataRepo>(
@@ -13,88 +16,107 @@ abstract class MealDataRepo {
   Future<List<MealData>> all();
   Future<List<MealData>> today();
   Future<List<MealData>> thisWeek();
-  Future<void> add(MealData data);
+  Future<List<MealData>> lastNDays(int n);
+
+  Future<MealData> add(MealData data);
   Future<void> clear();
 }
 
 class LocalMealDataRepo extends MealDataRepo {
-  static const boxName = 'meal_data';
-  static const _valuesKey = 'data';
-
   @override
-  Future<void> add(MealData data) async {
-    final box = await _openBox();
+  Future<List<MealData>> all() async {
+    final data = await database.select(database.dbMealDatas).get();
+    return _listFromDb(data);
+  }
 
-    // Todo: move to drift
-    // Hive is definitely not useful
-    final fullList = await all();
-    final id = (fullList.lastOrNull?.id ?? 0) + 1;
-    await box.put(_valuesKey, [
-      ...fullList.map((e) => e.toJson()),
-      {...data.toJson(), 'id': id},
-    ]);
+  List<MealData> _listFromDb(List<DbMealData> data) {
+    return data.map((e) => MealData.fromDB(e)).toList();
   }
 
   @override
-  Future<List<MealData>> all() async {
-    final box = await _openBox();
-    if (box.isEmpty) return [];
+  Future<MealData> add(MealData data) async {
+    final oldId = data.id.toBigInt();
+    final createdAt = data.id == null ? clock.now() : data.createdAt;
 
-    final allData = box.get(_valuesKey);
+    final id = await database
+        .into(database.dbMealDatas)
+        .insertOnConflictUpdate(
+          DbMealDatasCompanion(
+            id: oldId.toDbValueOrAbsent(),
+            calories: data.calories.toDbValue(),
+            protein: data.protein.toDbValue(),
+            carbs: data.protein.toDbValue(),
+            fats: data.fats.toDbValue(),
+            water: data.water.toDbValue(),
+            mealName: data.mealName.toDbValue(),
+            mealDescription: data.mealDescription.toDbNullableValue(),
+            updatedAt: clock.now().toDbValue(),
+            createdAt: createdAt.toDbValue(),
+          ),
+        );
 
-    if (allData is! List) {
-      throw 'To get Meal Time Reminders from Hive, the values should be list';
-    }
-    List<MealData> result = [];
-    for (var data in allData) {
-      result.add(MealData.fromJson(data));
-    }
+    return data.copyWith(id: id);
+  }
 
-    return result;
+  @override
+  Future<void> clear() async {
+    await database.managers.dbMealDatas.delete();
   }
 
   @override
   Future<List<MealData>> thisWeek() async {
-    final values = await all();
-    if (values.isEmpty) return [];
-
     final now = clock.now();
     final monday = now.subtract(Duration(days: now.weekday - 1));
     final sunday = monday.add(const Duration(days: 6));
+    final values =
+        await database.managers.dbMealDatas
+            .filter(
+              (f) =>
+                  f.createdAt.isAfter(
+                    monday.subtract(const Duration(milliseconds: 1)),
+                  ) &
+                  f.createdAt.isBefore(sunday.add(const Duration(days: 1))),
+            )
+            .get();
 
-    return values.where((meal) {
-      final mealDate = meal.createdAt;
-      return mealDate.isAfter(
-            monday.subtract(const Duration(milliseconds: 1)),
-          ) &&
-          (mealDate.isBefore(sunday.add(const Duration(days: 1))));
-    }).toList();
+    return _listFromDb(values);
   }
 
   @override
   Future<List<MealData>> today() async {
-    final allMeals = await all();
-    if (allMeals.isEmpty) return [];
-
-    final now = DateTime.now();
+    final now = clock.now();
     final todayStart = DateTime(now.year, now.month, now.day);
     final todayEnd = todayStart.add(const Duration(days: 1));
 
-    final todaysMeals =
-        allMeals.where((meal) {
-          return meal.createdAt.isAtSameMomentAs(todayStart) ||
-              (meal.createdAt.isAfter(todayStart) &&
-                  meal.createdAt.isBefore(todayEnd));
-        }).toList();
+    final values =
+        await database.managers.dbMealDatas
+            .filter(
+              (f) =>
+                  f.createdAt.isAfterOrOn(todayStart) &
+                  f.createdAt.isBefore(todayEnd),
+            )
+            .get();
 
-    return todaysMeals;
+    return _listFromDb(values);
   }
 
-  Future<Box> _openBox() => Hive.openBox(boxName);
-
   @override
-  Future<void> clear() async {
-    final box = await _openBox();
-    await box.clear();
+  Future<List<MealData>> lastNDays(int n) async {
+    final now = clock.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+
+    final start = todayStart.subtract(Duration(days: n));
+    final todayEnd = todayStart.add(const Duration(days: 1));
+
+    final values =
+        await database.managers.dbMealDatas
+            .filter(
+              (f) =>
+                  f.createdAt.isAfterOrOn(start) &
+                  f.createdAt.isBefore(todayEnd),
+            )
+            .get();
+
+    return _listFromDb(values);
   }
 }

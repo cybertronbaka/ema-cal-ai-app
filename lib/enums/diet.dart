@@ -6,9 +6,9 @@ enum Diet {
   vegetarian('Vegetarian', 'Plant-Based (No Meat)', FontAwesomeIcons.carrot),
   vegan('Vegan', 'Plant-Based (No Animal Product)', FontAwesomeIcons.leaf);
 
-  const Diet(this.name, this.description, this.icon);
+  const Diet(this.label, this.description, this.icon);
 
-  final String name;
+  final String label;
   final String description;
   final IconData icon;
 }

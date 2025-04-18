@@ -1,5 +1,5 @@
-import 'package:ema_cal_ai/repos/gpt_api_key_repo/gpt_api_key_repo.dart';
 import 'package:ema_cal_ai/repos/gpt_api_key_verify_repo/gpt_api_key_verify_repo.dart';
+import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +15,10 @@ class SetGptApiKeyController {
   Ref ref;
 
   Future<String?> getApiKey() async {
-    String? apiKey = ref.read(gptApiKeyProvider);
+    String? apiKey = ref.read(userProfileProvider)?.gptApiKey;
     if (apiKey != null) return apiKey;
 
-    apiKey = await ref.read(gptApiKeyRepoProvider).get();
+    apiKey = (await ref.read(profileRepoProvider).get())?.gptApiKey;
     return apiKey;
   }
 
@@ -26,7 +26,14 @@ class SetGptApiKeyController {
     final verified = await ref.read(gptApiKeyVerifyRepoProvider).verify(apiKey);
     if (verified) {
       try {
-        await ref.read(gptApiKeyRepoProvider).save(apiKey);
+        var profile = ref.read(userProfileProvider);
+        if (profile == null) throw 'Something went wrong';
+
+        profile = await ref
+            .read(profileRepoProvider)
+            .save(profile.copyWith(gptApiKey: apiKey));
+
+        ref.read(userProfileProvider.notifier).state = profile;
         return true;
       } catch (_) {
         return false;

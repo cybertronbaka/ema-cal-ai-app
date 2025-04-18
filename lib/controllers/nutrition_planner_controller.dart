@@ -31,7 +31,7 @@ class NutritionPlannerController {
       ref.notifyListeners();
       await ref.read(profileRepoProvider).save(profile);
 
-      await ref.read(mealTimeRemindersRepoProvider).save(reminders);
+      await ref.read(mealTimeRemindersRepoProvider).saveAll(reminders);
 
       await ref.read(profileRepoProvider).get().then((value) {
         debugPrint(value?.toJson().toString());

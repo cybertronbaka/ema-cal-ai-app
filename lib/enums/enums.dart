@@ -8,5 +8,4 @@ part 'diet.dart';
 part 'gender.dart';
 part 'macro_nutrients.dart';
 part 'onboarding_step.dart';
-part 'measurement_system.dart';
 part 'workout_frequency.dart';

@@ -1,6 +1,5 @@
 library;
 
-import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +16,14 @@ class SetWeightGoalView extends HookWidget {
     this.btnLabel = 'Save',
     this.onBtnPressed,
     required this.initialValue,
-    required this.measurementSystem,
+    required this.isMetric,
   });
 
   final String? title;
   final String? description;
   final String btnLabel;
   final UnitWeight initialValue;
-  final MeasurementSystem measurementSystem;
+  final bool isMetric;
 
   final void Function(UnitWeight)? onBtnPressed;
 
@@ -34,7 +33,6 @@ class SetWeightGoalView extends HookWidget {
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
     final goal = useValueNotifier<UnitWeight>(initialValue);
-    final isMetric = measurementSystem == MeasurementSystem.metric;
     final range = isMetric ? _kgRange : _lbsRange;
     final initValue = (isMetric ? initialValue.kg : initialValue.lbs).toInt();
     final unit = isMetric ? 'kg' : 'lb';

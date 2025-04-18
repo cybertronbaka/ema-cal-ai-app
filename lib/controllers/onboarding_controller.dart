@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/nutrition_planner_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
@@ -40,7 +41,7 @@ class OnboardingController {
     workoutFrequency = data.workoutFrequency;
     height = data.height;
     weight = data.weight;
-    measurementSystem = data.measurementSystem;
+    isMetric = data.isMetric;
     dob = data.dob;
     if (data.mealTimeReminders != null) {
       mealTimeReminders = data.mealTimeReminders!;
@@ -59,9 +60,9 @@ class OnboardingController {
 
   WorkoutFrequency? workoutFrequency;
 
-  MeasurementSystem measurementSystem = MeasurementSystem.metric;
-  static const UnitLength _initialHeight = MetricLength(163);
-  static const UnitWeight _initialWeight = MetricWeight(50);
+  bool isMetric = true;
+  static final UnitLength _initialHeight = MetricLength(163);
+  static final UnitWeight _initialWeight = MetricWeight(50);
 
   UnitWeight? _weight;
   UnitWeight get weight => _weight ?? _initialWeight;
@@ -93,26 +94,16 @@ class OnboardingController {
     workoutFrequency: workoutFrequency!,
     height: height,
     weight: weight,
-    measurementSystem: measurementSystem,
+    isMetric: isMetric,
     weightGoal: weightGoal,
     diet: diet!,
     isOnboardingComplete: false,
+    gptApiKey: gptApiKey!,
+    createdAt: clock.now(),
+    updatedAt: clock.now(),
   );
 
-  OnboardingData get _data => OnboardingData(
-    currentStep: currentStep,
-    dob: dob,
-    gender: gender,
-    workoutFrequency: workoutFrequency,
-    height: height,
-    weight: weight,
-    mealTimeReminders: mealTimeReminders,
-    measurementSystem: measurementSystem,
-    weightGoal: weightGoal,
-    diet: diet,
-    gptApiKey: gptApiKey,
-    nutritionPlan: nutritionPlan,
-  );
+  OnboardingData? _data;
 
   NutritionPlan? nutritionPlan;
 
@@ -174,8 +165,24 @@ class OnboardingController {
     );
   }
 
-  void saveData() {
-    unawaited(ref.read(onboardingSaveRepoProvider).save(_data));
+  void saveData() async {
+    final data = OnboardingData(
+      currentStep: currentStep,
+      dob: dob,
+      gender: gender,
+      workoutFrequency: workoutFrequency,
+      height: height,
+      weight: weight,
+      mealTimeReminders: mealTimeReminders,
+      isMetric: isMetric,
+      weightGoal: weightGoal,
+      diet: diet,
+      gptApiKey: gptApiKey,
+      nutritionPlan: nutritionPlan,
+      updatedAt: clock.now(),
+      createdAt: clock.now(),
+    );
+    _data = await ref.read(onboardingSaveRepoProvider).save(data);
     ref.read(onboardingDataProvider.notifier).state = _data;
   }
 

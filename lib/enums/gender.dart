@@ -5,6 +5,6 @@ enum Gender {
   female('Female'),
   other('Other');
 
-  const Gender(this.name);
-  final String name;
+  const Gender(this.label);
+  final String label;
 }
