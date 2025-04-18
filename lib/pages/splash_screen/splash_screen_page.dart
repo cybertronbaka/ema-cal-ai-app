@@ -84,17 +84,18 @@ class SplashScreenPage extends HookConsumerWidget {
   }
 
   // Only used in dev when I have to clear stuff
-  Future<void> _clearAll(WidgetRef ref) async {
-    await ref.read(profileRepoProvider).clear();
-    await ref.read(nutritionPlanRepoProvider).clear();
-    await ref.read(streaksRepoProvider).clear();
-    await ref.read(onboardingSaveRepoProvider).clear();
-    await ref.read(mealDataRepoProvider).clear();
-  }
+  // Future<void> _clearAll(WidgetRef ref) async {
+  //   await ref.read(profileRepoProvider).clear();
+  //   await ref.read(nutritionPlanRepoProvider).clear();
+  //   await ref.read(streaksRepoProvider).clear();
+  //   await ref.read(onboardingSaveRepoProvider).clear();
+  //   await ref.read(mealDataRepoProvider).clear();
+  // }
 
   Future<UserProfile?> _setCurrentProfileIfExists(WidgetRef ref) async {
     final profile = await ref.read(profileRepoProvider).get();
     ref.read(userProfileProvider.notifier).state = profile;
+    ref.read(gptApiKeyProvider.notifier).state = profile?.gptApiKey;
     return profile;
   }
 
@@ -110,11 +111,11 @@ class SplashScreenPage extends HookConsumerWidget {
 
   Future<void> _setOnboardingDataIfExists(WidgetRef ref) async {
     final onboardingData = await ref.read(onboardingSaveRepoProvider).get();
-    print('----onboardingdata: ${onboardingData?.toJson()}');
     final stepIndex = onboardingData?.currentStep.index;
     if (stepIndex != null) {
       ref.read(onboardingDataProvider.notifier).state = onboardingData;
     }
+    ref.read(gptApiKeyProvider.notifier).state = onboardingData?.gptApiKey;
   }
 
   Future<void> _setMealDataIfExists(WidgetRef ref) async {

@@ -27,8 +27,14 @@ class MealData {
       water: double.parse(json['water'].toString()),
       mealName: json['meal_name'],
       mealDescription: json['meal_name'],
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      createdAt:
+          json['created_at'] == null
+              ? clock.now()
+              : DateTime.parse(json['created_at'] as String),
+      updatedAt:
+          json['updated_at'] == null
+              ? clock.now()
+              : DateTime.parse(json['updated_at'] as String),
     );
   }
 

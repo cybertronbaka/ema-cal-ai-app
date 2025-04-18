@@ -5,3 +5,5 @@ final keyboardVisibilityControllerProvider =
     Provider<KeyboardVisibilityController>((ref) => throw UnimplementedError());
 
 final userProfileProvider = StateProvider<UserProfile?>((_) => null);
+
+final gptApiKeyProvider = StateProvider<String?>((_) => null);

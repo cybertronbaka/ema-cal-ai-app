@@ -90,15 +90,15 @@ class NutritionPlan {
     };
   }
 
-  NutritionPlan copyWith({int? id}) {
+  NutritionPlan copyWith({int? id, DateTime? createdAt, DateTime? updatedAt}) {
     return NutritionPlan(
       id: id,
       goal: goal,
       timeframeInWeeks: timeframeInWeeks,
       notes: notes,
       bmiIndex: bmiIndex,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

@@ -47,11 +47,50 @@ class LocalProfileRepo extends ProfileRepo {
       updatedAt: clock.now(),
     );
 
-    final id = await database
+    int id;
+    if (oldId == null) {
+      id = await _insert(profile);
+    } else {
+      await _update(profile);
+      id = oldId.toInt();
+    }
+
+    current = profile.toDB().copyWith(id: id.toBigInt());
+    return UserProfile.fromDB(current!);
+  }
+
+  @override
+  Future<void> clear() async {
+    await database.managers.dbUserProfiles.delete();
+  }
+
+  Future<int> _insert(UserProfile profile) {
+    return database
         .into(database.dbUserProfiles)
-        .insertOnConflictUpdate(
+        .insert(
+          DbUserProfilesCompanion.insert(
+            gender: profile.gender,
+            workoutFrequency: profile.workoutFrequency,
+            isMetric: profile.isMetric,
+            diet: profile.diet,
+            isOnboardingComplete: profile.isOnboardingComplete,
+            dob: profile.dob,
+            gptApiKey: profile.gptApiKey,
+            heightCm: profile.height.cm,
+            weightKg: profile.weight.kg,
+            weightGoalKg: profile.weightGoal.kg,
+            updatedAt: profile.updatedAt,
+            createdAt: profile.createdAt,
+          ),
+        );
+  }
+
+  Future<void> _update(UserProfile profile) async {
+    await database
+        .update(database.dbUserProfiles)
+        .replace(
           DbUserProfilesCompanion(
-            id: oldId.toDbValueOrAbsent(),
+            id: profile.id.toBigInt().toDbValueOrAbsent(),
             gender: profile.gender.toDbValue(),
             workoutFrequency: profile.workoutFrequency.toDbValue(),
             isMetric: profile.isMetric.toDbValue(),
@@ -62,21 +101,9 @@ class LocalProfileRepo extends ProfileRepo {
             heightCm: profile.height.cm.toDbValue(),
             weightKg: profile.weight.kg.toDbValue(),
             weightGoalKg: profile.weightGoal.kg.toDbValue(),
-            updatedAt: now.toDbValue(),
-            createdAt: createdAt.toDbValue(),
+            updatedAt: profile.updatedAt.toDbValue(),
+            createdAt: profile.createdAt.toDbValue(),
           ),
         );
-
-    current = profile.toDB().copyWith(
-      id: id.toBigInt(),
-      createdAt: createdAt,
-      updatedAt: now,
-    );
-    return UserProfile.fromDB(current!);
-  }
-
-  @override
-  Future<void> clear() async {
-    await database.managers.dbUserProfiles.delete();
   }
 }

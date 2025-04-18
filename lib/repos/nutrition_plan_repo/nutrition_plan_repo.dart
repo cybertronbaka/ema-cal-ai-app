@@ -39,21 +39,59 @@ class LocalNutritionPlanRepo extends NutritionPlanRepo {
   Future<NutritionPlan> save(NutritionPlan plan) async {
     var record = current == null ? await _getAndSaveCurrent() : current!;
 
-    BigInt? oldId;
-    if (record == null) {
-      oldId = null.toBigInt();
+    BigInt? oldId = record?.id;
+
+    plan = plan.copyWith(
+      id: oldId?.toInt(),
+      createdAt: oldId == null ? clock.now() : plan.createdAt,
+      updatedAt: clock.now(),
+    );
+
+    int id;
+    if (oldId == null) {
+      id = await _insert(plan);
     } else {
-      oldId = record.id;
+      await _update(plan);
+      id = oldId.toInt();
     }
 
-    final createdAt = oldId == null ? clock.now() : plan.createdAt;
-    final now = clock.now();
+    current = plan.toDB().copyWith(id: id.toBigInt());
 
-    final id = await database
+    return NutritionPlan.fromDB(current!);
+  }
+
+  @override
+  Future<void> clear() async {
+    await database.managers.dbNutritionPlans.delete();
+  }
+
+  Future<int> _insert(NutritionPlan plan) async {
+    return database
         .into(database.dbNutritionPlans)
-        .insertOnConflictUpdate(
+        .insert(
+          DbNutritionPlansCompanion.insert(
+            timeframeInWeeks: plan.timeframeInWeeks,
+            bmiIndex: plan.bmiIndex,
+            calories: plan.goal.calories,
+            proteinG: plan.goal.proteinG,
+            carbsG: plan.goal.carbsG,
+            fatsG: plan.goal.fatsG,
+            waterLiters: plan.goal.waterLiters,
+            warnings: plan.notes.warnings,
+            gymAdvice: plan.notes.gymAdvice,
+            medicalAdvice: plan.notes.medicalAdvice,
+            updatedAt: plan.updatedAt,
+            createdAt: plan.createdAt,
+          ),
+        );
+  }
+
+  Future<void> _update(NutritionPlan plan) async {
+    await database
+        .update(database.dbNutritionPlans)
+        .replace(
           DbNutritionPlansCompanion(
-            id: oldId.toDbValueOrAbsent(),
+            id: plan.id.toBigInt().toDbValueOrAbsent(),
             timeframeInWeeks: plan.timeframeInWeeks.toDbValue(),
             bmiIndex: plan.bmiIndex.toDbValue(),
             calories: plan.goal.calories.toDbValue(),
@@ -64,22 +102,9 @@ class LocalNutritionPlanRepo extends NutritionPlanRepo {
             warnings: plan.notes.warnings.toDbValue(),
             gymAdvice: plan.notes.gymAdvice.toDbValue(),
             medicalAdvice: plan.notes.medicalAdvice.toDbValue(),
-            updatedAt: now.toDbValue(),
-            createdAt: createdAt.toDbValue(),
+            updatedAt: plan.updatedAt.toDbValue(),
+            createdAt: plan.createdAt.toDbValue(),
           ),
         );
-
-    current = plan.toDB().copyWith(
-      id: id.toBigInt(),
-      createdAt: createdAt,
-      updatedAt: now,
-    );
-
-    return NutritionPlan.fromDB(current!);
-  }
-
-  @override
-  Future<void> clear() async {
-    await database.managers.dbNutritionPlans.delete();
   }
 }

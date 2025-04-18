@@ -66,24 +66,52 @@ class LocalStreaksRepo extends StreaksRepo {
 
   Future<void> _saveAndSaveCurrent(int count) async {
     final createdAt = current == null ? clock.now() : current!.createdAt;
-    final now = clock.now();
-    final id = await database
-        .into(database.dbStreakRecords)
-        .insertOnConflictUpdate(
-          DbStreakRecordsCompanion(
-            id: (current?.id).toDbValueOrAbsent(),
-            count: count.toDbValue(),
-            updatedAt: now.toDbValue(),
-            createdAt: createdAt.toDbValue(),
-          ),
-        );
+    final updatedAt = clock.now();
+
+    int id;
+    if (current == null) {
+      id = await _insert(count, createdAt, updatedAt);
+    } else {
+      await _update(count, current!.id, createdAt, updatedAt);
+      id = current!.id;
+    }
 
     current = DbStreakRecord(
       id: id,
       count: count,
-      updatedAt: now,
+      updatedAt: updatedAt,
       createdAt: createdAt,
     );
+  }
+
+  Future<int> _insert(int count, DateTime createdAt, DateTime updatedAt) {
+    return database
+        .into(database.dbStreakRecords)
+        .insert(
+          DbStreakRecordsCompanion.insert(
+            count: count,
+            updatedAt: updatedAt,
+            createdAt: createdAt,
+          ),
+        );
+  }
+
+  Future<void> _update(
+    int count,
+    int id,
+    DateTime createdAt,
+    DateTime updatedAt,
+  ) async {
+    await database
+        .update(database.dbStreakRecords)
+        .replace(
+          DbStreakRecordsCompanion(
+            id: id.toDbValue(),
+            count: count.toDbValue(),
+            updatedAt: updatedAt.toDbValue(),
+            createdAt: createdAt.toDbValue(),
+          ),
+        );
   }
 
   @override

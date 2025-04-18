@@ -15,7 +15,7 @@ class SetGptApiKeyController {
   Ref ref;
 
   Future<String?> getApiKey() async {
-    String? apiKey = ref.read(userProfileProvider)?.gptApiKey;
+    String? apiKey = ref.read(gptApiKeyProvider);
     if (apiKey != null) return apiKey;
 
     apiKey = (await ref.read(profileRepoProvider).get())?.gptApiKey;
@@ -25,19 +25,8 @@ class SetGptApiKeyController {
   Future<bool> verifyApiKey(BuildContext context, String apiKey) async {
     final verified = await ref.read(gptApiKeyVerifyRepoProvider).verify(apiKey);
     if (verified) {
-      try {
-        var profile = ref.read(userProfileProvider);
-        if (profile == null) throw 'Something went wrong';
-
-        profile = await ref
-            .read(profileRepoProvider)
-            .save(profile.copyWith(gptApiKey: apiKey));
-
-        ref.read(userProfileProvider.notifier).state = profile;
-        return true;
-      } catch (_) {
-        return false;
-      }
+      ref.read(gptApiKeyProvider.notifier).state = apiKey;
+      return true;
     }
 
     if (context.mounted) {

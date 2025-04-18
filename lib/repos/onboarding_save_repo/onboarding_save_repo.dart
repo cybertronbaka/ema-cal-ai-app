@@ -37,8 +37,6 @@ class LocalOnboardingSaveRepo extends OnboardingSaveRepo {
         .read(mealTimeRemindersRepoProvider)
         .get(onboardingDataId: data.id.toInt());
 
-    print('got reminders: ${reminders.map((e) => e.toJson())}');
-
     return OnboardingData.fromDB(
       data,
     ).copyWith(mealTimeReminders: reminders.isEmpty ? null : reminders);
@@ -69,10 +67,8 @@ class LocalOnboardingSaveRepo extends OnboardingSaveRepo {
     try {
       await database.transaction(() async {
         if (oldId == null) {
-          print('inserting');
           id = await _insert(data);
         } else {
-          print('updating');
           await _update(data);
           id = oldId.toInt();
         }
@@ -80,13 +76,11 @@ class LocalOnboardingSaveRepo extends OnboardingSaveRepo {
         if (data.mealTimeReminders == null) return;
 
         await ref.read(mealTimeRemindersRepoProvider).clear();
-        print('cleared on $id && $oldId');
 
         current = data.toDB().copyWith(id: id.toBigInt());
         reminders = await ref
             .read(mealTimeRemindersRepoProvider)
             .saveAll(data.mealTimeReminders!, onboardingDataId: id);
-        print('added reminders: ${reminders!.map((e) => e.toJson())}');
       });
     } catch (_) {
       current = record;
