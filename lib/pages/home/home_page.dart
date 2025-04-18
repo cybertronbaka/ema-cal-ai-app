@@ -7,7 +7,6 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/states/states.dart';
-import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,18 +20,13 @@ part 'widgets/no_meal_data_card.dart';
 part 'widgets/streak_week_section.dart';
 part 'widgets/water_intake_section.dart';
 
-class HomePage extends HookConsumerWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(homeControllerProvider);
     final streaks = ref.watch(streaksCountProvider);
-
-    useInitHook(() {
-      controller.getTodaysMealData();
-      controller.getThisWeekMealData();
-    }, []);
 
     return Scaffold(
       appBar: AppBar(
