@@ -19,7 +19,7 @@ class EditWorkoutFrequencyPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Workout Frequency'),
+        title: const Text('Edit Workout Rate'),
       ),
       body: SetWorkoutFrequencyView(
         initialValue: profile.workoutFrequency,
