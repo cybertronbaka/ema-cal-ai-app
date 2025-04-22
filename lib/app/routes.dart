@@ -116,6 +116,11 @@ abstract class Routes {
     path: ([args]) => '/settings/editPersonalDetails/editGender',
   );
 
+  static final CustomRoute editMealTimeReminders = CustomRoute(
+    name: 'editMealTimeReminders',
+    path: ([args]) => '/settings/editPersonalDetails/editMealTimeReminders',
+  );
+
   static final CustomRoute overview = CustomRoute(
     name: 'overview',
     path: ([args]) => '/overview',

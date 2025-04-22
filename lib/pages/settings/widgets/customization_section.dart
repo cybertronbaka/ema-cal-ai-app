@@ -32,6 +32,18 @@ class _CustomizationSection extends ConsumerWidget {
             color: AppColors.darkGrey,
           ),
         ),
+        ListTile(
+          onTap: () {
+            context.pushNamed(Routes.editMealTimeReminders.name);
+          },
+          title: const Text('Meal Time Reminders'),
+          subtitle: const Text('Breakfast, Lunch and Dinner'),
+          trailing: const FaIcon(
+            FontAwesomeIcons.chevronRight,
+            size: 18,
+            color: AppColors.darkGrey,
+          ),
+        ),
       ],
     );
   }

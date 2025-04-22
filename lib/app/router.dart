@@ -5,6 +5,7 @@ import 'package:ema_cal_ai/pages/edit_dob/edit_dob_page.dart';
 import 'package:ema_cal_ai/pages/edit_gender/edit_gender_page.dart';
 import 'package:ema_cal_ai/pages/edit_height_weight/edit_height_weight_page.dart';
 import 'package:ema_cal_ai/pages/edit_personal_details/edit_personal_details_page.dart';
+import 'package:ema_cal_ai/pages/edit_reminders/edit_reminders_page.dart';
 import 'package:ema_cal_ai/pages/edit_weight_goal/edit_weight_goal_page.dart';
 import 'package:ema_cal_ai/pages/home/home_page.dart';
 import 'package:ema_cal_ai/pages/onboarding_entry/onboarding_entry_page.dart';
@@ -68,6 +69,9 @@ final router = GoRouter(
     Routes.editHeightWeight.generateRoute(child: const EditHeightWeightPage()),
     Routes.editDob.generateRoute(child: const EditDobPage()),
     Routes.editGender.generateRoute(child: const EditGenderPage()),
+    Routes.editMealTimeReminders.generateRoute(
+      child: const EditRemindersPage(),
+    ),
 
     Routes.addMealData.generateRoute(
       builder: (context, state) {

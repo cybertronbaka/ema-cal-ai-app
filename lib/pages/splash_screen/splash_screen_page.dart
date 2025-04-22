@@ -6,6 +6,7 @@ import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
+import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
@@ -45,6 +46,7 @@ class SplashScreenPage extends HookConsumerWidget {
           _setNutritionPlanIfExists(ref),
           _validateAndSetStreaks(ref),
           _setMealDataIfExists(ref),
+          _setMealTimeReminders(ref),
           Future.delayed(const Duration(seconds: 1)),
           // Added So that user will see animation
         ]);
@@ -56,7 +58,6 @@ class SplashScreenPage extends HookConsumerWidget {
         return;
       }
       await Future.wait([
-        _setPackageInfo(ref),
         _setOnboardingDataIfExists(ref),
         Future.delayed(const Duration(seconds: 1)),
         // Added So that user will see animation
@@ -106,6 +107,11 @@ class SplashScreenPage extends HookConsumerWidget {
   Future<void> _setNutritionPlanIfExists(WidgetRef ref) async {
     final plan = await ref.read(nutritionPlanRepoProvider).get();
     ref.read(currentNutritionPlanProvider.notifier).state = plan;
+  }
+
+  Future<void> _setMealTimeReminders(WidgetRef ref) async {
+    final reminders = await ref.read(mealTimeRemindersRepoProvider).get();
+    ref.read(mealTimeRemindersProvider.notifier).state = reminders;
   }
 
   Future<void> _setPackageInfo(WidgetRef ref) async {

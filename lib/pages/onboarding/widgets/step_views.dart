@@ -136,7 +136,7 @@ class _SetMealTimeRemindersStep extends ConsumerWidget {
           'You can skip this step by tapping "Next"',
       btnLabel: 'Next',
       initialValue: controller.mealTimeReminders,
-      onBtnPressed: (reminders) {
+      onBtnPressed: (reminders) async {
         controller.mealTimeReminders = reminders;
         controller.moveToNextStep(context, DefaultTabController.of(context));
       },
