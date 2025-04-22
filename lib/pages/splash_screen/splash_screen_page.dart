@@ -135,15 +135,25 @@ class SplashScreenPage extends HookConsumerWidget {
   }
 
   Future<void> _setMealDataIfExists(WidgetRef ref) async {
-    final today = await ref.read(mealDataRepoProvider).today();
-    ref.read(mealDataTodayProvider.notifier).state = today;
-    final thisWeek = await ref.read(mealDataRepoProvider).thisWeek();
-    ref.read(thisWeekMealDataProvider.notifier).state = thisWeek;
+    await Future.wait([
+      Future(() async {
+        final today = await ref.read(mealDataRepoProvider).today();
+        ref.read(mealDataTodayProvider.notifier).state = today;
+        var sum = const MealDataSum.zero();
+        for (var data in today) {
+          sum += data;
+        }
+        ref.read(collectiveMealDataTodayProvider.notifier).state = sum;
+      }),
 
-    var sum = const MealDataSum.zero();
-    for (var data in today) {
-      sum += data;
-    }
-    ref.read(collectiveMealDataTodayProvider.notifier).state = sum;
+      Future(() async {
+        final thisWeek = await ref.read(mealDataRepoProvider).thisWeek();
+        ref.read(thisWeekMealDataProvider.notifier).state = thisWeek;
+      }),
+      Future(() async {
+        final recentData = await ref.read(mealDataRepoProvider).lastNData(5);
+        ref.read(recentMealDataProvider.notifier).state = recentData;
+      }),
+    ]);
   }
 }
