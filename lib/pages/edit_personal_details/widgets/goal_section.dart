@@ -9,7 +9,9 @@ class _GoalSection extends ConsumerWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {},
+      onTap: () {
+        context.pushNamed(Routes.editWeightGoalPage.name);
+      },
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.cardBorder),

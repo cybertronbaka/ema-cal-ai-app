@@ -1,7 +1,11 @@
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/pages/add_meal_data/add_meal_data_page.dart';
+import 'package:ema_cal_ai/pages/edit_dob/edit_dob_page.dart';
+import 'package:ema_cal_ai/pages/edit_gender/edit_gender_page.dart';
+import 'package:ema_cal_ai/pages/edit_height_weight/edit_height_weight_page.dart';
 import 'package:ema_cal_ai/pages/edit_personal_details/edit_personal_details_page.dart';
+import 'package:ema_cal_ai/pages/edit_weight_goal/edit_weight_goal_page.dart';
 import 'package:ema_cal_ai/pages/home/home_page.dart';
 import 'package:ema_cal_ai/pages/onboarding_entry/onboarding_entry_page.dart';
 import 'package:ema_cal_ai/pages/dashboard/dashboard_page.dart';
@@ -60,6 +64,11 @@ final router = GoRouter(
     Routes.editPersonalDetails.generateRoute(
       child: const EditPersonalDetailsPage(),
     ),
+    Routes.editWeightGoalPage.generateRoute(child: const EditWeightGoalPage()),
+    Routes.editHeightWeight.generateRoute(child: const EditHeightWeightPage()),
+    Routes.editDob.generateRoute(child: const EditDobPage()),
+    Routes.editGender.generateRoute(child: const EditGenderPage()),
+
     Routes.addMealData.generateRoute(
       builder: (context, state) {
         // Todo: To get from local db and if nothing is found redirect to route not found page under redirect callback

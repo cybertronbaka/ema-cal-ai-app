@@ -96,6 +96,26 @@ abstract class Routes {
     path: ([args]) => '/settings/editPersonalDetails',
   );
 
+  static final CustomRoute editWeightGoalPage = CustomRoute(
+    name: 'editGoalPage',
+    path: ([args]) => '/settings/editPersonalDetails/editGoalPage',
+  );
+
+  static final CustomRoute editHeightWeight = CustomRoute(
+    name: 'editHeightWeight',
+    path: ([args]) => '/settings/editPersonalDetails/editHeightWeight',
+  );
+
+  static final CustomRoute editDob = CustomRoute(
+    name: 'editDob',
+    path: ([args]) => '/settings/editPersonalDetails/editDob',
+  );
+
+  static final CustomRoute editGender = CustomRoute(
+    name: 'editGender',
+    path: ([args]) => '/settings/editPersonalDetails/editGender',
+  );
+
   static final CustomRoute overview = CustomRoute(
     name: 'overview',
     path: ([args]) => '/overview',

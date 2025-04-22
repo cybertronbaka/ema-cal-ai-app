@@ -25,7 +25,7 @@ class SetWeightGoalView extends HookWidget {
   final UnitWeight initialValue;
   final bool isMetric;
 
-  final void Function(UnitWeight)? onBtnPressed;
+  final Future<void> Function(UnitWeight)? onBtnPressed;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
 
@@ -93,9 +93,9 @@ class SetWeightGoalView extends HookWidget {
           Container(
             padding: _hPadding.copyWith(bottom: 16, top: 16),
             width: double.infinity,
-            child: CustomFilledButton(
-              onPressed: () {
-                onBtnPressed?.call(goal.value);
+            child: FutureCustomFilledButton(
+              onPressed: () async {
+                await onBtnPressed?.call(goal.value);
               },
               label: btnLabel,
             ),

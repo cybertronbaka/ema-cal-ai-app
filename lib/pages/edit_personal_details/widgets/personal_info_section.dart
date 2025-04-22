@@ -6,11 +6,19 @@ class _PersonalInfoSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(userProfileProvider)!;
-    final List<(String, String, void Function())> datas = [
-      ('Current Weight', profile.weight.toString(), () {}),
-      ('Height', profile.height.toString(), () {}),
-      ('Date of birth', DateFormat('dd/MM/yyyy').format(profile.dob), () {}),
-      ('Gender', profile.gender.label, () {}),
+    final List<(String, String, String)> datas = [
+      (
+        'Current Weight',
+        profile.weight.toString(),
+        Routes.editHeightWeight.name,
+      ),
+      ('Height', profile.height.toString(), Routes.editHeightWeight.name),
+      (
+        'Date of birth',
+        DateFormat('dd/MM/yyyy').format(profile.dob),
+        Routes.editDob.name,
+      ),
+      ('Gender', profile.gender.label, Routes.editGender.name),
     ];
 
     return Container(
@@ -23,7 +31,9 @@ class _PersonalInfoSection extends ConsumerWidget {
         children: [
           for (var i = 0; i < datas.length; i++) ...[
             InkWell(
-              onTap: datas[i].$3,
+              onTap: () {
+                context.pushNamed(datas[i].$3);
+              },
               borderRadius: BorderRadius.circular(200),
               child: Padding(
                 padding: const EdgeInsets.all(8),

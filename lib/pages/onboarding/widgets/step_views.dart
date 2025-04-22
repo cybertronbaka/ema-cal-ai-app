@@ -15,7 +15,7 @@ class _ChooseGenderStep extends ConsumerWidget {
       description: 'Your personalized plan will be tailored based on this.',
       btnLabel: 'Next',
       initialValue: controller.gender,
-      onBtnPressed: (value) {
+      onBtnPressed: (value) async {
         controller.gender = value;
         controller.moveToNextStep(context, DefaultTabController.of(context));
       },
@@ -55,7 +55,7 @@ class _SetHeightAndWeightStep extends ConsumerWidget {
       initialHeight: controller.height,
       initialWeight: controller.weight,
       isMetric: controller.isMetric,
-      onBtnPressed: (isMetric, height, weight) {
+      onBtnPressed: (isMetric, height, weight) async {
         controller.isMetric = isMetric;
         controller.height = height;
         controller.weight = weight;
@@ -76,7 +76,7 @@ class _SetDobStep extends ConsumerWidget {
       description: 'Your personalized plan will be tailored based on this.',
       btnLabel: 'Next',
       initialValue: controller.dob,
-      onBtnPressed: (dob) {
+      onBtnPressed: (dob) async {
         controller.dob = dob;
         controller.moveToNextStep(context, DefaultTabController.of(context));
       },
@@ -96,7 +96,7 @@ class _SetWeightGoalStep extends ConsumerWidget {
       btnLabel: 'Next',
       initialValue: controller.weightGoal,
       isMetric: controller.isMetric,
-      onBtnPressed: (weight) {
+      onBtnPressed: (weight) async {
         controller.weightGoal = weight;
         controller.moveToNextStep(context, DefaultTabController.of(context));
       },

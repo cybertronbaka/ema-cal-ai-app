@@ -16,7 +16,7 @@ class SetGenderView extends HookWidget {
   final String? title;
   final String? description;
   final String btnLabel;
-  final void Function(Gender value)? onBtnPressed;
+  final Future<void> Function(Gender value)? onBtnPressed;
   final Gender? initialValue;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
@@ -72,12 +72,12 @@ class SetGenderView extends HookWidget {
             child: ListenableBuilder(
               listenable: selected,
               builder: (context, child) {
-                return CustomFilledButton(
+                return FutureCustomFilledButton(
                   enabled: selected.value != null,
-                  onPressed: () {
+                  onPressed: () async {
                     if (selected.value == null) return;
 
-                    onBtnPressed?.call(selected.value!);
+                    await onBtnPressed?.call(selected.value!);
                   },
                   label: btnLabel,
                 );

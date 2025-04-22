@@ -9,36 +9,46 @@ class FutureRunner<T> {
     this.errorMessage,
     this.onError,
     this.onDone,
+    this.showOverlay = true,
   });
   final BuildContext context;
   final String? doneMessage;
   final String Function(Object? obj, StackTrace stackTrace)? errorMessage;
   final void Function(Object? obj, StackTrace stackTrace)? onError;
   final void Function(T result)? onDone;
+  final bool showOverlay;
 
   Future<void> run(Future<T> Function() future) async {
-    final overlay = LoadingOverlay.of(context);
-    await overlay
-        .during(future)
-        .then((value) {
-          if (doneMessage != null && context.mounted) {
-            CustomSnackBar.showSuccessNotification(context, doneMessage!);
-          }
-          onDone?.call(value);
-        })
-        .onError((e, stackTrace) {
-          debugPrint(e.toString());
-          debugPrint(stackTrace.toString());
-          if (context.mounted) {
-            CustomSnackBar.showErrorNotification(
-              context,
-              errorMessage != null
-                  ? errorMessage!(e, stackTrace)
-                  : e.toString(),
-            );
-          }
+    if (showOverlay) {
+      final overlay = LoadingOverlay.of(context);
+      await overlay.during(future).then(_onDone).onError(_onError);
+    } else {
+      try {
+        final result = await future();
+        _onDone(result);
+      } catch (e, st) {
+        _onError(e, st);
+      }
+    }
+  }
 
-          onError?.call(e, stackTrace);
-        });
+  void _onDone(T value) {
+    if (doneMessage != null && context.mounted) {
+      CustomSnackBar.showSuccessNotification(context, doneMessage!);
+    }
+    onDone?.call(value);
+  }
+
+  void _onError(Object e, StackTrace stackTrace) {
+    debugPrint(e.toString());
+    debugPrint(stackTrace.toString());
+    if (context.mounted) {
+      CustomSnackBar.showErrorNotification(
+        context,
+        errorMessage != null ? errorMessage!(e, stackTrace) : e.toString(),
+      );
+    }
+
+    onError?.call(e, stackTrace);
   }
 }
