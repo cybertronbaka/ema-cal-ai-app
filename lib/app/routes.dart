@@ -116,9 +116,24 @@ abstract class Routes {
     path: ([args]) => '/settings/editPersonalDetails/editGender',
   );
 
+  static final CustomRoute editWorkoutFrequency = CustomRoute(
+    name: 'editWorkoutFrequency',
+    path: ([args]) => '/settings/editPersonalDetails/editWorkoutFrequency',
+  );
+
+  static final CustomRoute editDiet = CustomRoute(
+    name: 'editDiet',
+    path: ([args]) => '/settings/editPersonalDetails/editDiet',
+  );
+
   static final CustomRoute editMealTimeReminders = CustomRoute(
     name: 'editMealTimeReminders',
     path: ([args]) => '/settings/editPersonalDetails/editMealTimeReminders',
+  );
+
+  static final CustomRoute editGeminiAPIKey = CustomRoute(
+    name: 'editGeminiAPIKey',
+    path: ([args]) => '/settings/editPersonalDetails/editGeminiAPIKey',
   );
 
   static final CustomRoute overview = CustomRoute(

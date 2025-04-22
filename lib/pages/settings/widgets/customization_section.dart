@@ -34,6 +34,17 @@ class _CustomizationSection extends ConsumerWidget {
         ),
         ListTile(
           onTap: () {
+            context.pushNamed(Routes.editGeminiAPIKey.name);
+          },
+          title: const Text('Gemini API Key'),
+          trailing: const FaIcon(
+            FontAwesomeIcons.chevronRight,
+            size: 18,
+            color: AppColors.darkGrey,
+          ),
+        ),
+        ListTile(
+          onTap: () {
             context.pushNamed(Routes.editMealTimeReminders.name);
           },
           title: const Text('Meal Time Reminders'),

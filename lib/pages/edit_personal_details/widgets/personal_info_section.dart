@@ -19,6 +19,12 @@ class _PersonalInfoSection extends ConsumerWidget {
         Routes.editDob.name,
       ),
       ('Gender', profile.gender.label, Routes.editGender.name),
+      ('Diet', profile.diet.label, Routes.editDiet.name),
+      (
+        'Workout Rate',
+        profile.workoutFrequency.label,
+        Routes.editWorkoutFrequency.name,
+      ),
     ];
 
     return Container(

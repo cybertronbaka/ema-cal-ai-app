@@ -48,6 +48,24 @@ class ProfileController {
     await _setProfile(context, profile.copyWith(gender: gender));
   }
 
+  Future<void> setWorkoutFrequency(
+    BuildContext context,
+    WorkoutFrequency frequency,
+  ) async {
+    final profile = ref.read(userProfileProvider)!;
+    await _setProfile(context, profile.copyWith(workoutFrequency: frequency));
+  }
+
+  Future<void> setDiet(BuildContext context, Diet diet) async {
+    final profile = ref.read(userProfileProvider)!;
+    await _setProfile(context, profile.copyWith(diet: diet));
+  }
+
+  Future<void> setGptApiKey(BuildContext context, String apiKey) async {
+    final profile = ref.read(userProfileProvider)!;
+    await _setProfile(context, profile.copyWith(gptApiKey: apiKey));
+  }
+
   Future<void> _setProfile(BuildContext context, UserProfile newProfile) async {
     final runner = FutureRunner(context: context, showOverlay: false);
 
