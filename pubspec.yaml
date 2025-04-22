@@ -63,6 +63,7 @@ dependencies:
   drift_flutter: ^0.2.4
   flutter_image_compress: ^2.4.0
   image: ^4.5.4
+  package_info_plus: ^8.3.0
 
 dev_dependencies:
   flutter_test:

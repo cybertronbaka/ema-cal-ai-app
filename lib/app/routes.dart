@@ -33,6 +33,7 @@ class CustomRoute {
     Widget Function(BuildContext, GoRouterState)? builder,
     FutureOr<String?> Function(BuildContext, GoRouterState)? redirect,
     Widget? child,
+    List<RouteBase> routes = const [],
   }) {
     return GoRoute(
       name: name,
@@ -40,15 +41,16 @@ class CustomRoute {
       redirect: redirect,
       pageBuilder:
           pageBuilder ??
-          (transition != null
+          (transition != null && child != null
               ? (context, state) =>
-                  transition!(key: state.pageKey, child: child!)
+                  transition!(key: state.pageKey, child: child)
               : null),
       builder:
           builder ??
-          (pageBuilder == null && transition == null
-              ? (context, state) => child!
+          (pageBuilder == null && transition == null && child != null
+              ? (context, state) => child
               : null),
+      routes: routes,
     );
   }
 }
@@ -74,13 +76,73 @@ abstract class Routes {
     path: ([args]) => '/onboardingCompleteOverview',
   );
 
+  static final CustomRoute addMealData = CustomRoute(
+    name: 'addMealData',
+    path: ([args]) => '/addMealData',
+  );
+
   static final CustomRoute home = CustomRoute(
     name: 'home',
     path: ([args]) => '/home',
   );
 
-  static final CustomRoute addMealData = CustomRoute(
-    name: 'addMealData',
-    path: ([args]) => '/addMealData',
+  static final CustomRoute settings = CustomRoute(
+    name: 'settings',
+    path: ([args]) => '/settings',
+  );
+
+  static final CustomRoute editPersonalDetails = CustomRoute(
+    name: 'editPersonalDetails',
+    path: ([args]) => '/settings/editPersonalDetails',
+  );
+
+  static final CustomRoute editWeightGoalPage = CustomRoute(
+    name: 'editGoalPage',
+    path: ([args]) => '/settings/editPersonalDetails/editGoalPage',
+  );
+
+  static final CustomRoute editHeightWeight = CustomRoute(
+    name: 'editHeightWeight',
+    path: ([args]) => '/settings/editPersonalDetails/editHeightWeight',
+  );
+
+  static final CustomRoute editDob = CustomRoute(
+    name: 'editDob',
+    path: ([args]) => '/settings/editPersonalDetails/editDob',
+  );
+
+  static final CustomRoute editGender = CustomRoute(
+    name: 'editGender',
+    path: ([args]) => '/settings/editPersonalDetails/editGender',
+  );
+
+  static final CustomRoute editWorkoutFrequency = CustomRoute(
+    name: 'editWorkoutFrequency',
+    path: ([args]) => '/settings/editPersonalDetails/editWorkoutFrequency',
+  );
+
+  static final CustomRoute editDiet = CustomRoute(
+    name: 'editDiet',
+    path: ([args]) => '/settings/editPersonalDetails/editDiet',
+  );
+
+  static final CustomRoute editMealTimeReminders = CustomRoute(
+    name: 'editMealTimeReminders',
+    path: ([args]) => '/settings/editMealTimeReminders',
+  );
+
+  static final CustomRoute editGeminiAPIKey = CustomRoute(
+    name: 'editGeminiAPIKey',
+    path: ([args]) => '/settings/editGeminiAPIKey',
+  );
+
+  static final CustomRoute adjustGoals = CustomRoute(
+    name: 'adjustGoals',
+    path: ([args]) => '/settings/adjustGoals',
+  );
+
+  static final CustomRoute overview = CustomRoute(
+    name: 'overview',
+    path: ([args]) => '/overview',
   );
 }

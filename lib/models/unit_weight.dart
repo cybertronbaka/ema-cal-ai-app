@@ -55,7 +55,7 @@ final class ImperialWeight extends UnitWeight {
   }
 
   @override
-  String toString() => '$lbs lbs';
+  String toString() => '${lbs.toInt()} lbs';
 }
 
 /// Metric units implementation (kilograms)
@@ -77,5 +77,5 @@ final class MetricWeight extends UnitWeight {
   }
 
   @override
-  String toString() => '$kg kg';
+  String toString() => '${kg.toInt()} kg';
 }

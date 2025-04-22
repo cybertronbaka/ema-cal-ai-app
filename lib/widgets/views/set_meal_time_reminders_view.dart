@@ -19,7 +19,7 @@ class SetMealTimeRemindersView extends HookWidget {
   final String? title;
   final String? description;
   final String btnLabel;
-  final void Function(List<MealTimeReminder> value)? onBtnPressed;
+  final Future<void> Function(List<MealTimeReminder> value)? onBtnPressed;
   final List<MealTimeReminder>? initialValue;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
@@ -73,9 +73,9 @@ class SetMealTimeRemindersView extends HookWidget {
           Container(
             padding: _hPadding.copyWith(bottom: 16, top: 16),
             width: double.infinity,
-            child: CustomFilledButton(
-              onPressed: () {
-                onBtnPressed?.call(reminders);
+            child: FutureCustomFilledButton(
+              onPressed: () async {
+                await onBtnPressed?.call(reminders);
               },
               label: btnLabel,
             ),

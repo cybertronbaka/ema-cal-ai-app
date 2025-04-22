@@ -16,7 +16,7 @@ class SetDobView extends HookWidget {
   final String? title;
   final String? description;
   final String btnLabel;
-  final void Function(DateTime value)? onBtnPressed;
+  final Future<void> Function(DateTime value)? onBtnPressed;
   final DateTime? initialValue;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
@@ -72,10 +72,10 @@ class SetDobView extends HookWidget {
           Container(
             padding: _hPadding.copyWith(bottom: 16, top: 16),
             width: double.infinity,
-            child: CustomFilledButton(
+            child: FutureCustomFilledButton(
               enabled: true,
-              onPressed: () {
-                onBtnPressed?.call(dateTimeController.value);
+              onPressed: () async {
+                await onBtnPressed?.call(dateTimeController.value);
               },
               label: btnLabel,
             ),

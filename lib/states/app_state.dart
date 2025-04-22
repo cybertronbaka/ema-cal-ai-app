@@ -7,3 +7,9 @@ final keyboardVisibilityControllerProvider =
 final userProfileProvider = StateProvider<UserProfile?>((_) => null);
 
 final gptApiKeyProvider = StateProvider<String?>((_) => null);
+
+final packageInfoProvider = StateProvider<PackageInfo?>((_) => null);
+
+final mealTimeRemindersProvider = StateProvider<List<MealTimeReminder>>(
+  (_) => [],
+);

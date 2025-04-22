@@ -7,3 +7,5 @@ final collectiveMealDataTodayProvider = StateProvider<MealDataSum?>(
 final mealDataTodayProvider = StateProvider<List<MealData>>((_) => []);
 
 final thisWeekMealDataProvider = StateProvider<List<MealData>>((_) => []);
+
+final recentMealDataProvider = StateProvider<List<MealData>>((_) => []);

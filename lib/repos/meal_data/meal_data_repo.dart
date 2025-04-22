@@ -17,6 +17,7 @@ abstract class MealDataRepo {
   Future<List<MealData>> today();
   Future<List<MealData>> thisWeek();
   Future<List<MealData>> lastNDays(int n);
+  Future<List<MealData>> lastNData(int n);
 
   Future<MealData> add(MealData data);
   Future<void> clear();
@@ -118,5 +119,13 @@ class LocalMealDataRepo extends MealDataRepo {
             .get();
 
     return _listFromDb(values);
+  }
+
+  @override
+  Future<List<MealData>> lastNData(int n) async {
+    final query =
+        database.managers.dbMealDatas..orderBy((o) => o.createdAt.desc());
+    final data = await query.get();
+    return _listFromDb(data);
   }
 }

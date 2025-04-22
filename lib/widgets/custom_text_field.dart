@@ -13,6 +13,7 @@ class CustomTextField<T> extends StatelessWidget {
     this.onEditingComplete,
     this.readOnly = false,
     this.maxLines = 1,
+    this.labelText,
   });
 
   final String formControlName;
@@ -25,6 +26,7 @@ class CustomTextField<T> extends StatelessWidget {
   final void Function(FormControl<T>)? onEditingComplete;
   final bool readOnly;
   final int? maxLines;
+  final String? labelText;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,11 @@ class CustomTextField<T> extends StatelessWidget {
       style: const TextStyle(color: Colors.black),
       keyboardType: keyboardType,
       textInputAction: textInputAction,
-      decoration: InputDecoration(hintText: hintText, suffixIcon: suffixIcon),
+      decoration: InputDecoration(
+        hintText: hintText,
+        suffixIcon: suffixIcon,
+        labelText: labelText,
+      ),
     );
   }
 }

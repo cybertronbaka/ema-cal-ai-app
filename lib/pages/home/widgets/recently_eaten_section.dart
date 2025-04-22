@@ -6,7 +6,7 @@ class _RecentlyEatenSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
-    final todayList = ref.watch(mealDataTodayProvider);
+    final recentData = ref.watch(recentMealDataProvider);
     final plan = ref.watch(currentNutritionPlanProvider);
 
     return Column(
@@ -14,9 +14,9 @@ class _RecentlyEatenSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Recently eaten', style: textTheme.titleSmall),
-        if (todayList.isEmpty || plan == null) const _NoMealDataCard(),
-        if (todayList.isNotEmpty && plan != null)
-          for (var data in todayList) _MealDataCard(data: data, plan: plan),
+        if (recentData.isEmpty || plan == null) const _NoMealDataCard(),
+        if (recentData.isNotEmpty && plan != null)
+          for (var data in recentData) _MealDataCard(data: data, plan: plan),
       ],
     );
   }

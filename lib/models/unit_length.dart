@@ -60,6 +60,11 @@ final class ImperialLength extends UnitLength {
 
   @override
   bool get isMetric => false;
+
+  @override
+  String toString() {
+    return '${feet.toInt()} ft, ${inches.toInt()} in';
+  }
 }
 
 /// Metric units implementation
@@ -77,4 +82,9 @@ final class MetricLength extends UnitLength {
 
   @override
   bool get isMetric => true;
+
+  @override
+  String toString() {
+    return '${cm.toInt()} cm';
+  }
 }

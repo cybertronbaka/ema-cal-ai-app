@@ -33,7 +33,7 @@ class SetHeightAndWeightView extends HookWidget {
   final UnitWeight initialWeight;
   final bool isMetric;
 
-  final void Function(bool, UnitLength, UnitWeight)? onBtnPressed;
+  final Future<void> Function(bool, UnitLength, UnitWeight)? onBtnPressed;
 
   static const _hPadding = EdgeInsets.symmetric(horizontal: 16);
 
@@ -126,9 +126,13 @@ class SetHeightAndWeightView extends HookWidget {
           Container(
             padding: _hPadding.copyWith(bottom: 16, top: 16),
             width: double.infinity,
-            child: CustomFilledButton(
-              onPressed: () {
-                onBtnPressed?.call(isMetric.value, height.value, weight.value);
+            child: FutureCustomFilledButton(
+              onPressed: () async {
+                await onBtnPressed?.call(
+                  isMetric.value,
+                  height.value,
+                  weight.value,
+                );
               },
               label: btnLabel,
             ),
