@@ -33,6 +33,7 @@ class CustomRoute {
     Widget Function(BuildContext, GoRouterState)? builder,
     FutureOr<String?> Function(BuildContext, GoRouterState)? redirect,
     Widget? child,
+    List<RouteBase> routes = const [],
   }) {
     return GoRoute(
       name: name,
@@ -40,15 +41,16 @@ class CustomRoute {
       redirect: redirect,
       pageBuilder:
           pageBuilder ??
-          (transition != null
+          (transition != null && child != null
               ? (context, state) =>
-                  transition!(key: state.pageKey, child: child!)
+                  transition!(key: state.pageKey, child: child)
               : null),
       builder:
           builder ??
-          (pageBuilder == null && transition == null
-              ? (context, state) => child!
+          (pageBuilder == null && transition == null && child != null
+              ? (context, state) => child
               : null),
+      routes: routes,
     );
   }
 }
@@ -74,13 +76,23 @@ abstract class Routes {
     path: ([args]) => '/onboardingCompleteOverview',
   );
 
-  static final CustomRoute dashboard = CustomRoute(
-    name: 'dashboard',
-    path: ([args]) => '/dashboard',
-  );
-
   static final CustomRoute addMealData = CustomRoute(
     name: 'addMealData',
     path: ([args]) => '/addMealData',
+  );
+
+  static final CustomRoute home = CustomRoute(
+    name: 'home',
+    path: ([args]) => '/home',
+  );
+
+  static final CustomRoute settings = CustomRoute(
+    name: 'settings',
+    path: ([args]) => '/settings',
+  );
+
+  static final CustomRoute overview = CustomRoute(
+    name: 'overview',
+    path: ([args]) => '/overview',
   );
 }

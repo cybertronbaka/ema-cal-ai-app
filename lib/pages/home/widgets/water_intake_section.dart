@@ -1,4 +1,4 @@
-part of '../dashboard_page.dart';
+part of '../home_content.dart';
 
 class _WaterIntakeSection extends ConsumerWidget {
   const _WaterIntakeSection();

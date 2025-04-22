@@ -1,111 +1,130 @@
 library;
 
-import 'package:clock/clock.dart';
-import 'package:ema_cal_ai/app/colors.dart';
+import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/home_controller.dart';
-import 'package:ema_cal_ai/enums/enums.dart';
-import 'package:ema_cal_ai/models/meal_data.dart';
-import 'package:ema_cal_ai/models/nutrition_plan.dart';
+import 'package:ema_cal_ai/pages/home/home_content.dart';
 import 'package:ema_cal_ai/states/states.dart';
-import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart' as intl;
 
-part 'widgets/calories_intake_card.dart';
-part 'widgets/macro_nutrients_section.dart';
-part 'widgets/macro_nutrient_card.dart';
-part 'widgets/recently_eaten_section.dart';
-part 'widgets/no_meal_data_card.dart';
-part 'widgets/streak_week_section.dart';
-part 'widgets/water_intake_section.dart';
+enum DashboardPageType {
+  overview('Overview', FontAwesomeIcons.chartSimple),
+  home('Home', FontAwesomeIcons.house),
+  settings('Settings', FontAwesomeIcons.gear);
 
-class DashboardPage extends ConsumerWidget {
-  const DashboardPage({super.key});
+  const DashboardPageType(this.label, this.icon);
+
+  final String label;
+  final IconData icon;
+
+  Widget? get floatingButton {
+    return switch (this) {
+      overview => null,
+      home => const HomeFloatingButton(),
+      settings => null,
+    };
+  }
+
+  String get pageName {
+    return switch (this) {
+      overview => Routes.overview.name,
+      home => Routes.home.name,
+      settings => Routes.settings.name,
+    };
+  }
+
+  String get pagePath {
+    return switch (this) {
+      overview => Routes.overview.path(),
+      home => Routes.home.path(),
+      settings => Routes.settings.path(),
+    };
+  }
+}
+
+class DashboardPage extends HookConsumerWidget {
+  const DashboardPage({
+    super.key,
+    required this.navigationShell,
+    required this.children,
+  });
+  final StatefulNavigationShell navigationShell;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(homeControllerProvider);
-    final streaks = ref.watch(streaksCountProvider);
+    ref.watch(homeControllerProvider);
+    ref.watch(streaksCountProvider);
+    final type = DashboardPageType.values[navigationShell.currentIndex];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ema Cal AI'),
-        actions: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(32),
-            ),
-            child: Row(
-              spacing: 4,
-              children: [
-                const FaIcon(
-                  FontAwesomeIcons.fire,
-                  color: Colors.orange,
-                  size: 18,
-                ),
-                Text(
-                  streaks.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
       resizeToAvoidBottomInset: false,
-      body: const SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 24),
-              _StreaksWeekSection(),
-              SizedBox(height: 24),
-              // Todo: Collapse Calories, Macro Nutrients and Water intake into
-              // Todo: New design where all are Listed in small icons and text
-              // Todo: and linear progress bar when scrolled.
-              _DailyCaloriesIntakeCard(),
-              SizedBox(height: 16),
-              _MacroNutrientsSection(),
-              SizedBox(height: 16),
-              _WaterIntakeSection(),
-              SizedBox(height: 16),
-              _RecentlyEatenSection(),
-              SizedBox(height: 50),
-            ],
-          ),
+      body: SafeArea(
+        child: AnimatedBranchContainer(
+          currentIndex: navigationShell.currentIndex,
+          children: children,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          controller.showImageSrcSelectionSheet(context);
-        },
-        child: const Center(child: FaIcon(FontAwesomeIcons.plus, size: 20)),
-      ),
+      floatingActionButton: type.floatingButton,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        onTap: (index) {},
-        items: const [
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.chartSimple, size: 18),
-            label: 'Overview',
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house, size: 18),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.gear, size: 18),
-            label: 'Settings',
-          ),
+        currentIndex: navigationShell.currentIndex,
+        onTap: (index) {
+          // currentPageIndex.value = index;
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
+          );
+        },
+        items: [
+          for (var type in DashboardPageType.values)
+            BottomNavigationBarItem(
+              icon: FaIcon(type.icon, size: 18),
+              label: type.label,
+            ),
         ],
       ),
+    );
+  }
+}
+
+class AnimatedBranchContainer extends HookWidget {
+  const AnimatedBranchContainer({
+    super.key,
+    required this.currentIndex,
+    required this.children,
+  });
+
+  final int currentIndex;
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final currentPage = useValueNotifier(currentIndex);
+    final pageController = usePageController(initialPage: currentPage.value);
+
+    useEffect(() {
+      if (currentPage.value == currentIndex) return;
+
+      pageController.animateToPage(
+        currentIndex,
+        duration: Duration(
+          milliseconds: 500 * (currentPage.value - currentIndex).abs(),
+        ),
+        curve: Curves.easeInOut,
+      );
+      currentPage.value = currentIndex;
+
+      return null;
+    }, [currentIndex]);
+
+    return PageView(
+      controller: pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      children: children,
     );
   }
 }

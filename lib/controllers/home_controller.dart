@@ -19,9 +19,12 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-final homeControllerProvider = Provider.autoDispose(
-  (ref) => HomeController(ref),
-);
+final homeControllerProvider = Provider.autoDispose((ref) {
+  ref.onDispose(() {
+    debugPrint('Disposed HomeController');
+  });
+  return HomeController(ref);
+});
 
 class HomeController {
   HomeController(this.ref);

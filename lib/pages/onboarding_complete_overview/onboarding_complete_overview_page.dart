@@ -148,7 +148,7 @@ class OnboardingCompleteOverviewPage extends ConsumerWidget {
               child: CustomFilledButton(
                 enabled: true,
                 onPressed: () {
-                  context.pushReplacementNamed(Routes.dashboard.name);
+                  context.pushReplacementNamed(Routes.home.name);
                 },
                 label: "Let's get started!",
               ),
