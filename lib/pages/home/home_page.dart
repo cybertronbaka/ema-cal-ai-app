@@ -21,8 +21,8 @@ part 'widgets/no_meal_data_card.dart';
 part 'widgets/streak_week_section.dart';
 part 'widgets/water_intake_section.dart';
 
-class HomeContent extends StatelessWidget {
-  const HomeContent({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +53,7 @@ class HomeContent extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: HomeFloatingButton(),
     );
   }
 }

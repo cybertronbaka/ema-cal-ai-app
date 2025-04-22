@@ -1,4 +1,4 @@
-part of '../home_content.dart';
+part of '../home_page.dart';
 
 class _StreaksWeekSection extends ConsumerWidget {
   const _StreaksWeekSection();

@@ -1,4 +1,4 @@
-part of '../home_content.dart';
+part of '../home_page.dart';
 
 class _MacroNutrientsSection extends StatelessWidget {
   const _MacroNutrientsSection();

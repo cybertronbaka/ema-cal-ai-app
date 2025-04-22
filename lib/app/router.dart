@@ -1,7 +1,7 @@
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/pages/add_meal_data/add_meal_data_page.dart';
-import 'package:ema_cal_ai/pages/home/home_content.dart';
+import 'package:ema_cal_ai/pages/home/home_page.dart';
 import 'package:ema_cal_ai/pages/onboarding_entry/onboarding_entry_page.dart';
 import 'package:ema_cal_ai/pages/dashboard/dashboard_page.dart';
 import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
@@ -36,7 +36,7 @@ final router = GoRouter(
           navigatorKey: homeNavigatorKey,
           observers: [homeNavigatorObserver],
           preload: true,
-          routes: [Routes.home.generateRoute(child: const HomeContent())],
+          routes: [Routes.home.generateRoute(child: const HomePage())],
         ),
         StatefulShellBranch(
           navigatorKey: settingsNavigatorKey,

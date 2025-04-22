@@ -1,4 +1,4 @@
-part of '../home_content.dart';
+part of '../home_page.dart';
 
 class _NoMealDataCard extends StatelessWidget {
   const _NoMealDataCard();

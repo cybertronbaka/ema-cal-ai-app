@@ -1,4 +1,4 @@
-part of '../home_content.dart';
+part of '../home_page.dart';
 
 class _RecentlyEatenSection extends ConsumerWidget {
   const _RecentlyEatenSection();

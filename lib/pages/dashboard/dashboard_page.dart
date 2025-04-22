@@ -2,7 +2,6 @@ library;
 
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/home_controller.dart';
-import 'package:ema_cal_ai/pages/home/home_content.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -19,14 +18,6 @@ enum DashboardPageType {
 
   final String label;
   final IconData icon;
-
-  Widget? get floatingButton {
-    return switch (this) {
-      overview => null,
-      home => const HomeFloatingButton(),
-      settings => null,
-    };
-  }
 
   String get pageName {
     return switch (this) {
@@ -58,7 +49,6 @@ class DashboardPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(homeControllerProvider);
     ref.watch(streaksCountProvider);
-    final type = DashboardPageType.values[navigationShell.currentIndex];
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -68,7 +58,6 @@ class DashboardPage extends HookConsumerWidget {
           children: children,
         ),
       ),
-      floatingActionButton: type.floatingButton,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (index) {
