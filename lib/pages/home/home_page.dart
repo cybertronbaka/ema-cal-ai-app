@@ -53,7 +53,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: HomeFloatingButton(),
     );
   }
 }
