@@ -7,54 +7,38 @@ class _CustomizationSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
 
+    final tiles = [
+      ('Personal Details', null, Routes.editPersonalDetails.name),
+      (
+        'Adjust Goals',
+        'Calories, carbs, fats, and protein',
+        Routes.adjustGoals.name,
+      ),
+      ('Gemini API Key', null, Routes.editGeminiAPIKey.name),
+      (
+        'Meal Time Reminders',
+        'Breakfast, Lunch and Dinner',
+        Routes.editMealTimeReminders.name,
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Customization', style: textTheme.titleMedium),
-        ListTile(
-          onTap: () {
-            context.pushNamed(Routes.editPersonalDetails.name);
-          },
-          title: const Text('Personal Details'),
-          trailing: const FaIcon(
-            FontAwesomeIcons.chevronRight,
-            size: 18,
-            color: AppColors.darkGrey,
+        for (final tile in tiles)
+          ListTile(
+            onTap: () {
+              context.pushNamed(tile.$3);
+            },
+            title: Text(tile.$1),
+            subtitle: tile.$2 == null ? null : Text(tile.$2!),
+            trailing: const FaIcon(
+              FontAwesomeIcons.chevronRight,
+              size: 18,
+              color: AppColors.darkGrey,
+            ),
           ),
-        ),
-        ListTile(
-          onTap: () {},
-          title: const Text('Adjust Goals'),
-          subtitle: const Text('Calories, carbs, fats, and protein'),
-          trailing: const FaIcon(
-            FontAwesomeIcons.chevronRight,
-            size: 18,
-            color: AppColors.darkGrey,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            context.pushNamed(Routes.editGeminiAPIKey.name);
-          },
-          title: const Text('Gemini API Key'),
-          trailing: const FaIcon(
-            FontAwesomeIcons.chevronRight,
-            size: 18,
-            color: AppColors.darkGrey,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            context.pushNamed(Routes.editMealTimeReminders.name);
-          },
-          title: const Text('Meal Time Reminders'),
-          subtitle: const Text('Breakfast, Lunch and Dinner'),
-          trailing: const FaIcon(
-            FontAwesomeIcons.chevronRight,
-            size: 18,
-            color: AppColors.darkGrey,
-          ),
-        ),
       ],
     );
   }

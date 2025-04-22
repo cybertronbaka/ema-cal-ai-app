@@ -1,6 +1,7 @@
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/pages/add_meal_data/add_meal_data_page.dart';
+import 'package:ema_cal_ai/pages/adjust_goals/adjust_goals_page.dart';
 import 'package:ema_cal_ai/pages/edit_pages/edit_diet/edit_diet_page.dart';
 import 'package:ema_cal_ai/pages/edit_pages/edit_dob/edit_dob_page.dart';
 import 'package:ema_cal_ai/pages/edit_pages/edit_gemini_api_key/edit_gemini_api_key_page.dart';
@@ -81,6 +82,8 @@ final router = GoRouter(
     ),
     Routes.editDiet.generateRoute(child: const EditDietPage()),
     Routes.editGeminiAPIKey.generateRoute(child: const EditGeminiApiKeyPage()),
+
+    Routes.adjustGoals.generateRoute(child: const AdjustGoalsPage()),
 
     Routes.addMealData.generateRoute(
       builder: (context, state) {

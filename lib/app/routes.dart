@@ -128,12 +128,17 @@ abstract class Routes {
 
   static final CustomRoute editMealTimeReminders = CustomRoute(
     name: 'editMealTimeReminders',
-    path: ([args]) => '/settings/editPersonalDetails/editMealTimeReminders',
+    path: ([args]) => '/settings/editMealTimeReminders',
   );
 
   static final CustomRoute editGeminiAPIKey = CustomRoute(
     name: 'editGeminiAPIKey',
-    path: ([args]) => '/settings/editPersonalDetails/editGeminiAPIKey',
+    path: ([args]) => '/settings/editGeminiAPIKey',
+  );
+
+  static final CustomRoute adjustGoals = CustomRoute(
+    name: 'adjustGoals',
+    path: ([args]) => '/settings/adjustGoals',
   );
 
   static final CustomRoute overview = CustomRoute(
