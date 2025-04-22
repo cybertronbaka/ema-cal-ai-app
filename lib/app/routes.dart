@@ -91,6 +91,11 @@ abstract class Routes {
     path: ([args]) => '/settings',
   );
 
+  static final CustomRoute editPersonalDetails = CustomRoute(
+    name: 'editPersonalDetails',
+    path: ([args]) => '/settings/editPersonalDetails',
+  );
+
   static final CustomRoute overview = CustomRoute(
     name: 'overview',
     path: ([args]) => '/overview',

@@ -12,6 +12,12 @@ class CustomBackButton extends StatelessWidget {
     : color = Colors.white,
       backgroundColor = const Color(0x639E9E9E);
 
+  const CustomBackButton.transparentBg({
+    super.key,
+    this.onPressed,
+    this.color = Colors.black,
+  }) : backgroundColor = Colors.transparent;
+
   final Color color;
   final Color backgroundColor;
   final VoidCallback? onPressed;
@@ -30,7 +36,7 @@ class CustomBackButton extends StatelessWidget {
 
         Navigator.of(context).pop();
       },
-      icon: FaIcon(FontAwesomeIcons.arrowLeft, color: color, size: 20),
+      icon: FaIcon(FontAwesomeIcons.arrowLeft, color: color, size: 18),
     );
   }
 }

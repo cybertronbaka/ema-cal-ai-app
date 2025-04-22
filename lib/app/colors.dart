@@ -9,4 +9,5 @@ abstract class AppColors {
   static const darkGrey = Color(0x63000000);
   static const lightGrey = Color(0x63FFFFFF);
   static const error = Color(0xFFFE5F55);
+  static const cardBorder = Color(0x28000000);
 }

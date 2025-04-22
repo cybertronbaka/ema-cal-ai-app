@@ -115,14 +115,18 @@ abstract class AppTheme {
       listTileTheme: ListTileThemeData(
         titleTextStyle: textTheme.bodyMedium,
         subtitleTextStyle: baseTextStyle.copyWith(fontSize: 12),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         leadingAndTrailingTextStyle: textTheme.bodyMedium?.copyWith(
           fontWeight: FontWeight.bold,
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(500)),
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Color(0xFFF2F5FF),
       ),
+      dividerTheme: const DividerThemeData(color: Color(0x639E9E9E)),
     );
   }
 }
