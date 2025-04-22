@@ -16,7 +16,7 @@ class FutureRunner<T> {
   final void Function(Object? obj, StackTrace stackTrace)? onError;
   final void Function(T result)? onDone;
 
-  Future<void> run(Future<T> future) async {
+  Future<void> run(Future<T> Function() future) async {
     final overlay = LoadingOverlay.of(context);
     await overlay
         .during(future)

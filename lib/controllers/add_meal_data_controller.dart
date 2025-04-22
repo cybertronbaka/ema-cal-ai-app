@@ -42,12 +42,10 @@ class AddMealDataController {
       onDone: (_) {
         if (context.mounted) context.pop(true);
       },
-    ).run(
-      Future(() async {
-        await ref.read(mealDataRepoProvider).add(data.value);
-        return null;
-      }),
-    );
+    ).run(() async {
+      await ref.read(mealDataRepoProvider).add(data.value);
+      return null;
+    });
   }
 
   void editTitle(BuildContext context) async {

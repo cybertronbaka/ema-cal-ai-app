@@ -106,6 +106,7 @@ class SplashScreenPage extends HookConsumerWidget {
   }
 
   Future<void> _validateAndSetStreaks(WidgetRef ref) async {
+    await ref.read(streaksRepoProvider).validateAndReset();
     final streaks = await ref.read(streaksRepoProvider).get();
     ref.read(streaksCountProvider.notifier).state = streaks;
   }

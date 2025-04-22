@@ -22,8 +22,9 @@ class LoadingOverlay {
     );
   }
 
-  Future<T> during<T>(Future<T> future) {
+  Future<T> during<T>(Future<T> Function() func) {
     show();
+    final future = func();
     return future.whenComplete(() => hide());
   }
 }
