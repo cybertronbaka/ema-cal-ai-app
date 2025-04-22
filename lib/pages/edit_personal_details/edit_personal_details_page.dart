@@ -22,7 +22,10 @@ class EditPersonalDetailsPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Personal details'),
+        title: Text(
+          'Personal details',
+          style: TextTheme.of(context).titleMedium,
+        ),
       ),
       body: const SafeArea(
         child: SingleChildScrollView(

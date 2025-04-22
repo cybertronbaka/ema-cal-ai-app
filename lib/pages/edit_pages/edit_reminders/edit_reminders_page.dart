@@ -19,7 +19,7 @@ class EditRemindersPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Reminders'),
+        title: Text('Edit Reminders', style: TextTheme.of(context).titleMedium),
       ),
       body: SetMealTimeRemindersView(
         initialValue: reminders,

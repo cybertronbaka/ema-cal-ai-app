@@ -19,7 +19,10 @@ class EditDobPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Date of Birth'),
+        title: Text(
+          'Edit Date of Birth',
+          style: TextTheme.of(context).titleMedium,
+        ),
       ),
       body: SetDobView(
         initialValue: profile.dob,

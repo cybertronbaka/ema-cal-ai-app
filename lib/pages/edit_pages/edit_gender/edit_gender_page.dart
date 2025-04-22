@@ -19,7 +19,7 @@ class EditGenderPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Gender'),
+        title: Text('Edit Gender', style: TextTheme.of(context).titleMedium),
       ),
       body: SetGenderView(
         initialValue: profile.gender,

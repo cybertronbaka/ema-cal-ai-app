@@ -19,7 +19,10 @@ class EditGeminiApiKeyPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Gemini API Key'),
+        title: Text(
+          'Edit Gemini API Key',
+          style: TextTheme.of(context).titleMedium,
+        ),
       ),
       body: SetGeminiApiKeyView(
         description:

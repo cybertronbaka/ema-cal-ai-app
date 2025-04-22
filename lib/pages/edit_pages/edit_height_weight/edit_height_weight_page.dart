@@ -19,7 +19,10 @@ class EditHeightWeightPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Height & Weight'),
+        title: Text(
+          'Edit Height & Weight',
+          style: TextTheme.of(context).titleMedium,
+        ),
       ),
       body: SetHeightAndWeightView(
         isMetric: profile.isMetric,

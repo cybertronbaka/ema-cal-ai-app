@@ -19,7 +19,7 @@ class EditDietPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Diet'),
+        title: Text('Edit Diet', style: TextTheme.of(context).titleMedium),
       ),
       body: SetDietView(
         initialValue: profile.diet,

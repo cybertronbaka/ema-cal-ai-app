@@ -19,7 +19,10 @@ class EditWeightGoalPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const CustomBackButton.transparentBg(),
-        title: const Text('Edit Weight Goal'),
+        title: Text(
+          'Edit Weight Goal',
+          style: TextTheme.of(context).titleMedium,
+        ),
       ),
       body: SetWeightGoalView(
         initialValue: profile.weightGoal,
