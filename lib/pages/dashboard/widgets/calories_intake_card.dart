@@ -1,4 +1,4 @@
-part of '../home_page.dart';
+part of '../dashboard_page.dart';
 
 class _DailyCaloriesIntakeCard extends ConsumerWidget {
   const _DailyCaloriesIntakeCard();

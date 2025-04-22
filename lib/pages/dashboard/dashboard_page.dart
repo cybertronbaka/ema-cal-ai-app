@@ -21,8 +21,8 @@ part 'widgets/no_meal_data_card.dart';
 part 'widgets/streak_week_section.dart';
 part 'widgets/water_intake_section.dart';
 
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
+class DashboardPage extends ConsumerWidget {
+  const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -87,6 +87,24 @@ class HomePage extends ConsumerWidget {
           controller.showImageSrcSelectionSheet(context);
         },
         child: const Center(child: FaIcon(FontAwesomeIcons.plus, size: 20)),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 1,
+        onTap: (index) {},
+        items: const [
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.chartSimple, size: 18),
+            label: 'Overview',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.house, size: 18),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.gear, size: 18),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }

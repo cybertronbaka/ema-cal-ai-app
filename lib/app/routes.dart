@@ -74,9 +74,9 @@ abstract class Routes {
     path: ([args]) => '/onboardingCompleteOverview',
   );
 
-  static final CustomRoute home = CustomRoute(
-    name: 'home',
-    path: ([args]) => '/home',
+  static final CustomRoute dashboard = CustomRoute(
+    name: 'dashboard',
+    path: ([args]) => '/dashboard',
   );
 
   static final CustomRoute addMealData = CustomRoute(

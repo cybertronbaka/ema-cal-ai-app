@@ -48,7 +48,7 @@ class SplashScreenPage extends HookConsumerWidget {
         ]);
 
         if (context.mounted) {
-          context.replaceNamed(Routes.home.name);
+          context.replaceNamed(Routes.dashboard.name);
         }
 
         return;
