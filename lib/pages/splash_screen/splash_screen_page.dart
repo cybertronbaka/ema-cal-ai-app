@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashScreenPage extends HookConsumerWidget {
   const SplashScreenPage({super.key});
@@ -40,6 +41,7 @@ class SplashScreenPage extends HookConsumerWidget {
       final profile = await _setCurrentProfileIfExists(ref);
       if (profile != null && profile.isOnboardingComplete) {
         await Future.wait([
+          _setPackageInfo(ref),
           _setNutritionPlanIfExists(ref),
           _validateAndSetStreaks(ref),
           _setMealDataIfExists(ref),
@@ -54,6 +56,7 @@ class SplashScreenPage extends HookConsumerWidget {
         return;
       }
       await Future.wait([
+        _setPackageInfo(ref),
         _setOnboardingDataIfExists(ref),
         Future.delayed(const Duration(seconds: 1)),
         // Added So that user will see animation
@@ -103,6 +106,11 @@ class SplashScreenPage extends HookConsumerWidget {
   Future<void> _setNutritionPlanIfExists(WidgetRef ref) async {
     final plan = await ref.read(nutritionPlanRepoProvider).get();
     ref.read(currentNutritionPlanProvider.notifier).state = plan;
+  }
+
+  Future<void> _setPackageInfo(WidgetRef ref) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    ref.read(packageInfoProvider.notifier).state = packageInfo;
   }
 
   Future<void> _validateAndSetStreaks(WidgetRef ref) async {
