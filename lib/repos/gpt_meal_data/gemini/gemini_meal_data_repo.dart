@@ -4,7 +4,7 @@ class GeminiMealDataRepo extends GptMealDataRepo {
   @override
   Future<MealData> estimate(
     String apiKey,
-    XFile image,
+    Uint8List imageData,
     String? userNote,
   ) async {
     final model = GenerativeModel(
@@ -35,7 +35,7 @@ class GeminiMealDataRepo extends GptMealDataRepo {
     final content = [
       Content.multi([
         TextPart(_prompt),
-        DataPart(image.mimeType ?? 'image/jpeg', await image.readAsBytes()),
+        DataPart('image/jpeg', imageData),
         if (userNote != null)
           TextPart(
             'This is the user\'s note about the picture.'

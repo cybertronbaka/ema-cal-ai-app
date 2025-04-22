@@ -8,6 +8,7 @@ import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/future_runner.dart';
+import 'package:ema_cal_ai/utils/image_compressor.dart';
 import 'package:ema_cal_ai/utils/image_picker.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:ema_cal_ai/widgets/dialogs/dialogs.dart';
@@ -117,7 +118,8 @@ class HomeController {
 
       return;
     }
-    await FutureRunner<MealData>(
+
+    final runner = FutureRunner<MealData>(
       context: context,
       onDone: (data) async {
         if (!context.mounted) return;
@@ -132,10 +134,13 @@ class HomeController {
           await addStreak();
         }
       },
-    ).run(
-      ref
-          .read(gptMealDataRepoProvider)
-          .estimate(apiKey, image, imageDescription),
     );
+
+    await runner.run(() async {
+      final compressedImage = await ImageCompressor.compressXFile(image);
+      return ref
+          .read(gptMealDataRepoProvider)
+          .estimate(apiKey, compressedImage, imageDescription);
+    });
   }
 }
