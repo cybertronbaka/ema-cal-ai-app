@@ -3,6 +3,7 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/extensions/db_extension.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
+import 'dart:math' as math;
 
 // Todo: Simply use DbUserProfile instead of this.
 // Todo: Will need to adapt the ui to and rest of the logic.
@@ -146,4 +147,8 @@ class UserProfile {
   @override
   // ignore: unnecessary_overrides
   int get hashCode => super.hashCode;
+
+  double get bmiIndex {
+    return (weight.kg) / math.pow(height.cm / 100, 2);
+  }
 }

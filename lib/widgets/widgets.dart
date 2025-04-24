@@ -17,6 +17,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:video_player/video_player.dart';
 
+part 'bmi_indicator.dart';
 part 'counter_widget.dart';
 part 'custom_asset_video_player.dart';
 part 'custom_back_button.dart';

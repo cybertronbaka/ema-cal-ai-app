@@ -1,7 +1,6 @@
 part of 'database.dart';
 
 // final int timeframeInWeeks;
-// final double bmiIndex;
 // final int calories;
 // final double proteinG;
 // final double carbsG;
@@ -16,7 +15,6 @@ class DbNutritionPlans extends Table {
 
   // Values
   IntColumn get timeframeInWeeks => integer()();
-  RealColumn get bmiIndex => real()();
   IntColumn get calories => integer()();
   RealColumn get proteinG => real()();
   RealColumn get carbsG => real()();

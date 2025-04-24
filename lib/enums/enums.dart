@@ -9,3 +9,4 @@ part 'gender.dart';
 part 'macro_nutrients.dart';
 part 'onboarding_step.dart';
 part 'workout_frequency.dart';
+part 'bmi_category.dart';
