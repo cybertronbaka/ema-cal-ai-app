@@ -6,19 +6,25 @@ import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
-import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
+import 'package:ema_cal_ai/repos/gpt_nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class EmaCalAIApp extends StatelessWidget {
-  const EmaCalAIApp({super.key, required this.keyboardVisibilityController});
+  const EmaCalAIApp({
+    super.key,
+    required this.keyboardVisibilityController,
+    required this.packageInfo,
+  });
 
   final KeyboardVisibilityController keyboardVisibilityController;
+  final PackageInfo packageInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class EmaCalAIApp extends StatelessWidget {
       keyboardVisibilityController: keyboardVisibilityController,
       profileRepo: LocalProfileRepo(),
       mealTimeRemindersRepo: LocalMealTimeRemindersRepo(),
-      nutritionPlannerRepo: GeminiNutritionPlannerRepo(),
+      gptNutritionPlannerRepo: GeminiNutritionPlannerRepo(),
       nutritionPlanRepo: LocalNutritionPlanRepo(),
       gptApiKeyVerifyRepo: GeminiApiKeyVerifyRepo(),
       onboardingSaveRepo: (ref) => LocalOnboardingSaveRepo(ref),
@@ -34,6 +40,7 @@ class EmaCalAIApp extends StatelessWidget {
       gptMealDataRepo: GeminiMealDataRepo(),
       streaksRepo: LocalStreaksRepo(),
       historyRepo: LocalHistoryRepo(),
+      packageInfo: packageInfo,
       child: const EmaCalAIAppMaterialApp(),
     );
   }

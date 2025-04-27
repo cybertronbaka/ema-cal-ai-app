@@ -1,6 +1,6 @@
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
-import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
+import 'package:ema_cal_ai/repos/gpt_nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class AdjustGoalsController {
     await runner.run(() async {
       final profile = ref.read(userProfileProvider)!;
       return ref
-          .read(nutritionPlannerRepoProvider)
+          .read(gptNutritionPlannerRepoProvider)
           .plan(profile, profile.gptApiKey);
     });
   }

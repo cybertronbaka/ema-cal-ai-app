@@ -20,9 +20,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 final homeControllerProvider = Provider.autoDispose((ref) {
-  ref.onDispose(() {
-    debugPrint('Disposed HomeController');
-  });
   return HomeController(ref);
 });
 

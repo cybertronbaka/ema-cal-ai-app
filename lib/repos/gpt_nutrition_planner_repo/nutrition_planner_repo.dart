@@ -12,10 +12,10 @@ part 'gemini/config.dart';
 part 'gemini/gemini_nutrition_planner_repo.dart';
 part 'gemini/prompt.dart';
 
-final nutritionPlannerRepoProvider = Provider<NutritionPlannerRepo>(
+final gptNutritionPlannerRepoProvider = Provider<GptNutritionPlannerRepo>(
   (_) => throw UnimplementedError(),
 );
 
-abstract class NutritionPlannerRepo {
+abstract class GptNutritionPlannerRepo {
   Future<NutritionPlan> plan(UserProfile profile, String gptApiKey);
 }
