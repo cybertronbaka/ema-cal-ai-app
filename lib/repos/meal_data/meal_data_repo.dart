@@ -9,7 +9,7 @@ import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final mealDataRepoProvider = Provider<MealDataRepo>(
-  (_) => throw UnimplementedError(),
+  (_) => throw UnimplementedError('MealDataRepo must be initialized'),
 );
 
 abstract class MealDataRepo {

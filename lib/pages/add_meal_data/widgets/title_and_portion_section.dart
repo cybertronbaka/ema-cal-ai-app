@@ -23,6 +23,7 @@ class _TitleAndPortionsSection extends ConsumerWidget {
                 },
               ),
               IconButton(
+                key: const Key('edit-title-btn'),
                 icon: const Center(
                   child: FaIcon(FontAwesomeIcons.pencil, size: 16),
                 ),

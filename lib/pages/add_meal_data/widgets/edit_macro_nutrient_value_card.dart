@@ -49,6 +49,7 @@ class _EditMacroNutrientValueCard extends ConsumerWidget {
             bottom: 0,
             right: 0,
             child: IconButton(
+              key: Key('edit-${type.name}-btn'),
               onPressed: () => controller.editNutritionValue(context, type),
               icon: const Center(
                 child: FaIcon(FontAwesomeIcons.pencil, size: 16),

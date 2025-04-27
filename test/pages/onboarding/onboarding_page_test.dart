@@ -92,7 +92,7 @@ void main() {
             mealTimeRemindersRepo: mealTimeRemindersRepo,
             gptNutritionPlannerRepo: gptNutritionPlannerRepo,
             onboardingSaveRepo: (ref) => onboardingSaveRepo,
-            child: createTestMaterialApp(const OnboardingPage()),
+            child: createTestMaterialApp(child: const OnboardingPage()),
           ),
         ),
       );
