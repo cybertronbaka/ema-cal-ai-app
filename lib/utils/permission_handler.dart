@@ -72,7 +72,6 @@ class _PermissionDeniedDialog extends StatelessWidget {
     return CustomDialog(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (permission.icon != null) ...[
             Container(
@@ -97,30 +96,33 @@ class _PermissionDeniedDialog extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          CustomFilledButton(
-            onPressed: () async {
-              final openedSettings = await openAppSettings();
-              if (!context.mounted) return;
+          SizedBox(
+            width: double.infinity,
+            child: CustomFilledButton(
+              onPressed: () async {
+                final openedSettings = await openAppSettings();
+                if (!context.mounted) return;
 
-              if (!openedSettings) {
-                CustomSnackBar.showErrorNotification(
-                  context,
-                  'Please open your Settings app, find the Ema Cal AI app, and grant ${permission.name!} permissions.',
+                if (!openedSettings) {
+                  CustomSnackBar.showErrorNotification(
+                    context,
+                    'Please open your Settings app, find the Ema Cal AI app, and grant ${permission.name!} permissions.',
+                  );
+                  return;
+                }
+
+                late final AppLifecycleListener appLifecycleListener;
+                appLifecycleListener = AppLifecycleListener(
+                  onResume: () {
+                    if (context.mounted) Navigator.of(context).pop();
+                    unawaited(requestPermission());
+
+                    appLifecycleListener.dispose();
+                  },
                 );
-                return;
-              }
-
-              late final AppLifecycleListener appLifecycleListener;
-              appLifecycleListener = AppLifecycleListener(
-                onResume: () {
-                  if (context.mounted) Navigator.of(context).pop();
-                  unawaited(requestPermission());
-
-                  appLifecycleListener.dispose();
-                },
-              );
-            },
-            label: 'Go to Settings',
+              },
+              label: 'Go to Settings',
+            ),
           ),
         ],
       ),

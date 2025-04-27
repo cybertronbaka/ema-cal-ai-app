@@ -2,7 +2,7 @@ import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
 import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
-import 'package:ema_cal_ai/repos/nutrition_planner_repo/nutrition_planner_repo.dart';
+import 'package:ema_cal_ai/repos/gpt_nutrition_planner_repo/nutrition_planner_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -42,7 +42,7 @@ class NutritionPlannerController {
       });
 
       final plan = await ref
-          .read(nutritionPlannerRepoProvider)
+          .read(gptNutritionPlannerRepoProvider)
           .plan(profile, gptApiKey);
 
       debugPrint(plan.toJson().toString());

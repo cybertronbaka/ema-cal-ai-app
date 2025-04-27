@@ -59,24 +59,48 @@ class DashboardPage extends HookConsumerWidget {
     ref.watch(homeControllerProvider);
     ref.watch(streaksCountProvider);
 
+    return DashboardScaffold(
+      currentIndex: navigationShell.currentIndex,
+      setCurrentIndex: (index) {
+        navigationShell.goBranch(
+          index,
+          initialLocation: index == navigationShell.currentIndex,
+        );
+      },
+      children: children,
+    );
+  }
+}
+
+class DashboardScaffold extends StatelessWidget {
+  const DashboardScaffold({
+    super.key,
+    required this.currentIndex,
+    required this.setCurrentIndex,
+    required this.children,
+  });
+
+  final int currentIndex;
+  final void Function(int index) setCurrentIndex;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: AnimatedBranchContainer(
-          currentIndex: navigationShell.currentIndex,
+          currentIndex: currentIndex,
           children: children,
         ),
       ),
       floatingActionButton:
-          DashboardPageType.values[navigationShell.currentIndex].floatingButton,
+          DashboardPageType.values[currentIndex].floatingButton,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
+        currentIndex: currentIndex,
         onTap: (index) {
           // currentPageIndex.value = index;
-          navigationShell.goBranch(
-            index,
-            initialLocation: index == navigationShell.currentIndex,
-          );
+          setCurrentIndex(index);
         },
         items: [
           for (var type in DashboardPageType.values)

@@ -3,21 +3,12 @@ library;
 import 'dart:ui';
 
 import 'package:ema_cal_ai/app/routes.dart';
-import 'package:ema_cal_ai/models/meal_data.dart';
-import 'package:ema_cal_ai/models/user_profile.dart';
-import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
-import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
-import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
-import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
-import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
-import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
-import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/app_initializer.dart';
 import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashScreenPage extends HookConsumerWidget {
   const SplashScreenPage({super.key});
@@ -36,36 +27,19 @@ class SplashScreenPage extends HookConsumerWidget {
       });
     }, []);
 
-    useInitHook(() async {
-      // Only used in dev when I have to clear stuff
-      // await _clearAll(ref);
-      final profile = await _setCurrentProfileIfExists(ref);
-      if (profile != null && profile.isOnboardingComplete) {
-        // await _saveWeightHistory(ref);
-        await Future.wait([
-          _setPackageInfo(ref),
-          _setNutritionPlanIfExists(ref),
-          _validateAndSetStreaks(ref),
-          _setMealDataIfExists(ref),
-          _setMealTimeReminders(ref),
-          Future.delayed(const Duration(seconds: 1)),
-          // Added So that user will see animation
-        ]);
-
-        if (context.mounted) {
-          context.replaceNamed(Routes.home.name);
-        }
-
-        return;
-      }
-      await Future.wait([
-        _setOnboardingDataIfExists(ref),
-        Future.delayed(const Duration(seconds: 1)),
-        // Added So that user will see animation
-      ]);
-      if (context.mounted) {
-        context.replaceNamed(Routes.onboardingEntry.name);
-      }
+    useInitHook(() {
+      AppInitializer(ProviderScope.containerOf(context)).init(
+        afterInitializingUserData: () {
+          if (context.mounted) {
+            context.replaceNamed(Routes.home.name);
+          }
+        },
+        onNoUser: () {
+          if (context.mounted) {
+            context.replaceNamed(Routes.onboardingEntry.name);
+          }
+        },
+      );
     }, []);
 
     return Scaffold(
@@ -87,87 +61,5 @@ class SplashScreenPage extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  // Only used in dev when I have to clear stuff
-  // Future<void> _clearAll(WidgetRef ref) async {
-  //   await ref.read(profileRepoProvider).clear();
-  //   await ref.read(nutritionPlanRepoProvider).clear();
-  //   await ref.read(streaksRepoProvider).clear();
-  //   await ref.read(onboardingSaveRepoProvider).clear();
-  //   await ref.read(mealDataRepoProvider).clear();
-  // }
-
-  // Future<UserProfile?> _saveWeightHistory(WidgetRef ref) async {
-  //   // await ref.read(historyRepoProvider).clear();
-  //   await ref
-  //       .read(historyRepoProvider)
-  //       .save(
-  //         History(
-  //           type: HistoryType.weight,
-  //           value: 83,
-  //           createdAt: DateTime.now(),
-  //         ),
-  //       );
-  // }
-
-  Future<UserProfile?> _setCurrentProfileIfExists(WidgetRef ref) async {
-    final profile = await ref.read(profileRepoProvider).get();
-    ref.read(userProfileProvider.notifier).state = profile;
-    ref.read(gptApiKeyProvider.notifier).state = profile?.gptApiKey;
-    return profile;
-  }
-
-  Future<void> _setNutritionPlanIfExists(WidgetRef ref) async {
-    final plan = await ref.read(nutritionPlanRepoProvider).get();
-    ref.read(currentNutritionPlanProvider.notifier).state = plan;
-  }
-
-  Future<void> _setMealTimeReminders(WidgetRef ref) async {
-    final reminders = await ref.read(mealTimeRemindersRepoProvider).get();
-    ref.read(mealTimeRemindersProvider.notifier).state = reminders;
-  }
-
-  Future<void> _setPackageInfo(WidgetRef ref) async {
-    final packageInfo = await PackageInfo.fromPlatform();
-    ref.read(packageInfoProvider.notifier).state = packageInfo;
-  }
-
-  Future<void> _validateAndSetStreaks(WidgetRef ref) async {
-    await ref.read(streaksRepoProvider).validateAndReset();
-    final streaks = await ref.read(streaksRepoProvider).get();
-    ref.read(streaksCountProvider.notifier).state = streaks;
-  }
-
-  Future<void> _setOnboardingDataIfExists(WidgetRef ref) async {
-    final onboardingData = await ref.read(onboardingSaveRepoProvider).get();
-    final stepIndex = onboardingData?.currentStep.index;
-    if (stepIndex != null) {
-      ref.read(onboardingDataProvider.notifier).state = onboardingData;
-    }
-    ref.read(gptApiKeyProvider.notifier).state = onboardingData?.gptApiKey;
-  }
-
-  Future<void> _setMealDataIfExists(WidgetRef ref) async {
-    await Future.wait([
-      Future(() async {
-        final today = await ref.read(mealDataRepoProvider).today();
-        ref.read(mealDataTodayProvider.notifier).state = today;
-        var sum = const MealDataSum.zero();
-        for (var data in today) {
-          sum += data;
-        }
-        ref.read(collectiveMealDataTodayProvider.notifier).state = sum;
-      }),
-
-      Future(() async {
-        final thisWeek = await ref.read(mealDataRepoProvider).thisWeek();
-        ref.read(thisWeekMealDataProvider.notifier).state = thisWeek;
-      }),
-      Future(() async {
-        final recentData = await ref.read(mealDataRepoProvider).lastNData(5);
-        ref.read(recentMealDataProvider.notifier).state = recentData;
-      }),
-    ]);
   }
 }

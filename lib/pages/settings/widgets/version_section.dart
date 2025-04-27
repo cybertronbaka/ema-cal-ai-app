@@ -6,7 +6,7 @@ class _VersionSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
-    final version = ref.read(packageInfoProvider)?.version ?? 'Unknown';
+    final version = ref.read(packageInfoProvider).version;
 
     return Text('Version $version', style: textTheme.bodySmall);
   }

@@ -47,18 +47,27 @@ class _MealDataCard extends StatelessWidget {
             spacing: 8,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                data.mealName,
-                style: textTheme.titleMedium,
-                overflow: TextOverflow.ellipsis,
+              Expanded(
+                flex: 2,
+                child: Text(
+                  data.mealName,
+                  style: textTheme.titleMedium,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              Text(
-                intl.DateFormat(
-                  '( dd-MMM-yyy hh:mm a )',
-                ).format(data.createdAt),
-                style: TextStyle(
-                  color: Colors.black.withAlpha(100),
-                  fontSize: 12,
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    intl.DateFormat(
+                      '( dd-MMM-yyy hh:mm a )',
+                    ).format(data.createdAt),
+                    style: TextStyle(
+                      color: Colors.black.withAlpha(100),
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
                 ),
               ),
             ],

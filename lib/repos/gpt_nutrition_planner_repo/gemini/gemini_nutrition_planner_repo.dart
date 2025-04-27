@@ -1,6 +1,6 @@
 part of '../nutrition_planner_repo.dart';
 
-class GeminiNutritionPlannerRepo extends NutritionPlannerRepo {
+class GeminiNutritionPlannerRepo extends GptNutritionPlannerRepo {
   @override
   Future<NutritionPlan> plan(UserProfile profile, String gptApiKey) async {
     final response = await GenerativeModel(
