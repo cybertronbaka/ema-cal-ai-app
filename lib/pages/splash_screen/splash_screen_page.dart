@@ -41,6 +41,7 @@ class SplashScreenPage extends HookConsumerWidget {
       // await _clearAll(ref);
       final profile = await _setCurrentProfileIfExists(ref);
       if (profile != null && profile.isOnboardingComplete) {
+        // await _saveWeightHistory(ref);
         await Future.wait([
           _setPackageInfo(ref),
           _setNutritionPlanIfExists(ref),
@@ -95,6 +96,19 @@ class SplashScreenPage extends HookConsumerWidget {
   //   await ref.read(streaksRepoProvider).clear();
   //   await ref.read(onboardingSaveRepoProvider).clear();
   //   await ref.read(mealDataRepoProvider).clear();
+  // }
+
+  // Future<UserProfile?> _saveWeightHistory(WidgetRef ref) async {
+  //   // await ref.read(historyRepoProvider).clear();
+  //   await ref
+  //       .read(historyRepoProvider)
+  //       .save(
+  //         History(
+  //           type: HistoryType.weight,
+  //           value: 83,
+  //           createdAt: DateTime.now(),
+  //         ),
+  //       );
   // }
 
   Future<UserProfile?> _setCurrentProfileIfExists(WidgetRef ref) async {

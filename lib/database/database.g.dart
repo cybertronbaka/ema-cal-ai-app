@@ -3753,6 +3753,359 @@ class DbStreakRecordsCompanion extends UpdateCompanion<DbStreakRecord> {
   }
 }
 
+class $DbHistoriesTable extends DbHistories
+    with TableInfo<$DbHistoriesTable, DbHistory> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DbHistoriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<BigInt> id = GeneratedColumn<BigInt>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.bigInt,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<HistoryType, String> type =
+      GeneratedColumn<String>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<HistoryType>($DbHistoriesTable.$convertertype);
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<double> value = GeneratedColumn<double>(
+    'value',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, type, value, updatedAt, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'db_histories';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DbHistory> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+        _valueMeta,
+        value.isAcceptableOrUnknown(data['value']!, _valueMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DbHistory map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DbHistory(
+      id:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.bigInt,
+            data['${effectivePrefix}id'],
+          )!,
+      type: $DbHistoriesTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
+      value:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.double,
+            data['${effectivePrefix}value'],
+          )!,
+      updatedAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}updated_at'],
+          )!,
+      createdAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}created_at'],
+          )!,
+    );
+  }
+
+  @override
+  $DbHistoriesTable createAlias(String alias) {
+    return $DbHistoriesTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<HistoryType, String, String> $convertertype =
+      const EnumNameConverter<HistoryType>(HistoryType.values);
+}
+
+class DbHistory extends DataClass implements Insertable<DbHistory> {
+  final BigInt id;
+  final HistoryType type;
+  final double value;
+  final DateTime updatedAt;
+  final DateTime createdAt;
+  const DbHistory({
+    required this.id,
+    required this.type,
+    required this.value,
+    required this.updatedAt,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<BigInt>(id);
+    {
+      map['type'] = Variable<String>(
+        $DbHistoriesTable.$convertertype.toSql(type),
+      );
+    }
+    map['value'] = Variable<double>(value);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  DbHistoriesCompanion toCompanion(bool nullToAbsent) {
+    return DbHistoriesCompanion(
+      id: Value(id),
+      type: Value(type),
+      value: Value(value),
+      updatedAt: Value(updatedAt),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory DbHistory.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DbHistory(
+      id: serializer.fromJson<BigInt>(json['id']),
+      type: $DbHistoriesTable.$convertertype.fromJson(
+        serializer.fromJson<String>(json['type']),
+      ),
+      value: serializer.fromJson<double>(json['value']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<BigInt>(id),
+      'type': serializer.toJson<String>(
+        $DbHistoriesTable.$convertertype.toJson(type),
+      ),
+      'value': serializer.toJson<double>(value),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  DbHistory copyWith({
+    BigInt? id,
+    HistoryType? type,
+    double? value,
+    DateTime? updatedAt,
+    DateTime? createdAt,
+  }) => DbHistory(
+    id: id ?? this.id,
+    type: type ?? this.type,
+    value: value ?? this.value,
+    updatedAt: updatedAt ?? this.updatedAt,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  DbHistory copyWithCompanion(DbHistoriesCompanion data) {
+    return DbHistory(
+      id: data.id.present ? data.id.value : this.id,
+      type: data.type.present ? data.type.value : this.type,
+      value: data.value.present ? data.value.value : this.value,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DbHistory(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('value: $value, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, type, value, updatedAt, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DbHistory &&
+          other.id == this.id &&
+          other.type == this.type &&
+          other.value == this.value &&
+          other.updatedAt == this.updatedAt &&
+          other.createdAt == this.createdAt);
+}
+
+class DbHistoriesCompanion extends UpdateCompanion<DbHistory> {
+  final Value<BigInt> id;
+  final Value<HistoryType> type;
+  final Value<double> value;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime> createdAt;
+  const DbHistoriesCompanion({
+    this.id = const Value.absent(),
+    this.type = const Value.absent(),
+    this.value = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  DbHistoriesCompanion.insert({
+    this.id = const Value.absent(),
+    required HistoryType type,
+    required double value,
+    required DateTime updatedAt,
+    required DateTime createdAt,
+  }) : type = Value(type),
+       value = Value(value),
+       updatedAt = Value(updatedAt),
+       createdAt = Value(createdAt);
+  static Insertable<DbHistory> custom({
+    Expression<BigInt>? id,
+    Expression<String>? type,
+    Expression<double>? value,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (type != null) 'type': type,
+      if (value != null) 'value': value,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  DbHistoriesCompanion copyWith({
+    Value<BigInt>? id,
+    Value<HistoryType>? type,
+    Value<double>? value,
+    Value<DateTime>? updatedAt,
+    Value<DateTime>? createdAt,
+  }) {
+    return DbHistoriesCompanion(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      value: value ?? this.value,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<BigInt>(id.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(
+        $DbHistoriesTable.$convertertype.toSql(type.value),
+      );
+    }
+    if (value.present) {
+      map['value'] = Variable<double>(value.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DbHistoriesCompanion(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('value: $value, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3767,6 +4120,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $DbStreakRecordsTable dbStreakRecords = $DbStreakRecordsTable(
     this,
   );
+  late final $DbHistoriesTable dbHistories = $DbHistoriesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3778,6 +4132,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     dbMealDatas,
     dbNutritionPlans,
     dbStreakRecords,
+    dbHistories,
   ];
 }
 
@@ -5864,6 +6219,206 @@ typedef $$DbStreakRecordsTableProcessedTableManager =
       DbStreakRecord,
       PrefetchHooks Function()
     >;
+typedef $$DbHistoriesTableCreateCompanionBuilder =
+    DbHistoriesCompanion Function({
+      Value<BigInt> id,
+      required HistoryType type,
+      required double value,
+      required DateTime updatedAt,
+      required DateTime createdAt,
+    });
+typedef $$DbHistoriesTableUpdateCompanionBuilder =
+    DbHistoriesCompanion Function({
+      Value<BigInt> id,
+      Value<HistoryType> type,
+      Value<double> value,
+      Value<DateTime> updatedAt,
+      Value<DateTime> createdAt,
+    });
+
+class $$DbHistoriesTableFilterComposer
+    extends Composer<_$AppDatabase, $DbHistoriesTable> {
+  $$DbHistoriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<BigInt> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<HistoryType, HistoryType, String> get type =>
+      $composableBuilder(
+        column: $table.type,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<double> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DbHistoriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DbHistoriesTable> {
+  $$DbHistoriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<BigInt> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DbHistoriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DbHistoriesTable> {
+  $$DbHistoriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<BigInt> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<HistoryType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<double> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$DbHistoriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DbHistoriesTable,
+          DbHistory,
+          $$DbHistoriesTableFilterComposer,
+          $$DbHistoriesTableOrderingComposer,
+          $$DbHistoriesTableAnnotationComposer,
+          $$DbHistoriesTableCreateCompanionBuilder,
+          $$DbHistoriesTableUpdateCompanionBuilder,
+          (
+            DbHistory,
+            BaseReferences<_$AppDatabase, $DbHistoriesTable, DbHistory>,
+          ),
+          DbHistory,
+          PrefetchHooks Function()
+        > {
+  $$DbHistoriesTableTableManager(_$AppDatabase db, $DbHistoriesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$DbHistoriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$DbHistoriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () =>
+                  $$DbHistoriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<BigInt> id = const Value.absent(),
+                Value<HistoryType> type = const Value.absent(),
+                Value<double> value = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => DbHistoriesCompanion(
+                id: id,
+                type: type,
+                value: value,
+                updatedAt: updatedAt,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<BigInt> id = const Value.absent(),
+                required HistoryType type,
+                required double value,
+                required DateTime updatedAt,
+                required DateTime createdAt,
+              }) => DbHistoriesCompanion.insert(
+                id: id,
+                type: type,
+                value: value,
+                updatedAt: updatedAt,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DbHistoriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DbHistoriesTable,
+      DbHistory,
+      $$DbHistoriesTableFilterComposer,
+      $$DbHistoriesTableOrderingComposer,
+      $$DbHistoriesTableAnnotationComposer,
+      $$DbHistoriesTableCreateCompanionBuilder,
+      $$DbHistoriesTableUpdateCompanionBuilder,
+      (DbHistory, BaseReferences<_$AppDatabase, $DbHistoriesTable, DbHistory>),
+      DbHistory,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5880,4 +6435,6 @@ class $AppDatabaseManager {
       $$DbNutritionPlansTableTableManager(_db, _db.dbNutritionPlans);
   $$DbStreakRecordsTableTableManager get dbStreakRecords =>
       $$DbStreakRecordsTableTableManager(_db, _db.dbStreakRecords);
+  $$DbHistoriesTableTableManager get dbHistories =>
+      $$DbHistoriesTableTableManager(_db, _db.dbHistories);
 }
