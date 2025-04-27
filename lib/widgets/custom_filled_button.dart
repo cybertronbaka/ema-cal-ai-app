@@ -35,11 +35,15 @@ class CustomSmallFilledButton extends StatelessWidget {
     required this.onPressed,
     this.enabled = true,
     required this.label,
+    this.fontSize = 14,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
   });
 
   final VoidCallback onPressed;
   final bool enabled;
   final String label;
+  final EdgeInsets padding;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +55,11 @@ class CustomSmallFilledButton extends StatelessWidget {
         foregroundColor: WidgetStatePropertyAll(
           enabled ? null : AppColors.primary,
         ),
-        padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        ),
-        textStyle: const WidgetStatePropertyAll(
+        padding: WidgetStatePropertyAll(padding),
+        minimumSize: const WidgetStatePropertyAll(Size(10.0, 10.0)),
+        textStyle: WidgetStatePropertyAll(
           TextStyle(
-            fontSize: 14,
+            fontSize: fontSize,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
           ),

@@ -9,7 +9,6 @@ import 'package:ema_cal_ai/models/user_profile.dart';
 
 NutritionPlan genFakeNutritionPlan() {
   return NutritionPlan(
-    bmiIndex: 21.0,
     timeframeInWeeks: 10,
     goal: DailyNutrition(
       calories: 1700,

@@ -16,10 +16,10 @@ import 'package:ema_cal_ai/pages/onboarding_entry/onboarding_entry_page.dart';
 import 'package:ema_cal_ai/pages/dashboard/dashboard_page.dart';
 import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
 import 'package:ema_cal_ai/pages/onboarding_complete_overview/onboarding_complete_overview_page.dart';
+import 'package:ema_cal_ai/pages/overview/overview_page.dart';
 import 'package:ema_cal_ai/pages/settings/settings_page.dart';
 import 'package:ema_cal_ai/pages/splash_screen/splash_screen_page.dart';
 import 'package:ema_cal_ai/utils/navigator_observer.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -39,9 +39,7 @@ final router = GoRouter(
           navigatorKey: overviewNavigatorKey,
           observers: [overviewNavigatorObserver],
           preload: true,
-          routes: [
-            Routes.overview.generateRoute(child: const Text('Overview')),
-          ],
+          routes: [Routes.overview.generateRoute(child: const OverviewPage())],
         ),
         StatefulShellBranch(
           navigatorKey: homeNavigatorKey,

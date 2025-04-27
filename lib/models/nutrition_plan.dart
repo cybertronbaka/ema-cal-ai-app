@@ -14,7 +14,6 @@ class NutritionPlan {
     required this.goal,
     required this.timeframeInWeeks,
     required this.notes,
-    required this.bmiIndex,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -24,7 +23,6 @@ class NutritionPlan {
       id: null,
       goal: DailyNutrition.fromJson(json['goal']),
       timeframeInWeeks: json['timeframe_in_weeks'] as int,
-      bmiIndex: json['bmi_index'] as double,
       notes: NutritionNotes.fromJson(json['notes']),
       createdAt: clock.now(),
       updatedAt: clock.now(),
@@ -46,7 +44,6 @@ class NutritionPlan {
         medicalAdvice: data.medicalAdvice,
         warnings: data.warnings,
       ),
-      bmiIndex: data.bmiIndex,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     );
@@ -64,7 +61,6 @@ class NutritionPlan {
       gymAdvice: notes.gymAdvice,
       medicalAdvice: notes.medicalAdvice,
       warnings: notes.warnings,
-      bmiIndex: bmiIndex,
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
@@ -74,7 +70,6 @@ class NutritionPlan {
   final DailyNutrition goal;
   final int timeframeInWeeks;
   final NutritionNotes notes;
-  final double bmiIndex;
   final DateTime updatedAt;
   final DateTime createdAt;
 
@@ -84,7 +79,6 @@ class NutritionPlan {
       'goal': goal.toJson(),
       'timeframe_in_weeks': timeframeInWeeks,
       'notes': notes.toJson(),
-      'bmi_index': bmiIndex,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
@@ -96,7 +90,6 @@ class NutritionPlan {
       goal: goal,
       timeframeInWeeks: timeframeInWeeks,
       notes: notes,
-      bmiIndex: bmiIndex,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

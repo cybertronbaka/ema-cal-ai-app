@@ -9,6 +9,7 @@ part 'db_reminders.dart';
 part 'db_nutrition_plan.dart';
 part 'db_meal_data.dart';
 part 'db_streak_record.dart';
+part 'db_history.dart';
 part 'database.g.dart';
 
 @DriftDatabase(
@@ -19,6 +20,7 @@ part 'database.g.dart';
     DbMealDatas,
     DbNutritionPlans,
     DbStreakRecords,
+    DbHistories,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -32,7 +34,7 @@ class AppDatabase extends _$AppDatabase {
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
-      name: 'database ',
+      name: 'database',
       native: const DriftNativeOptions(
         // By default, `driftDatabase` from `package:drift_flutter` stores the
         // database files in `getApplicationDocumentsDirectory()`.

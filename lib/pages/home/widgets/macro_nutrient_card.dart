@@ -27,7 +27,7 @@ class _DailyMacroNutrientIntakeCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${remaining.toInt()}${type.unit}',
+              '${remaining.toInt()} ${type.unit}',
               style: textTheme.titleMedium,
             ),
             const SizedBox(height: 2),

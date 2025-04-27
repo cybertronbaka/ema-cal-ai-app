@@ -71,7 +71,6 @@ class LocalNutritionPlanRepo extends NutritionPlanRepo {
         .insert(
           DbNutritionPlansCompanion.insert(
             timeframeInWeeks: plan.timeframeInWeeks,
-            bmiIndex: plan.bmiIndex,
             calories: plan.goal.calories,
             proteinG: plan.goal.proteinG,
             carbsG: plan.goal.carbsG,
@@ -93,7 +92,6 @@ class LocalNutritionPlanRepo extends NutritionPlanRepo {
           DbNutritionPlansCompanion(
             id: plan.id.toBigInt().toDbValueOrAbsent(),
             timeframeInWeeks: plan.timeframeInWeeks.toDbValue(),
-            bmiIndex: plan.bmiIndex.toDbValue(),
             calories: plan.goal.calories.toDbValue(),
             proteinG: plan.goal.proteinG.toDbValue(),
             carbsG: plan.goal.carbsG.toDbValue(),
