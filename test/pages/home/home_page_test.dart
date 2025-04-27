@@ -190,7 +190,7 @@ Future<void> _testHome({
           mealTimeRemindersRepo: mealTimeRemindersRepo,
           packageInfo: packageInfo,
           child: createTestMaterialApp(
-            DashboardScaffold(
+            child: DashboardScaffold(
               currentIndex: 1,
               setCurrentIndex: (_) {},
               children: [Container(), const HomePage(), Container()],

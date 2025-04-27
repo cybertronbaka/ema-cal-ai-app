@@ -36,7 +36,7 @@ void main() {
           child: createRootProviderScope(
             keyboardVisibilityController: keyboardVisibilityController,
             child: createTestMaterialApp(
-              const OnboardingCompleteOverviewPage(),
+              child: const OnboardingCompleteOverviewPage(),
             ),
           ),
         ),

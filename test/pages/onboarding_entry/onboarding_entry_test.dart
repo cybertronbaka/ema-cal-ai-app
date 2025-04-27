@@ -20,7 +20,7 @@ void main() {
         tester: tester,
         child: createRootProviderScope(
           keyboardVisibilityController: keyboardVisibilityController,
-          child: createTestMaterialApp(const OnboardingEntryPage()),
+          child: createTestMaterialApp(child: const OnboardingEntryPage()),
         ),
       ),
     );
