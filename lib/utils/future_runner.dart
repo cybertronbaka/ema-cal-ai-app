@@ -1,3 +1,4 @@
+import 'package:ema_cal_ai/utils/is_test.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,8 +41,10 @@ class FutureRunner<T> {
   }
 
   void _onError(Object e, StackTrace stackTrace) {
-    debugPrint(e.toString());
-    debugPrint(stackTrace.toString());
+    if (!kIsTest) {
+      debugPrint(e.toString());
+      debugPrint(stackTrace.toString());
+    }
     if (context.mounted) {
       CustomSnackBar.showErrorNotification(
         context,

@@ -62,6 +62,7 @@ class WaterIntakeCard extends StatelessWidget {
                     if (isEditable) ...[
                       const SizedBox(width: 8),
                       GestureDetector(
+                        key: const Key('edit-water-btn'),
                         onTap: onEdit,
                         child: const FaIcon(FontAwesomeIcons.pencil, size: 16),
                       ),

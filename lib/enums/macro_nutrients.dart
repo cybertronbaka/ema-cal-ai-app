@@ -4,7 +4,7 @@ enum MacroNutrients {
   calories('Calories', null, AppColors.primary, FontAwesomeIcons.bolt),
   protein('Protein', 'g', Colors.amber, FontAwesomeIcons.egg),
   carbs('Carbs', 'g', Colors.pink, FontAwesomeIcons.wheatAwn),
-  water('water', 'L', Colors.blue, FontAwesomeIcons.droplet),
+  water('Water', 'L', Colors.blue, FontAwesomeIcons.droplet),
   fats('Fats', 'g', Colors.blueAccent, FontAwesomeIcons.bacon);
 
   const MacroNutrients(this.label, this.unit, this.color, this.icon);

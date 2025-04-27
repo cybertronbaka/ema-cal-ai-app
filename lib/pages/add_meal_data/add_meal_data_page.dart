@@ -66,6 +66,7 @@ class AddMealDataPage extends ConsumerWidget {
                                 SizedBox(height: 20),
                                 _MacroNutrientsSection(),
                                 _WaterIntakeSection(),
+                                SizedBox(height: 100),
                               ],
                             ),
                           ),
