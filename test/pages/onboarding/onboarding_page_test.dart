@@ -26,7 +26,7 @@ void main() {
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
   late MockProfileRepo profileRepo;
   late MockGptApiKeyVerifyRepo gptApiKeyVerifyRepo;
-  late MockNutritionPlannerRepo nutritionPlannerRepo;
+  late MockGptNutritionPlannerRepo gptNutritionPlannerRepo;
   late MockOnboardingSaveRepo onboardingSaveRepo;
   bool verifiedApiKey = false;
 
@@ -34,7 +34,7 @@ void main() {
     keyboardVisibilityController = MockKeyboardVisibilityController();
     MockVideoPlayerPlatform().setup();
     gptApiKeyVerifyRepo = MockGptApiKeyVerifyRepo();
-    nutritionPlannerRepo = MockNutritionPlannerRepo();
+    gptNutritionPlannerRepo = MockGptNutritionPlannerRepo();
     profileRepo = MockProfileRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
     onboardingSaveRepo = MockOnboardingSaveRepo();
@@ -63,7 +63,7 @@ void main() {
     ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
 
     when<Future<NutritionPlan>>(
-      () => nutritionPlannerRepo.plan(
+      () => gptNutritionPlannerRepo.plan(
         any<UserProfile>(that: isA<UserProfile>()),
         any<String>(that: isA<String>()),
       ),
@@ -90,7 +90,7 @@ void main() {
             gptApiKeyVerifyRepo: gptApiKeyVerifyRepo,
             profileRepo: profileRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
-            nutritionPlannerRepo: nutritionPlannerRepo,
+            gptNutritionPlannerRepo: gptNutritionPlannerRepo,
             onboardingSaveRepo: (ref) => onboardingSaveRepo,
             child: createTestMaterialApp(const OnboardingPage()),
           ),
