@@ -54,6 +54,7 @@ abstract class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.bgColor,
         surfaceTintColor: Colors.transparent,
+        centerTitle: false,
       ),
       textTheme: textTheme,
       buttonTheme: const ButtonThemeData(
