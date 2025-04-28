@@ -9,23 +9,35 @@ import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-NutritionPlan genFakeNutritionPlan() {
+NutritionPlan genFakeNutritionPlan({
+  int? timeframeInWeeks,
+  int? calories,
+  double? proteinG,
+  double? carbsG,
+  double? fatsG,
+  double? waterLiters,
+  String? gymAdvice,
+  String? medicalAdvice,
+  String? warnings,
+  DateTime? createdAt,
+  DateTime? updatedAt,
+}) {
   return NutritionPlan(
-    timeframeInWeeks: 10,
+    timeframeInWeeks: timeframeInWeeks ?? 10,
     goal: DailyNutrition(
-      calories: 1700,
-      proteinG: 50,
-      carbsG: 30,
-      fatsG: 20,
-      waterLiters: 2.75,
+      calories: calories ?? 1700,
+      proteinG: proteinG ?? 50,
+      carbsG: carbsG ?? 30,
+      fatsG: fatsG ?? 20,
+      waterLiters: waterLiters ?? 2.75,
     ),
     notes: NutritionNotes(
-      gymAdvice: 'This is test Gym Advice',
-      medicalAdvice: 'This is test Medical Advice',
-      warnings: 'This is test Warnings',
+      gymAdvice: gymAdvice ?? 'This is test Gym Advice',
+      medicalAdvice: medicalAdvice ?? 'This is test Medical Advice',
+      warnings: warnings ?? 'This is test Warnings',
     ),
-    createdAt: clock.now(),
-    updatedAt: clock.now(),
+    createdAt: createdAt ?? clock.now(),
+    updatedAt: updatedAt ?? clock.now(),
   );
 }
 
