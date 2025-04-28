@@ -41,10 +41,10 @@ class FutureRunner<T> {
   }
 
   void _onError(Object e, StackTrace stackTrace) {
-    if (!kIsTest) {
-      debugPrint(e.toString());
-      debugPrint(stackTrace.toString());
-    }
+    // if (!kIsTest) {
+    debugPrint(e.toString());
+    debugPrint(stackTrace.toString());
+    // }
     if (context.mounted) {
       CustomSnackBar.showErrorNotification(
         context,

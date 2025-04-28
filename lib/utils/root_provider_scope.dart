@@ -27,6 +27,7 @@ ProviderScope createRootProviderScope({
   StreaksRepo? streaksRepo,
   HistoryRepo? historyRepo,
   PackageInfo? packageInfo,
+  List<Override>? extraOverrides,
   required Widget child,
 }) {
   final overrides = [
@@ -66,6 +67,8 @@ ProviderScope createRootProviderScope({
 
     if (packageInfo != null)
       packageInfoProvider.overrideWith((_) => packageInfo),
+
+    if (extraOverrides != null) ...extraOverrides,
   ];
 
   return ProviderScope(overrides: overrides, child: child);
