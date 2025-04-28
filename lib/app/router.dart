@@ -23,79 +23,92 @@ import 'package:ema_cal_ai/utils/navigator_observer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final router = GoRouter(
-  navigatorKey: rootNavigatorKey,
-  observers: [rootNavigatorObserver],
-  routes: [
-    Routes.splashScreen.generateRoute(child: const SplashScreenPage()),
-    Routes.onboardingEntry.generateRoute(child: const OnboardingEntryPage()),
-    Routes.onboarding.generateRoute(child: const OnboardingPage()),
-    Routes.onboardingCompleteOverview.generateRoute(
-      child: const OnboardingCompleteOverviewPage(),
-    ),
-    StatefulShellRoute(
-      branches: [
-        StatefulShellBranch(
-          navigatorKey: overviewNavigatorKey,
-          observers: [overviewNavigatorObserver],
-          preload: true,
-          routes: [Routes.overview.generateRoute(child: const OverviewPage())],
-        ),
-        StatefulShellBranch(
-          navigatorKey: homeNavigatorKey,
-          observers: [homeNavigatorObserver],
-          preload: true,
-          routes: [Routes.home.generateRoute(child: const HomePage())],
-        ),
-        StatefulShellBranch(
-          navigatorKey: settingsNavigatorKey,
-          observers: [settingsNavigatorObserver],
-          preload: true,
-          routes: [Routes.settings.generateRoute(child: const SettingsPage())],
-        ),
-      ],
-      builder: (context, state, navigationShell) {
-        return navigationShell;
-      },
-      navigatorContainerBuilder: (context, navigationShell, children) {
-        return DashboardPage(
-          navigationShell: navigationShell,
-          children: children,
-        );
-      },
-    ),
-    Routes.editPersonalDetails.generateRoute(
-      child: const EditPersonalDetailsPage(),
-    ),
+GoRouter router({CustomRoute? initialRoute}) {
+  return GoRouter(
+    navigatorKey: rootNavigatorKey,
+    initialLocation: initialRoute?.path(),
+    observers: [rootNavigatorObserver],
+    routes: [
+      Routes.splashScreen.generateRoute(child: const SplashScreenPage()),
+      Routes.onboardingEntry.generateRoute(child: const OnboardingEntryPage()),
+      Routes.onboarding.generateRoute(child: const OnboardingPage()),
+      Routes.onboardingCompleteOverview.generateRoute(
+        child: const OnboardingCompleteOverviewPage(),
+      ),
+      StatefulShellRoute(
+        branches: [
+          StatefulShellBranch(
+            navigatorKey: overviewNavigatorKey,
+            observers: [overviewNavigatorObserver],
+            preload: true,
+            routes: [
+              Routes.overview.generateRoute(child: const OverviewPage()),
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: homeNavigatorKey,
+            observers: [homeNavigatorObserver],
+            preload: true,
+            routes: [Routes.home.generateRoute(child: const HomePage())],
+          ),
+          StatefulShellBranch(
+            navigatorKey: settingsNavigatorKey,
+            observers: [settingsNavigatorObserver],
+            preload: true,
+            routes: [
+              Routes.settings.generateRoute(child: const SettingsPage()),
+            ],
+          ),
+        ],
+        builder: (context, state, navigationShell) {
+          return navigationShell;
+        },
+        navigatorContainerBuilder: (context, navigationShell, children) {
+          return DashboardPage(
+            navigationShell: navigationShell,
+            children: children,
+          );
+        },
+      ),
+      Routes.editPersonalDetails.generateRoute(
+        child: const EditPersonalDetailsPage(),
+      ),
 
-    Routes.editWeightGoalPage.generateRoute(child: const EditWeightGoalPage()),
-    Routes.editHeightWeight.generateRoute(child: const EditHeightWeightPage()),
-    Routes.editDob.generateRoute(child: const EditDobPage()),
-    Routes.editGender.generateRoute(child: const EditGenderPage()),
-    Routes.editMealTimeReminders.generateRoute(
-      child: const EditRemindersPage(),
-    ),
-    Routes.editWorkoutFrequency.generateRoute(
-      child: const EditWorkoutFrequencyPage(),
-    ),
-    Routes.editDiet.generateRoute(child: const EditDietPage()),
-    Routes.editGeminiAPIKey.generateRoute(child: const EditGeminiApiKeyPage()),
+      Routes.editWeightGoalPage.generateRoute(
+        child: const EditWeightGoalPage(),
+      ),
+      Routes.editHeightWeight.generateRoute(
+        child: const EditHeightWeightPage(),
+      ),
+      Routes.editDob.generateRoute(child: const EditDobPage()),
+      Routes.editGender.generateRoute(child: const EditGenderPage()),
+      Routes.editMealTimeReminders.generateRoute(
+        child: const EditRemindersPage(),
+      ),
+      Routes.editWorkoutFrequency.generateRoute(
+        child: const EditWorkoutFrequencyPage(),
+      ),
+      Routes.editDiet.generateRoute(child: const EditDietPage()),
+      Routes.editGeminiAPIKey.generateRoute(
+        child: const EditGeminiApiKeyPage(),
+      ),
 
-    Routes.adjustGoals.generateRoute(child: const AdjustGoalsPage()),
+      Routes.adjustGoals.generateRoute(child: const AdjustGoalsPage()),
 
-    Routes.addMealData.generateRoute(
-      builder: (context, state) {
-        // Todo: To get from local db and if nothing is found redirect to route not found page under redirect callback
-        // if(state.extra is! AddMealDataPage){}
-        return ProviderScope(
-          overrides: [
-            addMealDataPageDataProvider.overrideWithValue(
-              state.extra as AddMealDataPageData,
-            ),
-          ],
-          child: const AddMealDataPage(),
-        );
-      },
-    ),
-  ],
-);
+      Routes.addMealData.generateRoute(
+        builder: (context, state) {
+          // Todo: To get from local db and if nothing is found redirect to route not found page under redirect callback
+          // if(state.extra is! AddMealDataPage){}
+          return ProviderScope(
+            overrides: [
+              addMealDataPageDataProvider.overrideWithValue(
+                state.extra as AddMealDataPageData,
+              ),
+            ],
+            child: const AddMealDataPage(),
+          );
+        },
+      ),
+    ],
+  );
+}

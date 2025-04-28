@@ -12,6 +12,7 @@ import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/utils/root_provider_scope.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -46,11 +47,12 @@ class EmaCalAIApp extends StatelessWidget {
   }
 }
 
-class EmaCalAIAppMaterialApp extends StatelessWidget {
+class EmaCalAIAppMaterialApp extends HookWidget {
   const EmaCalAIAppMaterialApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final routerConfig = useMemoized(() => router());
     return ReactiveFormConfig(
       validationMessages: {
         ValidationMessage.required: (error) => 'This field must not be empty',
@@ -64,7 +66,7 @@ class EmaCalAIAppMaterialApp extends StatelessWidget {
         title: 'Ema Calorie AI',
         theme: AppTheme.data,
         themeMode: ThemeMode.light,
-        routerConfig: router,
+        routerConfig: routerConfig,
       ),
     );
   }

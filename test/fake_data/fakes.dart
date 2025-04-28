@@ -7,6 +7,7 @@ import 'package:ema_cal_ai/models/onboarding_data.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 NutritionPlan genFakeNutritionPlan() {
   return NutritionPlan(
@@ -101,5 +102,14 @@ MealData genFakeMealData({
     mealDescription: mealDescription ?? 'Test meal description',
     updatedAt: updatedAt ?? clock.now(),
     createdAt: createdAt ?? clock.now(),
+  );
+}
+
+PackageInfo genFakePackageInfo() {
+  return PackageInfo(
+    appName: 'Ema Cal AI',
+    packageName: 'com.emacalai',
+    version: '1.0.0',
+    buildNumber: '',
   );
 }
