@@ -43,10 +43,7 @@ void main() {
     });
   });
 
-  testAdaptiveWidgets('Onboarding Complete Overview Page Goldens', (
-    tester,
-    variant,
-  ) async {
+  testAdaptiveWidgets('Add Meal Data Page Goldens', (tester, variant) async {
     await tester.pumpWidget(
       AdaptiveWrapper(
         windowConfig: variant,
