@@ -14,16 +14,27 @@ class SetGptApiKeyController {
   Ref ref;
 
   Future<bool> verifyApiKey(BuildContext context, String apiKey) async {
-    final verified = await ref.read(gptApiKeyVerifyRepoProvider).verify(apiKey);
+    final (verified, error) = await ref
+        .read(gptApiKeyVerifyRepoProvider)
+        .verify(apiKey);
+    if (error != null) {
+      showError(context, error);
+      return false;
+    }
+
+    print('got here');
     if (verified) {
       ref.read(gptApiKeyProvider.notifier).state = apiKey;
       return true;
     }
 
-    if (context.mounted) {
-      CustomSnackBar.showErrorNotification(context, 'API Key does\'nt work');
-    }
-
+    showError(context, 'API Key does\'nt work');
     return false;
+  }
+
+  void showError(BuildContext context, String message) {
+    if (!context.mounted) return;
+
+    CustomSnackBar.showErrorNotification(context, message);
   }
 }

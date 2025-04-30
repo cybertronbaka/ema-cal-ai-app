@@ -1,6 +1,7 @@
 library;
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,5 +13,5 @@ final gptApiKeyVerifyRepoProvider = Provider<GptApiKeyVerifyRepo>(
 );
 
 abstract class GptApiKeyVerifyRepo {
-  Future<bool> verify(String apiKey);
+  Future<(bool, String?)> verify(String apiKey);
 }
