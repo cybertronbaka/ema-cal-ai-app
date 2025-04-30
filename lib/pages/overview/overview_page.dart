@@ -14,6 +14,7 @@ part 'widgets/bmi_card.dart';
 part 'widgets/log_weight_section.dart';
 part 'widgets/weight_goal_section.dart';
 part 'widgets/weight_progress_section.dart';
+part 'widgets/calories_progress_section.dart';
 
 class OverviewPage extends ConsumerWidget {
   const OverviewPage({super.key});
@@ -30,13 +31,7 @@ class OverviewPage extends ConsumerWidget {
             _LogWeightSection(),
             _BMICard(),
             _WeightProgressSection(),
-            // Todo: Need to Add graphs (Weight Graphs)
-            // For weight graphs. (Need to add by day.(Get one by day and save that.
-            // If updated on the same day, just update the history of that day. Otherwise, add))
-            // Filters include (90 days, 6 months, 1 year, All time)
-
-            // Todo: Add Calories Graph (Daily Avg., Graph,  Total Calories by filter)
-            // Filters include, (This week, Last Week, This month, This year)
+            _CaloriesProgressSection(),
           ],
         ),
       ),

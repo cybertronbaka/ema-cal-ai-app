@@ -1,11 +1,13 @@
 import 'package:adaptive_test/adaptive_test.dart';
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/routes.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/pages/dashboard/dashboard_page.dart';
 import 'package:ema_cal_ai/pages/overview/overview_page.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/app_initializer.dart';
 import 'package:ema_cal_ai/utils/root_provider_scope.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
@@ -24,6 +26,7 @@ void main() {
   late MockMealDataRepo mealDataRepo;
   late MockNutritionPlanRepo nutritionPlanRepo;
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
+  late MockHistoryRepo mockHistoryRepo;
   late PackageInfo packageInfo;
   final time = DateTime(2025, 04, 02);
 
@@ -34,7 +37,11 @@ void main() {
     mealDataRepo = MockMealDataRepo();
     nutritionPlanRepo = MockNutritionPlanRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
+    mockHistoryRepo = MockHistoryRepo();
     packageInfo = genFakePackageInfo();
+
+    registerFallbackValue(HistoryFilter.allTime);
+    registerFallbackValue(HistoryType.weight);
 
     when(
       () => profileRepo.get(),
@@ -51,6 +58,16 @@ void main() {
     when(() => mealDataRepo.today()).thenAnswerWithValue([]);
     when(() => mealDataRepo.thisWeek()).thenAnswerWithValue([]);
     when(() => mealDataRepo.lastNData(any())).thenAnswerWithValue([]);
+
+    when(
+      () => mockHistoryRepo.getChartData(
+        type: any(named: 'type'),
+        filter: any(named: 'filter'),
+      ),
+    ).thenAnswer((inv) async {
+      final filter = inv.namedArguments[#filter] as HistoryFilter;
+      return genChartData(10, filter);
+    });
   });
 
   testAdaptiveWidgets('Overview Page Golden', (tester, variant) async {
@@ -66,6 +83,7 @@ void main() {
             profileRepo: profileRepo,
             nutritionPlanRepo: nutritionPlanRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
+            historyRepo: mockHistoryRepo,
             packageInfo: packageInfo,
             child: ProviderScope(
               overrides: [
@@ -84,6 +102,33 @@ void main() {
       });
       await tester.pump();
       await tester.expectGolden<OverviewPage>(variant);
+
+      final listFinder =
+          find
+              .byType(Scrollable)
+              .last; // take last because the tab bar up top is also a Scrollable
+      expect(listFinder, findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Weight over time').first,
+        300,
+        scrollable: listFinder,
+      );
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OverviewPage>(
+        variant,
+        suffix: 'weight over time',
+      );
+
+      await tester.scrollUntilVisible(
+        find.text('Calories intake over time').first,
+        300,
+        scrollable: listFinder,
+      );
+      await tester.pumpAndSettle();
+      await tester.expectGolden<OverviewPage>(
+        variant,
+        suffix: 'calories intake over time',
+      );
     });
   });
 }

@@ -1,16 +1,16 @@
 part of '../overview_page.dart';
 
-class _WeightProgressSection extends HookConsumerWidget {
-  const _WeightProgressSection();
+class _CaloriesProgressSection extends HookConsumerWidget {
+  const _CaloriesProgressSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(overviewControllerProvider);
-    final tabs = controller.weightFilters.keys.toList();
+    final tabs = controller.caloriesFilters.keys.toList();
     final textTheme = TextTheme.of(context);
 
     useInitHook(() {
-      controller.initWeightHistories();
+      controller.initCaloriesHistories();
     }, []);
 
     return DefaultTabController(
@@ -20,7 +20,7 @@ class _WeightProgressSection extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildWithPadding(
-            Text('Weight over time', style: textTheme.titleSmall),
+            Text('Calories intake over time', style: textTheme.titleSmall),
           ),
           _buildWithPadding(CustomTabBar(tabs: tabs)),
           SizedBox(
@@ -45,7 +45,7 @@ class _WeightProgressSection extends HookConsumerWidget {
   }
 
   Widget _buildChartForFilter(WidgetRef ref, HistoryFilter filter) {
-    final data = ref.watch(weightChartDataProvider(filter));
+    final data = ref.watch(caloriesChartDataProvider(filter));
 
     return _buildWithPadding(DateChart(items: data));
   }
