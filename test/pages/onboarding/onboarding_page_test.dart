@@ -19,6 +19,7 @@ import '../../mocks/repositories.dart';
 import '../../mocks/video_player_platform.dart';
 import '../../utils/fa_icon.dart';
 import '../../utils/material_app.dart';
+import '../../utils/mocktail.dart';
 import '../../utils/tester.dart';
 
 void main() {
@@ -45,22 +46,20 @@ void main() {
 
     when(
       () => gptApiKeyVerifyRepo.verify(any()),
-    ).thenAnswer((_) => Future.value(verifiedApiKey));
+    ).thenAnswerWithValue((verifiedApiKey, null));
 
     when(
       () => profileRepo.save(any()),
-    ).thenAnswer((_) => Future.value(genFakeUserProfile()));
-    when(
-      () => profileRepo.get(),
-    ).thenAnswer((_) => Future.value(genFakeUserProfile()));
+    ).thenAnswerWithValue(genFakeUserProfile());
+    when(() => profileRepo.get()).thenAnswerWithValue(genFakeUserProfile());
 
     when(
       () => mealTimeRemindersRepo.get(),
-    ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
+    ).thenAnswerWithValue(genFakeMealTimeReminders());
 
     when(
       () => mealTimeRemindersRepo.saveAll(any()),
-    ).thenAnswer((_) => Future.value(genFakeMealTimeReminders()));
+    ).thenAnswerWithValue(genFakeMealTimeReminders());
 
     when<Future<NutritionPlan>>(
       () => gptNutritionPlannerRepo.plan(
@@ -76,7 +75,7 @@ void main() {
     when(
       () => onboardingSaveRepo.save(any()),
     ).thenAnswer((_) => Future.value(genFakeOnboardingData()));
-    when(() => onboardingSaveRepo.clear()).thenAnswer((_) async {});
+    when(() => onboardingSaveRepo.clear()).thenAnswerWithVoid();
   });
 
   testAdaptiveWidgets('Onboarding Page Goldens', (tester, variant) async {

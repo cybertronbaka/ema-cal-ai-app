@@ -68,7 +68,9 @@ void main() {
     when(() => mealDataRepo.thisWeek()).thenAnswerWithValue([]);
     when(() => mealDataRepo.lastNData(any())).thenAnswerWithValue([]);
 
-    when(() => gptApiKeyVerifyRepo.verify(any())).thenAnswerWithValue(true);
+    when(
+      () => gptApiKeyVerifyRepo.verify(any()),
+    ).thenAnswerWithValue((true, null));
   });
 
   testAdaptiveWidgets('Edit Gemini API Key Page Golden', (
