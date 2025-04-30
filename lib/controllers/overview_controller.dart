@@ -13,7 +13,7 @@ class OverviewController {
   Ref ref;
 
   final weightFilters = {
-    '3 mths': HistoryFilter.last3Months,
+    '1 mth': HistoryFilter.thisMonth,
     '6 mths': HistoryFilter.last6Months,
     '1 yr': HistoryFilter.last1Year,
     'All': HistoryFilter.allTime,
