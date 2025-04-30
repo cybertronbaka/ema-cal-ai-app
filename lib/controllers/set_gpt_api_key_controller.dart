@@ -22,7 +22,6 @@ class SetGptApiKeyController {
       return false;
     }
 
-    print('got here');
     if (verified) {
       ref.read(gptApiKeyProvider.notifier).state = apiKey;
       return true;

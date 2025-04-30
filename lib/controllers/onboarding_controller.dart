@@ -16,6 +16,7 @@ import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -140,28 +141,34 @@ class OnboardingController {
 
     FocusManager.instance.primaryFocus?.unfocus();
 
-    var newPlan = await ref
-        .read(nutritionPlanRepoProvider)
-        .save(nutritionPlan!);
-    ref.read(currentNutritionPlanProvider.notifier).state = newPlan;
+    await FutureRunner(
+      context: context,
+      onDone: (_) {
+        if (context.mounted) {
+          context.pushReplacementNamed(Routes.onboardingCompleteOverview.name);
+        }
+      },
+    ).run(() async {
+      var newPlan = await ref
+          .read(nutritionPlanRepoProvider)
+          .save(nutritionPlan!);
+      ref.read(currentNutritionPlanProvider.notifier).state = newPlan;
 
-    var newProfile = profile.copyWith(isOnboardingComplete: true);
-    newProfile = await ref.read(profileRepoProvider).save(newProfile);
-    ref.read(userProfileProvider.notifier).state = newProfile;
-    await ref
-        .read(historyRepoProvider)
-        .saveWeight(
-          History(
-            type: HistoryType.weight,
-            value: newProfile.weight.kg,
-            createdAt: clock.now(),
-          ),
-        );
-    clearData();
-
-    if (context.mounted) {
-      context.pushReplacementNamed(Routes.onboardingCompleteOverview.name);
-    }
+      var newProfile = profile.copyWith(isOnboardingComplete: true);
+      newProfile = await ref.read(profileRepoProvider).save(newProfile);
+      ref.read(userProfileProvider.notifier).state = newProfile;
+      await ref
+          .read(historyRepoProvider)
+          .saveWeight(
+            History(
+              type: HistoryType.weight,
+              value: newProfile.weight.kg,
+              createdAt: clock.now(),
+            ),
+          );
+      clearData();
+      return null;
+    });
   }
 
   void moveToNextStep(BuildContext context, TabController tabController) {

@@ -29,22 +29,18 @@ class GeminiApiKeyVerifyRepo extends GptApiKeyVerifyRepo {
 
       return (response.text != null && response.text!.isNotEmpty, null);
     } on TimeoutException {
-      print('TImed out');
       return (false, 'Request Timed out');
     } on GenerativeAIException catch (e) {
       try {
         var message = e.message.replaceFirst(RegExp(r'^.*{'), '');
         message = '{$message';
-        print('New message: ${message}');
         final json = jsonDecode(message);
         // ignore: avoid_dynamic_calls
         return (false, json['error']['message']! as String);
       } catch (_) {
-        print('e.message: ${e.message}');
         return (false, e.message);
       }
     } catch (e) {
-      print('Error: $e');
       return (false, e.toString());
     }
   }
