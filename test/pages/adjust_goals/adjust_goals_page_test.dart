@@ -28,6 +28,7 @@ void main() {
   late MockNutritionPlanRepo nutritionPlanRepo;
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
   late MockGptNutritionPlannerRepo gptNutritionPlannerRepo;
+  late MockHistoryRepo historyRepo;
 
   late PackageInfo packageInfo;
   final time = DateTime(2025, 04, 02, 10, 10);
@@ -48,15 +49,16 @@ void main() {
     nutritionPlanRepo = MockNutritionPlanRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
     gptNutritionPlannerRepo = MockGptNutritionPlannerRepo();
+    historyRepo = MockHistoryRepo();
     packageInfo = genFakePackageInfo();
 
-    registerFallbackValue(genFakeUserProfile());
+    final profile = genFakeUserProfile(isOnboardingComplete: true);
+
+    registerFallbackValue(profile);
     registerFallbackValue(reminders);
     registerFallbackValue(genFakeNutritionPlan());
 
-    when(
-      () => profileRepo.get(),
-    ).thenAnswerWithValue(genFakeUserProfile(isOnboardingComplete: true));
+    when(() => profileRepo.get()).thenAnswerWithValue(profile);
 
     when(() => nutritionPlanRepo.get()).thenAnswerWithValue(nutritionPlan);
     when(
@@ -78,6 +80,9 @@ void main() {
     when(() => mealDataRepo.today()).thenAnswerWithValue([]);
     when(() => mealDataRepo.thisWeek()).thenAnswerWithValue([]);
     when(() => mealDataRepo.lastNData(any())).thenAnswerWithValue([]);
+    when(
+      () => historyRepo.getLatestWeight(),
+    ).thenAnswerWithValue(genFakeHistory(value: profile.weight.kg));
   });
 
   testAdaptiveWidgets('Adjust Goals Page Golden', (tester, variant) async {
@@ -94,6 +99,7 @@ void main() {
             nutritionPlanRepo: nutritionPlanRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
             gptNutritionPlannerRepo: gptNutritionPlannerRepo,
+            historyRepo: historyRepo,
             packageInfo: packageInfo,
             extraOverrides: [
               userProfileProvider.overrideWith((_) => genFakeUserProfile()),

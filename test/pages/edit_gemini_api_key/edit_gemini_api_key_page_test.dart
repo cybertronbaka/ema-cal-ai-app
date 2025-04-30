@@ -29,6 +29,7 @@ void main() {
   late MockNutritionPlanRepo nutritionPlanRepo;
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
   late MockGptApiKeyVerifyRepo gptApiKeyVerifyRepo;
+  late MockHistoryRepo historyRepo;
   late PackageInfo packageInfo;
 
   final time = DateTime(2025, 04, 02, 10, 10);
@@ -45,6 +46,8 @@ void main() {
     nutritionPlanRepo = MockNutritionPlanRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
     gptApiKeyVerifyRepo = MockGptApiKeyVerifyRepo();
+    historyRepo = MockHistoryRepo();
+
     packageInfo = genFakePackageInfo();
     MockVideoPlayerPlatform().setup();
 
@@ -71,6 +74,10 @@ void main() {
     when(
       () => gptApiKeyVerifyRepo.verify(any()),
     ).thenAnswerWithValue((true, null));
+
+    when(
+      () => historyRepo.getLatestWeight(),
+    ).thenAnswerWithValue(genFakeHistory(value: profile.weight.kg));
   });
 
   testAdaptiveWidgets('Edit Gemini API Key Page Golden', (
@@ -91,6 +98,7 @@ void main() {
             mealTimeRemindersRepo: mealTimeRemindersRepo,
             packageInfo: packageInfo,
             gptApiKeyVerifyRepo: gptApiKeyVerifyRepo,
+            historyRepo: historyRepo,
             extraOverrides: [userProfileProvider.overrideWith((_) => profile)],
             child: createTestMaterialApp(initialRoute: Routes.settings),
           ),

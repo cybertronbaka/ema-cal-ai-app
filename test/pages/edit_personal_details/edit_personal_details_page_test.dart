@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:adaptive_test/adaptive_test.dart';
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/routes.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/pages/edit_pages/edit_diet/edit_diet_page.dart';
 import 'package:ema_cal_ai/pages/edit_pages/edit_dob/edit_dob_page.dart';
 import 'package:ema_cal_ai/pages/edit_pages/edit_gender/edit_gender_page.dart';
@@ -34,6 +35,7 @@ void main() {
   late MockMealDataRepo mealDataRepo;
   late MockNutritionPlanRepo nutritionPlanRepo;
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
+  late MockHistoryRepo historyRepo;
   late PackageInfo packageInfo;
   final time = DateTime(2025, 04, 02, 10, 10);
 
@@ -45,16 +47,14 @@ void main() {
     nutritionPlanRepo = MockNutritionPlanRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
     packageInfo = genFakePackageInfo();
+    historyRepo = MockHistoryRepo();
+    final profile = genFakeUserProfile(isOnboardingComplete: true);
 
-    registerFallbackValue(genFakeUserProfile());
+    registerFallbackValue(profile);
 
-    when(
-      () => profileRepo.get(),
-    ).thenAnswerWithValue(genFakeUserProfile(isOnboardingComplete: true));
+    when(() => profileRepo.get()).thenAnswerWithValue(profile);
 
-    when(
-      () => profileRepo.save(any()),
-    ).thenAnswerWithValue(genFakeUserProfile(isOnboardingComplete: true));
+    when(() => profileRepo.save(any())).thenAnswerWithValue(profile);
 
     when(
       () => nutritionPlanRepo.get(),
@@ -69,6 +69,15 @@ void main() {
     when(() => mealDataRepo.today()).thenAnswerWithValue([]);
     when(() => mealDataRepo.thisWeek()).thenAnswerWithValue([]);
     when(() => mealDataRepo.lastNData(any())).thenAnswerWithValue([]);
+    when(
+      () => historyRepo.getLatestWeight(),
+    ).thenAnswerWithValue(genFakeHistory(value: profile.weight.kg));
+    when(
+      () => historyRepo.saveWeight(any()),
+    ).thenAnswerWithValue(genFakeHistory(value: profile.weight.kg - 1));
+    when(() => historyRepo.saveHeight(any())).thenAnswerWithValue(
+      genFakeHistory(value: profile.height.cm + 1, type: HistoryType.height),
+    );
   });
 
   testAdaptiveWidgets('Edit Personal Details Page Golden', (
@@ -88,6 +97,7 @@ void main() {
             nutritionPlanRepo: nutritionPlanRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
             packageInfo: packageInfo,
+            historyRepo: historyRepo,
             extraOverrides: [
               userProfileProvider.overrideWith((_) => genFakeUserProfile()),
             ],

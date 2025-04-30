@@ -2,6 +2,7 @@ import 'package:adaptive_test/adaptive_test.dart';
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/onboarding_controller.dart';
+import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
 import 'package:ema_cal_ai/pages/onboarding/onboarding_page.dart';
@@ -87,6 +88,9 @@ void main() {
     when(
       () => historyRepo.saveWeight(any()),
     ).thenAnswerWithValue(genFakeHistory());
+    when(
+      () => historyRepo.saveHeight(any()),
+    ).thenAnswerWithValue(genFakeHistory(type: HistoryType.height));
 
     when(
       () => nutritionPlanRepo.save(any()),

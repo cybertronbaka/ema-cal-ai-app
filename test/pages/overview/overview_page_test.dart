@@ -26,7 +26,7 @@ void main() {
   late MockMealDataRepo mealDataRepo;
   late MockNutritionPlanRepo nutritionPlanRepo;
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
-  late MockHistoryRepo mockHistoryRepo;
+  late MockHistoryRepo historyRepo;
   late PackageInfo packageInfo;
   final time = DateTime(2025, 04, 02);
 
@@ -37,15 +37,14 @@ void main() {
     mealDataRepo = MockMealDataRepo();
     nutritionPlanRepo = MockNutritionPlanRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
-    mockHistoryRepo = MockHistoryRepo();
+    historyRepo = MockHistoryRepo();
     packageInfo = genFakePackageInfo();
 
     registerFallbackValue(HistoryFilter.allTime);
     registerFallbackValue(HistoryType.weight);
 
-    when(
-      () => profileRepo.get(),
-    ).thenAnswerWithValue(genFakeUserProfile(isOnboardingComplete: true));
+    final profile = genFakeUserProfile(isOnboardingComplete: true);
+    when(() => profileRepo.get()).thenAnswerWithValue(profile);
     when(
       () => nutritionPlanRepo.get(),
     ).thenAnswerWithValue(genFakeNutritionPlan());
@@ -60,7 +59,7 @@ void main() {
     when(() => mealDataRepo.lastNData(any())).thenAnswerWithValue([]);
 
     when(
-      () => mockHistoryRepo.getChartData(
+      () => historyRepo.getChartData(
         type: any(named: 'type'),
         filter: any(named: 'filter'),
       ),
@@ -68,6 +67,10 @@ void main() {
       final filter = inv.namedArguments[#filter] as HistoryFilter;
       return genChartData(10, filter);
     });
+
+    when(
+      () => historyRepo.getLatestWeight(),
+    ).thenAnswerWithValue(genFakeHistory(value: profile.weight.kg));
   });
 
   testAdaptiveWidgets('Overview Page Golden', (tester, variant) async {
@@ -83,7 +86,7 @@ void main() {
             profileRepo: profileRepo,
             nutritionPlanRepo: nutritionPlanRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
-            historyRepo: mockHistoryRepo,
+            historyRepo: historyRepo,
             packageInfo: packageInfo,
             child: ProviderScope(
               overrides: [

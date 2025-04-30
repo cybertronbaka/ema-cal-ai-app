@@ -4,7 +4,6 @@ import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/nutrition_planner_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
-import 'package:ema_cal_ai/models/history.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/models/onboarding_data.dart';
@@ -157,15 +156,8 @@ class OnboardingController {
       var newProfile = profile.copyWith(isOnboardingComplete: true);
       newProfile = await ref.read(profileRepoProvider).save(newProfile);
       ref.read(userProfileProvider.notifier).state = newProfile;
-      await ref
-          .read(historyRepoProvider)
-          .saveWeight(
-            History(
-              type: HistoryType.weight,
-              value: newProfile.weight.kg,
-              createdAt: clock.now(),
-            ),
-          );
+      await ref.read(historyRepoProvider).saveWeight(newProfile.weight.kg);
+      await ref.read(historyRepoProvider).saveHeight(newProfile.height.cm);
       clearData();
       return null;
     });

@@ -5,3 +5,5 @@ final weightChartDataProvider =
 
 final caloriesChartDataProvider =
     StateProvider.family<List<ChartData>, HistoryFilter>((_, _) => []);
+
+final currentWeightProvider = StateProvider<UnitWeight?>((_) => null);

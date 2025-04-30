@@ -35,7 +35,7 @@ class _LogWeightSection extends ConsumerWidget {
               width: double.infinity,
               child: CustomSmallFilledButton(
                 onPressed: () {
-                  // Todo: To Update history and from settings too
+                  context.pushNamed(Routes.logWeight.name);
                   // Todo: To only allow updating with profile's isMetric (No Switch)
                 },
                 padding: const EdgeInsets.all(16),

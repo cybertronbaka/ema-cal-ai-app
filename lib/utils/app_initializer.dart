@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:ema_cal_ai/models/meal_data.dart';
+import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
@@ -25,6 +27,7 @@ class AppInitializer {
     if (profile != null && profile.isOnboardingComplete) {
       // await _saveWeightHistory(container);
       await Future.wait([
+        setCurrentWeight(profile),
         setPackageInfo(),
         setNutritionPlanIfExists(),
         validateAndSetStreaks(),
@@ -54,18 +57,14 @@ class AppInitializer {
   //   await ref.read(mealDataRepoProvider).clear();
   // }
 
-  // Future<UserProfile?> _saveWeightHistory(WidgetRef ref) async {
-  //   // await ref.read(historyRepoProvider).clear();
-  //   await ref
-  //       .read(historyRepoProvider)
-  //       .save(
-  //         History(
-  //           type: HistoryType.weight,
-  //           value: 83,
-  //           createdAt: clock.now(),
-  //         ),
-  //       );
-  // }
+  Future<void> setCurrentWeight(UserProfile profile) async {
+    final weightInKg =
+        await container.read(historyRepoProvider).getLatestWeight();
+    container.read(currentWeightProvider.notifier).state = UnitWeight.fromKg(
+      weightInKg.value,
+      profile.isMetric,
+    );
+  }
 
   Future<void> setMealDataIfExists() async {
     await Future.wait([

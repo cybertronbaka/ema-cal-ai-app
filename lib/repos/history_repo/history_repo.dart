@@ -15,11 +15,13 @@ final historyRepoProvider = Provider<HistoryRepo>(
 );
 
 abstract class HistoryRepo {
+  Future<History> getLatestWeight();
   Future<List<History>> getFilteredHistory({
     required HistoryType type,
     required HistoryFilter filter,
   });
-  Future<History> saveWeight(History history);
+  Future<History> saveWeight(double weight);
+  Future<History> saveHeight(double height);
 
   Future<List<ChartData>> getChartData({
     required HistoryType type,
@@ -29,25 +31,25 @@ abstract class HistoryRepo {
 }
 
 class LocalHistoryRepo extends HistoryRepo {
-  DbHistory? weightHistoryToday;
+  Map<HistoryType, DbHistory?> todayHistory = {};
 
-  Future<DbHistory?> _getTodaysWeightHistory() async {
+  Future<DbHistory?> _getTodaysHistory(HistoryType type) async {
     final now = clock.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
-    if (weightHistoryToday != null &&
-        _isOnSameDay(now, weightHistoryToday!.createdAt)) {
-      return weightHistoryToday!;
+    final historyToday = todayHistory[type];
+    if (historyToday != null && _isOnSameDay(now, historyToday.createdAt)) {
+      return historyToday;
     }
 
     final existingQuery = database.managers.dbHistories.filter((f) {
-      return f.type.equals(HistoryType.weight) &
+      return f.type.equals(type) &
           f.createdAt.isAfterOrOn(startOfDay) &
           f.createdAt.isBefore(endOfDay);
     });
 
     final existing = await existingQuery.getSingleOrNull();
-    weightHistoryToday = existing;
+    todayHistory[type] = existing;
 
     return existing;
   }
@@ -60,13 +62,14 @@ class LocalHistoryRepo extends HistoryRepo {
         (other.isAfter(startOfDay) && other.isBefore(endOfDay));
   }
 
-  @override
-  Future<History> saveWeight(History history) async {
-    if (history.type != HistoryType.weight) {
-      throw 'Cannot save non-weight types with this method';
+  Future<History> _upsert(HistoryType type, double value) async {
+    if (![HistoryType.weight, HistoryType.height].contains(type)) {
+      throw 'Cannot upsert for $type';
     }
 
-    final existing = await _getTodaysWeightHistory();
+    final existing = await _getTodaysHistory(HistoryType.weight);
+
+    final history = History(type: type, value: value);
 
     if (existing != null) {
       return _update(existing, history);
@@ -75,7 +78,18 @@ class LocalHistoryRepo extends HistoryRepo {
     return _insert(history);
   }
 
+  @override
+  Future<History> saveWeight(double weight) {
+    return _upsert(HistoryType.weight, weight);
+  }
+
+  @override
+  Future<History> saveHeight(double height) {
+    return _upsert(HistoryType.height, height);
+  }
+
   Future<History> _update(DbHistory existing, History history) async {
+    // print('Updating History of ${existing.id.toInt()}');
     final now = clock.now();
     final companion = DbHistoriesCompanion(
       id: existing.id.toDbValue(),
@@ -87,15 +101,20 @@ class LocalHistoryRepo extends HistoryRepo {
 
     await database.update(database.dbHistories).replace(companion);
 
-    return History(
+    final result = History(
       id: existing.id.toInt(),
       type: history.type,
       value: history.value,
+      updatedAt: now,
       createdAt: existing.createdAt,
     );
+    todayHistory[history.type] = result.toDB();
+
+    return result;
   }
 
   Future<History> _insert(History history) async {
+    // print('Inserting History');
     final now = clock.now();
     final companion = DbHistoriesCompanion.insert(
       type: history.type,
@@ -106,12 +125,16 @@ class LocalHistoryRepo extends HistoryRepo {
 
     final id = await database.into(database.dbHistories).insert(companion);
 
-    return History(
+    final result = History(
       id: id,
       type: history.type,
       value: history.value,
+      updatedAt: now,
       createdAt: now,
     );
+    todayHistory[history.type] = result.toDB();
+
+    return result;
   }
 
   @override
@@ -212,6 +235,25 @@ class LocalHistoryRepo extends HistoryRepo {
   @override
   Future<void> clear() async {
     await database.delete(database.dbHistories).go();
+  }
+
+  @override
+  Future<History> getLatestWeight() async {
+    final historyToday = todayHistory[HistoryType.weight];
+    if (historyToday != null) return History.fromDB(historyToday);
+
+    final result =
+        await database.managers.dbHistories
+            .filter((f) => f.type.equals(HistoryType.weight))
+            .orderBy((o) => o.createdAt.desc())
+            .limit(1)
+            .getSingleOrNull();
+
+    if (result == null) {
+      throw 'Could not get any weight. Something went wrong.';
+    }
+
+    return History.fromDB(result);
   }
 }
 

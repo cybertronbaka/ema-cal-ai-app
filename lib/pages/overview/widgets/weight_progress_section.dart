@@ -5,13 +5,14 @@ class _WeightProgressSection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(userProfileProvider)!;
     final controller = ref.watch(overviewControllerProvider);
     final tabs = controller.weightFilters.keys.toList();
     final textTheme = TextTheme.of(context);
 
     useInitHook(() {
       controller.initWeightHistories();
-    }, []);
+    }, [profile.weight]);
 
     return DefaultTabController(
       length: tabs.length,

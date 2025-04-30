@@ -28,6 +28,7 @@ void main() {
   late MockMealDataRepo mealDataRepo;
   late MockNutritionPlanRepo nutritionPlanRepo;
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
+  late MockHistoryRepo historyRepo;
   late PackageInfo packageInfo;
   final time = DateTime(2025, 04, 02);
 
@@ -38,6 +39,7 @@ void main() {
     mealDataRepo = MockMealDataRepo();
     nutritionPlanRepo = MockNutritionPlanRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
+    historyRepo = MockHistoryRepo();
     packageInfo = PackageInfo(
       appName: 'Ema Cal AI',
       packageName: 'com.emacalai',
@@ -45,15 +47,18 @@ void main() {
       buildNumber: '',
     );
 
-    when(
-      () => profileRepo.get(),
-    ).thenAnswerWithValue(genFakeUserProfile(isOnboardingComplete: true));
+    final profile = genFakeUserProfile(isOnboardingComplete: true);
+
+    when(() => profileRepo.get()).thenAnswerWithValue(profile);
     when(
       () => nutritionPlanRepo.get(),
     ).thenAnswerWithValue(genFakeNutritionPlan());
     when(
       () => mealTimeRemindersRepo.get(),
     ).thenAnswerWithValue(genFakeMealTimeReminders());
+    when(
+      () => historyRepo.getLatestWeight(),
+    ).thenAnswerWithValue(genFakeHistory(value: profile.weight.kg));
   });
 
   group('Without MealData', () {
@@ -81,6 +86,7 @@ void main() {
         profileRepo: profileRepo,
         nutritionPlanRepo: nutritionPlanRepo,
         mealTimeRemindersRepo: mealTimeRemindersRepo,
+        historyRepo: historyRepo,
         packageInfo: packageInfo,
       );
       await tester.tap(find.byFaIcon(FontAwesomeIcons.plus));
@@ -144,6 +150,7 @@ void main() {
         nutritionPlanRepo: nutritionPlanRepo,
         mealTimeRemindersRepo: mealTimeRemindersRepo,
         packageInfo: packageInfo,
+        historyRepo: historyRepo,
         suffix: suffix,
       );
 
@@ -173,6 +180,7 @@ Future<void> _testHome({
   required MockProfileRepo profileRepo,
   required MockNutritionPlanRepo nutritionPlanRepo,
   required MockMealTimeRemindersRepo mealTimeRemindersRepo,
+  required MockHistoryRepo historyRepo,
   required PackageInfo packageInfo,
   String? suffix,
 }) async {
@@ -188,6 +196,7 @@ Future<void> _testHome({
           profileRepo: profileRepo,
           nutritionPlanRepo: nutritionPlanRepo,
           mealTimeRemindersRepo: mealTimeRemindersRepo,
+          historyRepo: historyRepo,
           packageInfo: packageInfo,
           child: createTestMaterialApp(
             child: DashboardScaffold(

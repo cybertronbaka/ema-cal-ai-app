@@ -170,6 +170,7 @@ WheelPickerController useWheelPickerController({
   int? initialValue,
   String debugLabel = 'useWheelPickerController',
   bool debug = false,
+  List<Object?>? dependencies,
 }) {
   final controller = useMemoized(() {
     if (debug) debugPrint('$debugLabel: Memoizing');
@@ -179,7 +180,7 @@ WheelPickerController useWheelPickerController({
       initialValue: initialValue,
       debugLabel: debugLabel,
     );
-  }, []);
+  }, dependencies ?? []);
 
   // Update controller when dependencies change
   useEffect(() {
