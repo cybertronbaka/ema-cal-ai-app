@@ -93,7 +93,7 @@ class LocalHistoryRepo extends HistoryRepo {
   }
 
   Future<History> _update(DbHistory existing, History history) async {
-    print('Updating History of ${existing.id.toInt()}');
+    // print('Updating History of ${existing.id.toInt()}');
     final now = clock.now();
     final companion = DbHistoriesCompanion(
       id: existing.id.toDbValue(),
@@ -118,7 +118,7 @@ class LocalHistoryRepo extends HistoryRepo {
   }
 
   Future<History> _insert(History history) async {
-    print('Inserting History');
+    // print('Inserting History');
     final now = clock.now();
     final companion = DbHistoriesCompanion.insert(
       type: history.type,
