@@ -13,6 +13,7 @@ class GeminiNutritionPlannerRepo extends GptNutritionPlannerRepo {
       ),
     ).generateContent([Content.text(_buildPrompt(profile))]);
 
+    print('GOT RESPONSE: ${response.text}');
     return NutritionPlan.fromJson(
       jsonDecode(
         response.text ?? (throw 'Could not get response from the Planner.'),
