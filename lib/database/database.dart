@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
@@ -10,6 +12,7 @@ part 'db_nutrition_plan.dart';
 part 'db_meal_data.dart';
 part 'db_streak_record.dart';
 part 'db_history.dart';
+part 'interceptor.dart';
 part 'database.g.dart';
 
 @DriftDatabase(
@@ -41,7 +44,7 @@ class AppDatabase extends _$AppDatabase {
         databaseDirectory: getApplicationSupportDirectory,
       ),
       // If you need web support, see https://drift.simonbinder.eu/platforms/web/
-    );
+    ).interceptWith(LogInterceptor());
   }
 
   @override

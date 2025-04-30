@@ -62,7 +62,7 @@ class AppInitializer {
   //         History(
   //           type: HistoryType.weight,
   //           value: 83,
-  //           createdAt: DateTime.now(),
+  //           createdAt: clock.now(),
   //         ),
   //       );
   // }

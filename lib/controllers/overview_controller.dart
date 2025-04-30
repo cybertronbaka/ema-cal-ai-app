@@ -24,8 +24,9 @@ class OverviewController {
       weightFilters.values.map((filter) async {
         final data = await ref
             .read(historyRepoProvider)
-            .getFilteredHistory(type: HistoryType.weight, filter: filter);
-        ref.read(weightHistoryProvider(filter).notifier).state = data;
+            .getChartData(type: HistoryType.weight, filter: filter);
+
+        ref.read(weightChartDataProvider(filter).notifier).state = data;
       }),
     );
   }

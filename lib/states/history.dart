@@ -1,4 +1,4 @@
 part of 'states.dart';
 
-final weightHistoryProvider =
-    StateProvider.family<List<History>, HistoryFilter>((_, _) => []);
+final weightChartDataProvider =
+    StateProvider.family<List<ChartData>, HistoryFilter>((_, _) => []);

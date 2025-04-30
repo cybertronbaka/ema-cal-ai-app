@@ -1,44 +1,21 @@
 part of 'widgets.dart';
 
-enum ChartDateType { weekDays, months, years }
-
-class DateChartItem {
-  const DateChartItem({required this.date, required this.value});
-
-  final DateTime date;
-  final double value;
-}
-
 class DateChart extends HookWidget {
-  const DateChart({super.key, required this.items, required this.dateType});
-  final List<DateChartItem> items;
-  final ChartDateType dateType;
-
-  intl.DateFormat get _dateFormat {
-    return switch (dateType) {
-      ChartDateType.weekDays => intl.DateFormat('EEEEE'),
-      ChartDateType.months => intl.DateFormat('MMM'),
-      ChartDateType.years => intl.DateFormat('yyyy'),
-    };
-  }
+  const DateChart({super.key, required this.items});
+  final List<ChartData> items;
 
   @override
   Widget build(BuildContext context) {
     final touchedSpot = useState<FlSpot?>(null);
     final showingTooltipOnSpots = useState<List<int>>([]);
-    final dateSortedItems = useMemoized(() {
-      return items.sorted((a, b) => a.date.compareTo(b.date));
-    }, [items]);
 
     final valueSortedItems = useMemoized(() {
       return items.sorted((a, b) => a.value.compareTo(b.value));
     }, [items]);
 
     final spots = useMemoized(() {
-      return dateSortedItems
-          .mapIndexed((i, e) => FlSpot(i.toDouble(), e.value))
-          .toList();
-    }, [dateSortedItems]);
+      return items.mapIndexed((i, e) => FlSpot(i.toDouble(), e.value)).toList();
+    }, [items]);
     final minY = useMemoized(() {
       if (valueSortedItems.isEmpty) return 0.0;
 
@@ -52,8 +29,8 @@ class DateChart extends HookWidget {
     }, [valueSortedItems]);
 
     final maxX = useMemoized(() {
-      return dateSortedItems.length.toDouble();
-    }, [dateSortedItems]);
+      return items.length.toDouble();
+    }, [items]);
 
     final lineBarsData = useMemoized(() {
       return [
@@ -162,7 +139,7 @@ class DateChart extends HookWidget {
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 30,
+                  reservedSize: 60,
                   interval: 1,
                   getTitlesWidget: (value, meta) {
                     return SideTitleWidget(
@@ -170,11 +147,15 @@ class DateChart extends HookWidget {
                       child:
                           value == spots.length || value == -1
                               ? Container()
-                              : Text(
-                                _dateFormat.format(
-                                  dateSortedItems[value.toInt()].date,
+                              : Transform.rotate(
+                                angle: -math.pi / 3,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    items[value.toInt()].interval,
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
                                 ),
-                                style: const TextStyle(fontSize: 12),
                               ),
                     );
                   },

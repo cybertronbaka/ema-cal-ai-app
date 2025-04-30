@@ -8,6 +8,7 @@ import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
 import 'package:ema_cal_ai/app/colors.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/models/chart_data.dart';
 import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
 import 'package:ema_cal_ai/utils/hooks/video_player_controller.dart';
 import 'package:fl_chart/fl_chart.dart';

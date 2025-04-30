@@ -3,7 +3,6 @@ library;
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/overview_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
-import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/hooks/init_hook.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
@@ -30,7 +29,7 @@ class OverviewPage extends ConsumerWidget {
             _WeightGoalSection(),
             _LogWeightSection(),
             _BMICard(),
-            // _WeightProgressSection(),
+            _WeightProgressSection(),
             // Todo: Need to Add graphs (Weight Graphs)
             // For weight graphs. (Need to add by day.(Get one by day and save that.
             // If updated on the same day, just update the history of that day. Otherwise, add))
