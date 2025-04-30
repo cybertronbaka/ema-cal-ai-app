@@ -32,6 +32,7 @@ class OverviewPage extends ConsumerWidget {
             _BMICard(),
             _WeightProgressSection(),
             _CaloriesProgressSection(),
+            SizedBox(height: 40),
           ],
         ),
       ),
