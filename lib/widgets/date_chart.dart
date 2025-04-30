@@ -19,7 +19,7 @@ class DateChart extends HookWidget {
     final minY = useMemoized(() {
       if (valueSortedItems.isEmpty) return 0.0;
 
-      return valueSortedItems.first.value;
+      return valueSortedItems.first.value - 1;
     }, [valueSortedItems]);
 
     final maxY = useMemoized(() {
