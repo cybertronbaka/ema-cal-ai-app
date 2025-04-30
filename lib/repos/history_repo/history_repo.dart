@@ -22,10 +22,11 @@ abstract class HistoryRepo {
   });
   Future<History> saveWeight(double weight);
   Future<History> saveHeight(double height);
-
+  Future<History> addCalorie(double calories);
   Future<List<ChartData>> getChartData({
     required HistoryType type,
     required HistoryFilter filter,
+    AggregateType aggregateType = AggregateType.avg,
   });
   Future<void> clear();
 }
@@ -62,14 +63,17 @@ class LocalHistoryRepo extends HistoryRepo {
         (other.isAfter(startOfDay) && other.isBefore(endOfDay));
   }
 
-  Future<History> _upsert(HistoryType type, double value) async {
-    if (![HistoryType.weight, HistoryType.height].contains(type)) {
-      throw 'Cannot upsert for $type';
-    }
+  Future<History> _upsert(
+    HistoryType type,
+    double value, {
+    double Function(DbHistory? existing)? newValue,
+  }) async {
+    final existing = await _getTodaysHistory(type);
 
-    final existing = await _getTodaysHistory(HistoryType.weight);
-
-    final history = History(type: type, value: value);
+    final history = History(
+      type: type,
+      value: newValue?.call(existing) ?? value,
+    );
 
     if (existing != null) {
       return _update(existing, history);
@@ -89,7 +93,7 @@ class LocalHistoryRepo extends HistoryRepo {
   }
 
   Future<History> _update(DbHistory existing, History history) async {
-    // print('Updating History of ${existing.id.toInt()}');
+    print('Updating History of ${existing.id.toInt()}');
     final now = clock.now();
     final companion = DbHistoriesCompanion(
       id: existing.id.toDbValue(),
@@ -114,7 +118,7 @@ class LocalHistoryRepo extends HistoryRepo {
   }
 
   Future<History> _insert(History history) async {
-    // print('Inserting History');
+    print('Inserting History');
     final now = clock.now();
     final companion = DbHistoriesCompanion.insert(
       type: history.type,
@@ -141,6 +145,7 @@ class LocalHistoryRepo extends HistoryRepo {
   Future<List<ChartData>> getChartData({
     required HistoryType type,
     required HistoryFilter filter,
+    AggregateType aggregateType = AggregateType.avg,
   }) {
     final startDate = _getStartDate(filter).toUtc();
     final localTime = startDate.toIso8601String();
@@ -151,6 +156,11 @@ class LocalHistoryRepo extends HistoryRepo {
       HistoryFilter.last3Months => '%Y-%m',
       HistoryFilter.thisMonth => '%Y-%m-%W',
       HistoryFilter.last6Months => '%Y-%m',
+    };
+
+    final aggregateFunc = switch (aggregateType) {
+      AggregateType.avg => 'AVG',
+      AggregateType.sum => 'SUM',
     };
 
     return database
@@ -171,7 +181,7 @@ class LocalHistoryRepo extends HistoryRepo {
           ELSE
             strftime('%Y/%m/%d', datetime(created_at, 'localtime'))
         END AS interval,
-        AVG(value) AS value
+        $aggregateFunc(value) AS value
       FROM filtered, counts
       GROUP BY interval
       ORDER BY created_at
@@ -254,6 +264,15 @@ class LocalHistoryRepo extends HistoryRepo {
     }
 
     return History.fromDB(result);
+  }
+
+  @override
+  Future<History> addCalorie(double calories) async {
+    return _upsert(
+      HistoryType.calories,
+      calories,
+      newValue: (existing) => calories + (existing?.value ?? 0),
+    );
   }
 }
 

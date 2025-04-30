@@ -43,7 +43,11 @@ class OverviewController {
       caloriesFilters.values.map((filter) async {
         final data = await ref
             .read(historyRepoProvider)
-            .getChartData(type: HistoryType.calories, filter: filter);
+            .getChartData(
+              type: HistoryType.calories,
+              filter: filter,
+              aggregateType: AggregateType.sum,
+            );
 
         ref.read(caloriesChartDataProvider(filter).notifier).state = data;
       }),

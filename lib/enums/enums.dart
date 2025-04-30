@@ -12,3 +12,4 @@ part 'onboarding_step.dart';
 part 'workout_frequency.dart';
 part 'bmi_category.dart';
 part 'history_filter.dart';
+part 'aggregate_type.dart';

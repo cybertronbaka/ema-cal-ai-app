@@ -5,13 +5,14 @@ class _CaloriesProgressSection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final collectMealData = ref.watch(collectiveMealDataTodayProvider);
     final controller = ref.watch(overviewControllerProvider);
     final tabs = controller.caloriesFilters.keys.toList();
     final textTheme = TextTheme.of(context);
 
     useInitHook(() {
       controller.initCaloriesHistories();
-    }, []);
+    }, [collectMealData?.calories]);
 
     return DefaultTabController(
       length: tabs.length,

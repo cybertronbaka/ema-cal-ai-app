@@ -42,6 +42,7 @@ void main() {
 
     registerFallbackValue(HistoryFilter.allTime);
     registerFallbackValue(HistoryType.weight);
+    registerFallbackValue(AggregateType.avg);
 
     final profile = genFakeUserProfile(isOnboardingComplete: true);
     when(() => profileRepo.get()).thenAnswerWithValue(profile);
@@ -62,6 +63,7 @@ void main() {
       () => historyRepo.getChartData(
         type: any(named: 'type'),
         filter: any(named: 'filter'),
+        aggregateType: any(named: 'aggregateType'),
       ),
     ).thenAnswer((inv) async {
       final filter = inv.namedArguments[#filter] as HistoryFilter;

@@ -4,9 +4,9 @@ import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/nav_data/add_meal_data_page_data.dart';
 import 'package:ema_cal_ai/repos/gpt_meal_data/gpt_meal_data_repo.dart';
-import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/streaks_repo/streaks_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/app_initializer.dart';
 import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:ema_cal_ai/utils/image_compressor.dart';
 import 'package:ema_cal_ai/utils/image_picker.dart';
@@ -41,16 +41,7 @@ class HomeController {
 
   Future<void> getTodaysMealData() async {
     try {
-      final data = await ref.read(mealDataRepoProvider).today();
-      ref.read(mealDataTodayProvider.notifier).state = data;
-
-      if (data.isEmpty) return;
-
-      MealDataSum sum = const MealDataSum.zero();
-      for (var e in data) {
-        sum = sum + e;
-      }
-      ref.read(collectiveMealDataTodayProvider.notifier).state = sum;
+      await AppInitializer(ref.container).setTodaysMealDataIfExists();
     } catch (e, st) {
       debugPrint('$e\n$st');
     }
@@ -58,8 +49,15 @@ class HomeController {
 
   Future<void> getThisWeekMealData() async {
     try {
-      final data = await ref.read(mealDataRepoProvider).thisWeek();
-      ref.read(thisWeekMealDataProvider.notifier).state = data;
+      await AppInitializer(ref.container).setThisWeekMealDataIfExists();
+    } catch (e, st) {
+      debugPrint('$e\n$st');
+    }
+  }
+
+  Future<void> getRecentMealData() async {
+    try {
+      await AppInitializer(ref.container).setRecentMealDataIfExists();
     } catch (e, st) {
       debugPrint('$e\n$st');
     }
@@ -131,6 +129,7 @@ class HomeController {
         if (shouldAdd != null && shouldAdd is bool && shouldAdd) {
           await getTodaysMealData();
           await getThisWeekMealData();
+          await getRecentMealData();
           await addStreak();
         }
       },
