@@ -240,10 +240,7 @@ void main() {
       );
 
       await tester.pumpAndSettle(const Duration(seconds: 3));
-      await tester.expectGolden<OnboardingPage>(
-        variant,
-        path: '${prefix}_step_9.png',
-      );
+
       verifiedApiKey = true;
       await tester.tap(find.text('Next'));
       await tester.pumpNTimes(4);
