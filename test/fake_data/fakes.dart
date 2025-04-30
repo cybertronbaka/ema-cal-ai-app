@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/chart_data.dart';
+import 'package:ema_cal_ai/models/history.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
@@ -168,4 +169,18 @@ List<ChartData> genChartData(
   }
 
   return list;
+}
+
+History genFakeHistory({
+  int? id,
+  HistoryType? type,
+  double? value,
+  DateTime? createdAt,
+}) {
+  return History(
+    id: id,
+    type: type ?? HistoryType.weight,
+    value: value ?? 50.0,
+    createdAt: createdAt ?? clock.now(),
+  );
 }
