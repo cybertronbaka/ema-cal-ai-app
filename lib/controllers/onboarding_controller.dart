@@ -10,10 +10,12 @@ import 'package:ema_cal_ai/models/onboarding_data.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -138,17 +140,27 @@ class OnboardingController {
 
     FocusManager.instance.primaryFocus?.unfocus();
 
-    await ref.read(nutritionPlanRepoProvider).save(nutritionPlan!);
-    ref.read(currentNutritionPlanProvider.notifier).state = nutritionPlan;
+    await FutureRunner(
+      context: context,
+      onDone: (_) {
+        if (context.mounted) {
+          context.pushReplacementNamed(Routes.onboardingCompleteOverview.name);
+        }
+      },
+    ).run(() async {
+      var newPlan = await ref
+          .read(nutritionPlanRepoProvider)
+          .save(nutritionPlan!);
+      ref.read(currentNutritionPlanProvider.notifier).state = newPlan;
 
-    final newProfile = profile.copyWith(isOnboardingComplete: true);
-    await ref.read(profileRepoProvider).save(newProfile);
-    ref.read(userProfileProvider.notifier).state = newProfile;
-    clearData();
-
-    if (context.mounted) {
-      context.pushReplacementNamed(Routes.onboardingCompleteOverview.name);
-    }
+      var newProfile = profile.copyWith(isOnboardingComplete: true);
+      newProfile = await ref.read(profileRepoProvider).save(newProfile);
+      ref.read(userProfileProvider.notifier).state = newProfile;
+      await ref.read(historyRepoProvider).saveWeight(newProfile.weight.kg);
+      await ref.read(historyRepoProvider).saveHeight(newProfile.height.cm);
+      clearData();
+      return null;
+    });
   }
 
   void moveToNextStep(BuildContext context, TabController tabController) {

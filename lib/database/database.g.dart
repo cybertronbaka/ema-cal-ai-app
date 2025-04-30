@@ -4134,6 +4134,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     dbStreakRecords,
     dbHistories,
   ];
+  @override
+  DriftDatabaseOptions get options =>
+      const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
 typedef $$DbUserProfilesTableCreateCompanionBuilder =

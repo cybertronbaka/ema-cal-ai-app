@@ -27,6 +27,7 @@ void main() {
   late MockMealDataRepo mealDataRepo;
   late MockNutritionPlanRepo nutritionPlanRepo;
   late MockMealTimeRemindersRepo mealTimeRemindersRepo;
+  late MockHistoryRepo historyRepo;
   late PackageInfo packageInfo;
   final time = DateTime(2025, 04, 02, 10, 10);
   final reminders = genFakeMealTimeReminders();
@@ -38,13 +39,13 @@ void main() {
     mealDataRepo = MockMealDataRepo();
     nutritionPlanRepo = MockNutritionPlanRepo();
     mealTimeRemindersRepo = MockMealTimeRemindersRepo();
+    historyRepo = MockHistoryRepo();
     packageInfo = genFakePackageInfo();
 
+    final profile = genFakeUserProfile(isOnboardingComplete: true);
     registerFallbackValue(reminders);
 
-    when(
-      () => profileRepo.get(),
-    ).thenAnswerWithValue(genFakeUserProfile(isOnboardingComplete: true));
+    when(() => profileRepo.get()).thenAnswerWithValue(profile);
 
     when(
       () => nutritionPlanRepo.get(),
@@ -61,6 +62,9 @@ void main() {
     when(() => mealDataRepo.today()).thenAnswerWithValue([]);
     when(() => mealDataRepo.thisWeek()).thenAnswerWithValue([]);
     when(() => mealDataRepo.lastNData(any())).thenAnswerWithValue([]);
+    when(
+      () => historyRepo.getLatestWeight(),
+    ).thenAnswerWithValue(genFakeHistory(value: profile.weight.kg));
   });
 
   testAdaptiveWidgets('Edit Meal Time Reminders Page Golden', (
@@ -79,6 +83,7 @@ void main() {
             profileRepo: profileRepo,
             nutritionPlanRepo: nutritionPlanRepo,
             mealTimeRemindersRepo: mealTimeRemindersRepo,
+            historyRepo: historyRepo,
             packageInfo: packageInfo,
             extraOverrides: [
               userProfileProvider.overrideWith((_) => genFakeUserProfile()),

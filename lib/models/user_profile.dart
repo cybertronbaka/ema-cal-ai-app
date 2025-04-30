@@ -45,7 +45,7 @@ class UserProfile {
 
   DbUserProfile toDB() {
     return DbUserProfile(
-      id: -1.toBigInt(),
+      id: id?.toBigInt() ?? -1.toBigInt(),
       dob: dob,
       gender: gender,
       workoutFrequency: workoutFrequency,

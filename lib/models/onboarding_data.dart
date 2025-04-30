@@ -59,7 +59,7 @@ class OnboardingData {
 
   DbOnboardingData toDB() {
     return DbOnboardingData(
-      id: -1.toBigInt(),
+      id: id?.toBigInt() ?? -1.toBigInt(),
       currentStep: currentStep,
       dob: dob,
       gender: gender,

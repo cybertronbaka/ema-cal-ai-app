@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:ema_cal_ai/models/meal_data.dart';
+import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/repos/meal_time_reminders_repo/meal_time_reminders_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
@@ -18,13 +20,16 @@ class AppInitializer {
   Future<void> init({
     VoidCallback? afterInitializingUserData,
     VoidCallback? onNoUser,
+    // Only used in dev when I have to clear stuff
+    bool clearAll = false,
   }) async {
     // Only used in dev when I have to clear stuff
-    // await _clearAll(container);
+    if (clearAll) await _clearAll();
     final profile = await setCurrentProfileIfExists();
     if (profile != null && profile.isOnboardingComplete) {
       // await _saveWeightHistory(container);
       await Future.wait([
+        setCurrentWeight(profile),
         setPackageInfo(),
         setNutritionPlanIfExists(),
         validateAndSetStreaks(),
@@ -46,50 +51,50 @@ class AppInitializer {
   }
 
   // Only used in dev when I have to clear stuff
-  // Future<void> _clearAll(WidgetRef ref) async {
-  //   await ref.read(profileRepoProvider).clear();
-  //   await ref.read(nutritionPlanRepoProvider).clear();
-  //   await ref.read(streaksRepoProvider).clear();
-  //   await ref.read(onboardingSaveRepoProvider).clear();
-  //   await ref.read(mealDataRepoProvider).clear();
-  // }
+  Future<void> _clearAll() async {
+    await container.read(profileRepoProvider).clear();
+    await container.read(nutritionPlanRepoProvider).clear();
+    await container.read(streaksRepoProvider).clear();
+    await container.read(onboardingSaveRepoProvider).clear();
+    await container.read(mealDataRepoProvider).clear();
+    await container.read(historyRepoProvider).clear();
+  }
 
-  // Future<UserProfile?> _saveWeightHistory(WidgetRef ref) async {
-  //   // await ref.read(historyRepoProvider).clear();
-  //   await ref
-  //       .read(historyRepoProvider)
-  //       .save(
-  //         History(
-  //           type: HistoryType.weight,
-  //           value: 83,
-  //           createdAt: DateTime.now(),
-  //         ),
-  //       );
-  // }
+  Future<void> setCurrentWeight(UserProfile profile) async {
+    final weightInKg =
+        await container.read(historyRepoProvider).getLatestWeight();
+    container.read(currentWeightProvider.notifier).state = UnitWeight.fromKg(
+      weightInKg.value,
+      profile.isMetric,
+    );
+  }
 
   Future<void> setMealDataIfExists() async {
     await Future.wait([
-      Future(() async {
-        final today = await container.read(mealDataRepoProvider).today();
-        container.read(mealDataTodayProvider.notifier).state = today;
-        var sum = const MealDataSum.zero();
-        for (var data in today) {
-          sum += data;
-        }
-        container.read(collectiveMealDataTodayProvider.notifier).state = sum;
-      }),
-
-      Future(() async {
-        final thisWeek = await container.read(mealDataRepoProvider).thisWeek();
-        container.read(thisWeekMealDataProvider.notifier).state = thisWeek;
-      }),
-      Future(() async {
-        final recentData = await container
-            .read(mealDataRepoProvider)
-            .lastNData(5);
-        container.read(recentMealDataProvider.notifier).state = recentData;
-      }),
+      setTodaysMealDataIfExists(),
+      setThisWeekMealDataIfExists(),
+      setRecentMealDataIfExists(),
     ]);
+  }
+
+  Future<void> setRecentMealDataIfExists() async {
+    final recentData = await container.read(mealDataRepoProvider).lastNData(5);
+    container.read(recentMealDataProvider.notifier).state = recentData;
+  }
+
+  Future<void> setThisWeekMealDataIfExists() async {
+    final thisWeek = await container.read(mealDataRepoProvider).thisWeek();
+    container.read(thisWeekMealDataProvider.notifier).state = thisWeek;
+  }
+
+  Future<void> setTodaysMealDataIfExists() async {
+    final today = await container.read(mealDataRepoProvider).today();
+    container.read(mealDataTodayProvider.notifier).state = today;
+    var sum = const MealDataSum.zero();
+    for (var data in today) {
+      sum += data;
+    }
+    container.read(collectiveMealDataTodayProvider.notifier).state = sum;
   }
 
   Future<UserProfile?> setCurrentProfileIfExists() async {

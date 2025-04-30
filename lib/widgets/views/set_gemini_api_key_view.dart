@@ -2,7 +2,6 @@ import 'package:ema_cal_ai/controllers/set_gpt_api_key_controller.dart';
 import 'package:ema_cal_ai/utils/hooks/form_group.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -34,7 +33,6 @@ class SetGeminiApiKeyView extends HookConsumerWidget {
         'api_key': [initialValue ?? '', Validators.required],
       },
     );
-    final btnIsStale = useState(true);
 
     return ReactiveForm(
       formGroup: formGroup,
@@ -71,9 +69,8 @@ class SetGeminiApiKeyView extends HookConsumerWidget {
                               style: const TextStyle(fontSize: 14),
                             ),
 
-                          SensitiveField(
+                          const SensitiveField(
                             formControlName: 'api_key',
-                            readOnly: !btnIsStale.value,
                             hintText: 'Enter your Gemini API Key',
                           ),
                           const Text(
@@ -97,28 +94,21 @@ class SetGeminiApiKeyView extends HookConsumerWidget {
               width: double.infinity,
               child: ReactiveFormConsumer(
                 builder: (context, fg, _) {
-                  return CustomFilledButton(
-                    enabled: fg.valid && btnIsStale.value,
+                  return FutureCustomFilledButton(
+                    enabled: fg.valid,
                     onPressed: () async {
-                      if (fg.invalid || !btnIsStale.value) return;
-
-                      btnIsStale.value = false;
+                      if (fg.invalid) return;
 
                       final value =
                           (fg.control('api_key').value as String).trim();
 
-                      final verified = await controller.verifyApiKey(
+                      await controller.verifyApiKey(
                         context,
                         value,
+                        onVerified: () {
+                          onBtnPressed?.call(value);
+                        },
                       );
-
-                      if (!verified) {
-                        btnIsStale.value = true;
-                        return;
-                      }
-
-                      onBtnPressed?.call(value);
-                      btnIsStale.value = true;
                     },
                     label: btnLabel,
                   );

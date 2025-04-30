@@ -13,7 +13,14 @@ class OverviewController {
   Ref ref;
 
   final weightFilters = {
-    '3 mths': HistoryFilter.last3Months,
+    '1 mth': HistoryFilter.thisMonth,
+    '6 mths': HistoryFilter.last6Months,
+    '1 yr': HistoryFilter.last1Year,
+    'All': HistoryFilter.allTime,
+  };
+
+  final caloriesFilters = {
+    '1 mth': HistoryFilter.thisMonth,
     '6 mths': HistoryFilter.last6Months,
     '1 yr': HistoryFilter.last1Year,
     'All': HistoryFilter.allTime,
@@ -24,8 +31,25 @@ class OverviewController {
       weightFilters.values.map((filter) async {
         final data = await ref
             .read(historyRepoProvider)
-            .getFilteredHistory(type: HistoryType.weight, filter: filter);
-        ref.read(weightHistoryProvider(filter).notifier).state = data;
+            .getChartData(type: HistoryType.weight, filter: filter);
+
+        ref.read(weightChartDataProvider(filter).notifier).state = data;
+      }),
+    );
+  }
+
+  Future<void> initCaloriesHistories() async {
+    await Future.wait(
+      caloriesFilters.values.map((filter) async {
+        final data = await ref
+            .read(historyRepoProvider)
+            .getChartData(
+              type: HistoryType.calories,
+              filter: filter,
+              aggregateType: AggregateType.sum,
+            );
+
+        ref.read(caloriesChartDataProvider(filter).notifier).state = data;
       }),
     );
   }

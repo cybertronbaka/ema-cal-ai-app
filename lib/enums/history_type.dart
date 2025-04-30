@@ -1,3 +1,3 @@
 part of 'enums.dart';
 
-enum HistoryType { weight, calories }
+enum HistoryType { weight, calories, height }

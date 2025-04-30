@@ -1,5 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/models/chart_data.dart';
+import 'package:ema_cal_ai/models/history.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
@@ -7,6 +9,7 @@ import 'package:ema_cal_ai/models/onboarding_data.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 NutritionPlan genFakeNutritionPlan({
@@ -123,5 +126,61 @@ PackageInfo genFakePackageInfo() {
     packageName: 'com.emacalai',
     version: '1.0.0',
     buildNumber: '',
+  );
+}
+
+List<ChartData> genChartData(
+  int n,
+  HistoryFilter filter, {
+  String Function(int)? interval,
+  double Function(int)? value,
+}) {
+  List<ChartData> list = [];
+  final startDate = DateTime(2025, 01, 01);
+  const startValue = 80.0;
+  for (var i = 0; i < n; i++) {
+    String? intervalText = interval?.call(i);
+    if (intervalText == null) {
+      final date = startDate.subtract(Duration(days: i));
+      if (n > 7) {
+        intervalText = switch (filter) {
+          HistoryFilter.allTime => DateFormat('yyyy').format(date),
+          HistoryFilter.last1Year ||
+          HistoryFilter.last3Months ||
+          HistoryFilter.last6Months => DateFormat('MMM yyyy').format(date),
+          HistoryFilter.thisMonth => DateFormat('MMM dd').format(date),
+        };
+      } else {
+        intervalText = DateFormat('MMM dd').format(date);
+      }
+    }
+
+    double? realValue = value?.call(i);
+    if (realValue == null) {
+      final val = startValue - (0.5 * i);
+      if (val <= 30) {
+        realValue = 30;
+      } else {
+        realValue = val;
+      }
+    }
+
+    list.add(ChartData(interval: intervalText, value: realValue));
+  }
+
+  return list;
+}
+
+History genFakeHistory({
+  int? id,
+  HistoryType? type,
+  double? value,
+  DateTime? createdAt,
+}) {
+  return History(
+    id: id,
+    type: type ?? HistoryType.weight,
+    value: value ?? 50.0,
+    createdAt: createdAt ?? clock.now(),
   );
 }

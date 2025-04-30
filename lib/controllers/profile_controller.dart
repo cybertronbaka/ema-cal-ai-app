@@ -2,6 +2,7 @@ import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
 import 'package:ema_cal_ai/utils/future_runner.dart';
@@ -35,6 +36,28 @@ class ProfileController {
     await _setProfile(
       context,
       profile.copyWith(weight: weight, height: height, isMetric: isMetric),
+      otherTask: () async {
+        if (weight.kg != profile.weight.kg) {
+          await ref.read(historyRepoProvider).saveWeight(weight.kg);
+        }
+
+        if (height.cm != profile.height.cm) {
+          await ref.read(historyRepoProvider).saveHeight(height.cm);
+        }
+      },
+    );
+  }
+
+  Future<void> setWeight(BuildContext context, UnitWeight weight) async {
+    final profile = ref.read(userProfileProvider)!;
+    await _setProfile(
+      context,
+      profile.copyWith(weight: weight),
+      otherTask: () async {
+        if (weight.kg != profile.weight.kg) {
+          await ref.read(historyRepoProvider).saveWeight(weight.kg);
+        }
+      },
     );
   }
 
@@ -66,13 +89,18 @@ class ProfileController {
     await _setProfile(context, profile.copyWith(gptApiKey: apiKey));
   }
 
-  Future<void> _setProfile(BuildContext context, UserProfile newProfile) async {
+  Future<void> _setProfile(
+    BuildContext context,
+    UserProfile newProfile, {
+    Future<void> Function()? otherTask,
+  }) async {
     final runner = FutureRunner(context: context, showOverlay: false);
 
     await runner.run(() async {
       final response = await ref.read(profileRepoProvider).save(newProfile);
 
       ref.read(userProfileProvider.notifier).state = response;
+      await otherTask?.call();
     });
   }
 }

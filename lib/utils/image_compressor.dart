@@ -1,6 +1,7 @@
 import 'dart:isolate';
 import 'dart:math' as math;
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -10,7 +11,7 @@ abstract class ImageCompressor {
   static Future<Uint8List> compressXFile(XFile file) async {
     final imageData = await file.readAsBytes();
     final sendPort = await _spawnIsolate();
-    final start = DateTime.now();
+    final start = clock.now();
     final compressed = await _compress(
       imageData: imageData,
       sendPort: sendPort,
@@ -18,7 +19,7 @@ abstract class ImageCompressor {
       minWidth: 800,
     );
     debugPrint(
-      'Compressing image took ${DateTime.now().millisecondsSinceEpoch - start.millisecondsSinceEpoch} ms',
+      'Compressing image took ${clock.now().millisecondsSinceEpoch - start.millisecondsSinceEpoch} ms',
     );
     return compressed;
   }

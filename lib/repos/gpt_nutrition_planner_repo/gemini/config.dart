@@ -2,7 +2,7 @@ part of '../nutrition_planner_repo.dart';
 
 final _responseSchema = Schema.object(
   nullable: false,
-  requiredProperties: ['goal', 'timeframe_in_weeks', 'notes', 'bmi_index'],
+  requiredProperties: ['goal', 'timeframe_in_weeks', 'notes'],
   properties: {
     'goal': Schema.object(
       nullable: false,
@@ -25,7 +25,6 @@ final _responseSchema = Schema.object(
       description: 'Estimated timeframe to achieve the goal. (Ceil if float)',
       nullable: false,
     ),
-    'bmi_index': Schema.number(nullable: false),
     'notes': Schema.object(
       requiredProperties: ['gym_advice', 'medical_advice', 'warnings'],
       properties: {

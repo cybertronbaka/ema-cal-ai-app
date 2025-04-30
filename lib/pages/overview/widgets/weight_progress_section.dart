@@ -1,45 +1,31 @@
 part of '../overview_page.dart';
 
-// Todo: Figure out how to handle edge cases like:
-// 1: for all time (if there are only 1 - 14 data points)
-// 2: if(there are more than 14 months but time difference is too low)
-// and such
-// ignore: unused_element
 class _WeightProgressSection extends HookConsumerWidget {
   const _WeightProgressSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(userProfileProvider)!;
     final controller = ref.watch(overviewControllerProvider);
     final tabs = controller.weightFilters.keys.toList();
-    // final threeMonthsHistory = ref.watch(
-    //   weightHistoryProvider(HistoryFilter.last3Months),
-    // );
-    // final sixMonthsHistory = ref.watch(
-    //   weightHistoryProvider(HistoryFilter.last6Months),
-    // );
-    // final oneYearHistory = ref.watch(
-    //   weightHistoryProvider(HistoryFilter.last1Year),
-    // );
-    // final allTimeHistory = ref.watch(
-    //   weightHistoryProvider(HistoryFilter.allTime),
-    // );
+    final textTheme = TextTheme.of(context);
 
     useInitHook(() {
       controller.initWeightHistories();
-    }, []);
+    }, [profile.weight]);
 
     return DefaultTabController(
       length: tabs.length,
       child: Column(
         spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CustomTabBar(tabs: tabs),
+          _buildWithPadding(
+            Text('Weight over time', style: textTheme.titleSmall),
           ),
+          _buildWithPadding(CustomTabBar(tabs: tabs)),
           SizedBox(
-            height: 200,
+            height: 300,
             child: TabBarView(
               children: [
                 for (var filter in controller.weightFilters.values)
@@ -52,42 +38,16 @@ class _WeightProgressSection extends HookConsumerWidget {
     );
   }
 
-  Widget _buildChartForFilter(WidgetRef ref, HistoryFilter filter) {
-    final data = ref.watch(weightHistoryProvider(filter));
-
+  Widget _buildWithPadding(Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: DateChart(
-        dateType: switch (filter) {
-          HistoryFilter.thisMonth => ChartDateType.months,
-          HistoryFilter.last3Months => ChartDateType.months,
-          HistoryFilter.last6Months => ChartDateType.months,
-          HistoryFilter.last1Year => ChartDateType.years,
-          HistoryFilter.allTime => ChartDateType.years,
-        },
-        // items: [
-        //   DateChartItem(date: clock.now(), value: 83),
-        //   DateChartItem(
-        //     date: clock.now().subtract(const Duration(days: 1)),
-        //     value: 84,
-        //   ),
-        //   DateChartItem(
-        //     date: clock.now().subtract(const Duration(days: 2)),
-        //     value: 86,
-        //   ),
-        //   DateChartItem(
-        //     date: clock.now().subtract(const Duration(days: 3)),
-        //     value: 88,
-        //   ),
-        // ],
-        items:
-            data.map((history) {
-              return DateChartItem(
-                date: history.createdAt,
-                value: history.value,
-              );
-            }).toList(),
-      ),
+      child: child,
     );
+  }
+
+  Widget _buildChartForFilter(WidgetRef ref, HistoryFilter filter) {
+    final data = ref.watch(weightChartDataProvider(filter));
+
+    return _buildWithPadding(DateChart(items: data));
   }
 }

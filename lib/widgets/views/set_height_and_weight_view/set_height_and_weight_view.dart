@@ -1,5 +1,6 @@
 library;
 
+import 'package:ema_cal_ai/config/app_config.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/widgets/widgets.dart';
@@ -7,12 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 part 'widget/unit_switcher.dart';
-
-const _cmRange = (60, 250);
-const _kgRange = (20, 400);
-const _feetRange = (1, 9);
-const _inchesRange = (0, 11);
-const _lbsRange = (40, 800);
 
 class SetHeightAndWeightView extends HookWidget {
   const SetHeightAndWeightView({
@@ -159,24 +154,24 @@ class _MetricHeightAndWeightPicker extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appConfig = AppConfig();
+
     return _PickersLayout(
       heightSide: WheelPicker(
-        min: _cmRange.$1,
-        max: _cmRange.$2,
+        min: appConfig.heightCmRange.start,
+        max: appConfig.heightCmRange.end,
         initialValue: initialHeight.cm.toInt(),
         onValueChanged: (value) {
           heightNotifier.value = MetricLength(value.toDouble());
         },
         builder: (context, value) => Text('$value cm'),
       ),
-      weightSide: WheelPicker(
-        min: _kgRange.$1,
-        max: _kgRange.$2,
-        initialValue: initialWeight.kg.toInt(),
+      weightSide: WeightPicker(
+        isMetric: true,
+        initialWeight: initialWeight,
         onValueChanged: (value) {
-          weightNotifier.value = MetricWeight(value.toDouble());
+          weightNotifier.value = value;
         },
-        builder: (context, value) => Text('$value kg'),
       ),
     );
   }
@@ -198,15 +193,16 @@ class _ImperialHeightAndWeightPicker extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appConfig = AppConfig();
     final feetController = useWheelPickerController(
-      min: _feetRange.$1,
-      max: _feetRange.$2,
+      min: appConfig.heightFeetRange.start,
+      max: appConfig.heightFeetRange.end,
       initialValue: initialHeight.feet.toInt(),
     );
 
     final inchesController = useWheelPickerController(
-      min: _inchesRange.$1,
-      max: _inchesRange.$2,
+      min: appConfig.heightInchesRange.start,
+      max: appConfig.heightInchesRange.end,
       initialValue: initialHeight.inches.toInt(),
     );
 
@@ -239,11 +235,12 @@ class _ImperialHeightAndWeightPicker extends HookWidget {
           ),
         ],
       ),
-      weightSide: WheelPicker(
-        min: _lbsRange.$1,
-        max: _lbsRange.$2,
-        initialValue: initialWeight.lbs.toInt(),
-        builder: (context, value) => Text('$value lb'),
+      weightSide: WeightPicker(
+        initialWeight: initialWeight,
+        isMetric: false,
+        onValueChanged: (value) {
+          weightNotifier.value = value;
+        },
       ),
     );
   }

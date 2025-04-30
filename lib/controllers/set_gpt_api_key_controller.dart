@@ -1,5 +1,6 @@
 import 'package:ema_cal_ai/repos/gpt_api_key_verify_repo/gpt_api_key_verify_repo.dart';
 import 'package:ema_cal_ai/states/states.dart';
+import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:ema_cal_ai/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,17 +14,40 @@ class SetGptApiKeyController {
 
   Ref ref;
 
-  Future<bool> verifyApiKey(BuildContext context, String apiKey) async {
-    final verified = await ref.read(gptApiKeyVerifyRepoProvider).verify(apiKey);
-    if (verified) {
-      ref.read(gptApiKeyProvider.notifier).state = apiKey;
-      return true;
-    }
+  Future<void> verifyApiKey(
+    BuildContext context,
+    String apiKey, {
+    void Function()? onVerified,
+  }) async {
+    await FutureRunner<(bool, String?)>(
+      context: context,
+      onDone: (result) {
+        final (verified, error) = result;
 
-    if (context.mounted) {
-      CustomSnackBar.showErrorNotification(context, 'API Key does\'nt work');
-    }
+        if (error != null) {
+          if (context.mounted) {
+            showError(context, error);
+          }
+          return;
+        }
 
-    return false;
+        if (verified) {
+          ref.read(gptApiKeyProvider.notifier).state = apiKey;
+          onVerified?.call();
+          return;
+        }
+
+        if (context.mounted) {
+          showError(context, 'API Key does\'nt work');
+        }
+        return;
+      },
+    ).run(() async {
+      return ref.read(gptApiKeyVerifyRepoProvider).verify(apiKey);
+    });
+  }
+
+  void showError(BuildContext context, String message) {
+    CustomSnackBar.showErrorNotification(context, message);
   }
 }

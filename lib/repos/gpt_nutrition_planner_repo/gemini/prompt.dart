@@ -42,7 +42,6 @@ Return JSON without markdown:
 {
   "goal": {"calories": number, ...},
   "timeframe_weeks": number,
-  "bmi_index": number,
   "notes": {
     "gym_advice": "[Fitness tips: e.g., resistance training frequency, protein timing]",
     "medical_advice": "[Health precautions: e.g., monitor energy levels, consult a doctor]", 

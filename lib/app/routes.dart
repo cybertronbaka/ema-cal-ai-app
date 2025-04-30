@@ -145,4 +145,9 @@ abstract class Routes {
     name: 'overview',
     path: ([args]) => '/overview',
   );
+
+  static final CustomRoute logWeight = CustomRoute(
+    name: 'logWeight',
+    path: ([_]) => '/overview/logWeight',
+  );
 }

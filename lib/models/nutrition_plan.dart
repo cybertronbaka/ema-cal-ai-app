@@ -51,7 +51,7 @@ class NutritionPlan {
 
   DbNutritionPlan toDB() {
     return DbNutritionPlan(
-      id: -1.toBigInt(),
+      id: id?.toBigInt() ?? -1.toBigInt(),
       calories: goal.calories,
       proteinG: goal.proteinG,
       carbsG: goal.carbsG,

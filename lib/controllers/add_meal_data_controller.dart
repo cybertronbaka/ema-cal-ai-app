@@ -1,5 +1,6 @@
 import 'package:ema_cal_ai/enums/enums.dart';
 import 'package:ema_cal_ai/models/meal_data.dart';
+import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/repos/meal_data/meal_data_repo.dart';
 import 'package:ema_cal_ai/utils/future_runner.dart';
 import 'package:ema_cal_ai/widgets/dialogs/dialogs.dart';
@@ -44,6 +45,7 @@ class AddMealDataController {
       },
     ).run(() async {
       await ref.read(mealDataRepoProvider).add(data.value);
+      await ref.read(historyRepoProvider).addCalorie(data.value.calories);
       return null;
     });
   }
