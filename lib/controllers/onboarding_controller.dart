@@ -4,12 +4,14 @@ import 'package:clock/clock.dart';
 import 'package:ema_cal_ai/app/routes.dart';
 import 'package:ema_cal_ai/controllers/nutrition_planner_controller.dart';
 import 'package:ema_cal_ai/enums/enums.dart';
+import 'package:ema_cal_ai/models/history.dart';
 import 'package:ema_cal_ai/models/meal_time_reminder.dart';
 import 'package:ema_cal_ai/models/nutrition_plan.dart';
 import 'package:ema_cal_ai/models/onboarding_data.dart';
 import 'package:ema_cal_ai/models/unit_length.dart';
 import 'package:ema_cal_ai/models/unit_weight.dart';
 import 'package:ema_cal_ai/models/user_profile.dart';
+import 'package:ema_cal_ai/repos/history_repo/history_repo.dart';
 import 'package:ema_cal_ai/repos/nutrition_plan_repo/nutrition_plan_repo.dart';
 import 'package:ema_cal_ai/repos/onboarding_save_repo/onboarding_save_repo.dart';
 import 'package:ema_cal_ai/repos/profile_repo/profile_repo.dart';
@@ -138,12 +140,23 @@ class OnboardingController {
 
     FocusManager.instance.primaryFocus?.unfocus();
 
-    await ref.read(nutritionPlanRepoProvider).save(nutritionPlan!);
-    ref.read(currentNutritionPlanProvider.notifier).state = nutritionPlan;
+    var newPlan = await ref
+        .read(nutritionPlanRepoProvider)
+        .save(nutritionPlan!);
+    ref.read(currentNutritionPlanProvider.notifier).state = newPlan;
 
-    final newProfile = profile.copyWith(isOnboardingComplete: true);
-    await ref.read(profileRepoProvider).save(newProfile);
+    var newProfile = profile.copyWith(isOnboardingComplete: true);
+    newProfile = await ref.read(profileRepoProvider).save(newProfile);
     ref.read(userProfileProvider.notifier).state = newProfile;
+    await ref
+        .read(historyRepoProvider)
+        .saveWeight(
+          History(
+            type: HistoryType.weight,
+            value: newProfile.weight.kg,
+            createdAt: clock.now(),
+          ),
+        );
     clearData();
 
     if (context.mounted) {
